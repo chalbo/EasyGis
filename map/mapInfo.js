@@ -1,5 +1,7 @@
 import MapSource from './mapSource';
 import communityJson from './mapData/json/community';
+import enterprise from './mapData/Enterprise';
+
 
 const configData = {
   map_type: 'arcgis',
@@ -22,11 +24,13 @@ const typeColors = {
   Circle: { fill: { color: 'yellow' }, stroke: { color: 'green' } },
 };
 const mapSource = new MapSource(configData);
-mapSource.makeGeoJsonMap(document.getElementById('map'), communityJson, typeColors);
-mapSource.setMourseMoveFeatures('red');
-const handel = mapSource.getFeaturesHandle('', true);
+mapSource.makeMap(document.getElementById('map'), communityJson, typeColors);
+mapSource.addGeoJson(communityJson, typeColors, {});
+mapSource.addGeoJson(enterprise, typeColors, { name: 'NSRMC', color: 'COLOR' });
+
+const handel = mapSource.getNoneStyleFeaturesHandle();
 handel.on('select', (e) => {
-  // const features = e.target.getFeatures().getArray();
+  const features = e.target.getFeatures().getArray();
   // mapSource.addJsonFeatures(features,{
   //   MultiPolygon: { fill: { color: 'rgb(123,123,123,0.4)' }, stroke: { color: 'red' } },
   //   Polygon: { fill: { color: 'rgb(123,123,123,0.4)' }, stroke: { color: 'red' } },}
