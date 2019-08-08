@@ -1,0 +1,34 @@
+cluster.name : aus
+connection.address :
+  - host: 21.37.19.63
+    port: 9300
+
+# The time to wait for a ping response from a node. 
+client.transport.ping_timeout : 10s
+client.transport.sniff: false
+client.pool: false
+
+## if client.pool is true, following settings must setted
+connection.pool.initNum : 1
+connection.pool.maxNum : 20
+
+###############################################################
+# elasticsearch-hadoop 
+# Essential settings
+## for spark
+#spark.master: 21.36.128.61
+#spark.app.name: aus-spark-mql
+#spark.driver.cores: 2
+#spark.executor.memory: 1g
+#spark.es.nodes: 21.36.128.61
+#spark.es.port: 9200
+#
+#datain.transport.address:
+#   -host: localhost
+#   -port: 20001
+#datain.sch.master.host: localhost
+#datain.sch.master.port: 20002
+## each node may be diffrent
+#datain.sch.worker.host: localhost
+#datain.sch.worker.port: 20003
+#
