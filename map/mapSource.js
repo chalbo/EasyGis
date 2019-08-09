@@ -70,6 +70,13 @@ class mapSource extends EventEmitter {
     return operate;
   };
 
+  getPointerMoveFeaturesHandle = () => {
+    const operate = new Select({
+      condition: pointerMove,
+    });
+    this.map.addInteraction(operate);
+    return operate;
+  };
   // addInteraction(typeStr, userInfo) {
 
   //   if (typeStr !== 'None') {
@@ -90,12 +97,15 @@ class mapSource extends EventEmitter {
           radius: 5,
           fill: new Fill({ color: feature.get(field.color) }),
           stroke: new Stroke({ color: feature.get(field.color), width: field.width }),
-          text: new Text({
-            text: feature.get(field.name),
-          }),
+          // text: new Text({
+          //   text: feature.get(field.name),
+          // }),
         });
         styles[key] = new Style({
           image,
+          // text: new Text({
+          //   text: feature.get(field.name),
+          // }),
         });
       } else {
         styles[key] = new Style({

@@ -1,4 +1,4 @@
-import MapSource from './mapSource';
+import { MapSource } from './sugonGis';
 import communityJson from './mapData/json/community';
 import enterprise from './mapData/Enterprise';
 
@@ -28,9 +28,11 @@ mapSource.makeMap(document.getElementById('map'), communityJson, typeColors);
 mapSource.addGeoJson(communityJson, typeColors, {});
 mapSource.addGeoJson(enterprise, typeColors, { name: 'NSRMC', color: 'COLOR' });
 
-const handel = mapSource.getNoneStyleFeaturesHandle();
+const handel = mapSource.getPointerMoveFeaturesHandle();
 handel.on('select', (e) => {
   const features = e.target.getFeatures().getArray();
+
+  alert(1);
   // mapSource.addJsonFeatures(features,{
   //   MultiPolygon: { fill: { color: 'rgb(123,123,123,0.4)' }, stroke: { color: 'red' } },
   //   Polygon: { fill: { color: 'rgb(123,123,123,0.4)' }, stroke: { color: 'red' } },}
