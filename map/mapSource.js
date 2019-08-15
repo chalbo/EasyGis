@@ -78,7 +78,6 @@ class mapSource extends EventEmitter {
     return operate;
   };
   // addInteraction(typeStr, userInfo) {
-
   //   if (typeStr !== 'None') {
   //     const draw = new Draw({
   //       source: this.userVectorSource,
@@ -416,7 +415,11 @@ class mapSource extends EventEmitter {
       style: styleFunction,
     });
     this.map.addLayer(VectorTmp);
+    return VectorTmp;
   }
+
+  // eslint-disable-next-line no-shadow
+  getGeoJson= Feature => ((new GeoJSON()).writeFeature(Feature))
 
   // 绘制地图
   makeGeoJsonMap = (mapName, featureCollection = {}, typeColors = {}) => {

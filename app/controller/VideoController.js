@@ -1,11 +1,11 @@
 const moment = require("moment");
 const fs = require('fs');
-const VideoService = require("../service/VideoService");
+// const VideoService = require("../service/VideoService");
 
 function   getRouters() {
     return {
-        'POST /res/getCameraVideo': Video.getCameraVideo,
-        'POST /res/delCameraVideo': Video.delCameraVideo,
+       // 'POST /res/getCameraVideo': Video.getCameraVideo,
+      //  'POST /res/delCameraVideo': Video.delCameraVideo,
     }
 } 
 class Video {

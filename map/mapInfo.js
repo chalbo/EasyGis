@@ -25,14 +25,24 @@ const typeColors = {
 };
 const mapSource = new MapSource(configData);
 mapSource.makeMap(document.getElementById('map'), communityJson, typeColors);
-mapSource.addGeoJson(communityJson, typeColors, {});
-mapSource.addGeoJson(enterprise, typeColors, { name: 'NSRMC', color: 'COLOR' });
+mapSource.addGeoJson(communityJson, typeColors, { name: 'NAME' });
 
-const handel = mapSource.getPointerMoveFeaturesHandle();
+const handel = mapSource.getFeaturesHandle();
 handel.on('select', (e) => {
   const features = e.target.getFeatures().getArray();
 
-  alert(1);
+  const json = mapSource.getGeoJson(features[0]);
+ 
+  // addGeoJson
+  const layer1=mapSource.addGeoJson(json, {
+    MultiPolygon: { fill: { color: 'yellow' }, stroke: { color: 'green' } },
+    Polygon: { fill: { color: 'yellow' }, stroke: { color: 'green' } },
+  }, { name: 'NAME' });
+  setTimeout(() => {
+    mapSource.map.removeLayer(layer1);
+  }, 1000);
+
+
   // mapSource.addJsonFeatures(features,{
   //   MultiPolygon: { fill: { color: 'rgb(123,123,123,0.4)' }, stroke: { color: 'red' } },
   //   Polygon: { fill: { color: 'rgb(123,123,123,0.4)' }, stroke: { color: 'red' } },}

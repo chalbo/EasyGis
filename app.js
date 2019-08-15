@@ -1,4 +1,4 @@
-import moment from 'moment';
+const moment = require('moment');
 
 const Koa = require('koa');
 const staticContents = require('koa-static');
