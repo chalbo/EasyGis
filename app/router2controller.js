@@ -39,7 +39,6 @@ function addControllers(route, dir) {
     fs.readdirSync(`${__dirname} /${dir}`).filter(f => f.endsWith('.js')).forEach((f) => {
       console.log(`process controller: ${f}...`);
       const mapingUrl = `${__dirname} /${dir}/${f}`;
-      
       // eslint-disable-next-line import/no-dynamic-require
       const mapping = require(mapingUrl);
       addMapping(route, mapping);
@@ -53,7 +52,7 @@ function addControllers(route, dir) {
   }
 }
 
-module.exports = function (dir) {
+module.exports = (dir) => {
   const controllersDir = dir || 'controller';
   addControllers(router, controllersDir);
   return router.routes();

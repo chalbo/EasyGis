@@ -194,6 +194,7 @@ class mapSource extends EventEmitter {
     this.map.addOverlay(overlay);
   };
 
+  // 绘制轨迹要求参数 cameras:[{lonLat:XX,count:25|default}]
   drawStar = (cameras, colorNum) => {
     const { map } = this;
     // eslint-disable-next-line array-callback-return

@@ -1,13 +1,13 @@
-const esClient = require("../common/ESClient.js");
-const constent = require("../../config/Constent.js");
-const config = require("../../config/config.local");
-const utlis = require("../common/utlis");
-const jsonUtils = require("../common/JsonUtils.js");
-const moment = require("moment");
-const esUtil = require("../common/esUtil.js");
-const logger = require("../common/logger");
-const ffmpeg = require("fluent-ffmpeg");
-const fs = require("fs");
+const esClient = require('../common/ESClient.js');
+const constent = require('../../config/Constent.js');
+const config = require('../../config/config.local');
+const utlis = require('../common/utlis');
+const jsonUtils = require('../common/JsonUtils.js');
+const moment = require('moment');
+const esUtil = require('../common/esUtil.js');
+const logger = require('../common/logger');
+const ffmpeg = require('fluent-ffmpeg');
+const fs = require('fs');
 // const walk = require('walk')
 
 
@@ -66,7 +66,7 @@ class VideoService {
                         if (err) {
                             resolve({ error: err, status: false });
                         } else {
-                            resolve({ message: "ok", status: true });
+                            resolve({ message: 'ok', status: true });
                         }
                     });
                 }
