@@ -14,6 +14,7 @@ import { Vector, Vector as VectorSource } from 'ol/source';
 import VectorLayer from 'ol/layer/Vector';
 import { Select } from 'ol/interaction';
 import { pointerMove } from 'ol/events/condition';
+import { ZoomSlider, Zoom } from 'ol/control';
 import Overlay from 'ol/Overlay';
 import {
   Fill, Stroke, Style, Text, Circle as CircleStyle,
@@ -70,9 +71,20 @@ class mapSource extends EventEmitter {
     return operate;
   };
 
-  getPointerMoveFeaturesHandle = () => {
+  getPointerMoveFeaturesHandle = (color = 'green') => {
+    const image = new CircleStyle({
+      radius: 8,
+      fill: new Fill({ color: 'transparent' }),
+      stroke: new Stroke({ color, width: 1 }),
+    });
+    const style = new Style({
+      image,
+      fill: new Fill({ color: 'transparent' }),
+      stroke: new Stroke({ color, width: 1 }),
+    });
     const operate = new Select({
       condition: pointerMove,
+      style,
     });
     this.map.addInteraction(operate);
     return operate;
@@ -93,7 +105,7 @@ class mapSource extends EventEmitter {
     Object.keys(typeColors).forEach((key) => {
       if (key === 'Point') {
         const image = new CircleStyle({
-          radius: 5,
+          radius: 8,
           fill: new Fill({ color: feature.get(field.color) }),
           stroke: new Stroke({ color: feature.get(field.color), width: field.width }),
           // text: new Text({
@@ -117,6 +129,14 @@ class mapSource extends EventEmitter {
       }
     });
     return styles;
+  }
+
+  addZoom=() => {
+    this.map.addControl(new Zoom());
+  }
+
+  addZoomslider=() => {
+    this.map.addControl(new ZoomSlider());
   }
 
   addFeatures = (feature, typeColors) => {

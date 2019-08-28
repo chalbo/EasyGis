@@ -1,4 +1,5 @@
 import MapSource from './mapSource';
+import 'ol/ol.css';
 
 function getArgc() {
   const args = {};

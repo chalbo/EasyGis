@@ -24,8 +24,10 @@ const typeColors = {
   Circle: { fill: { color: 'yellow' }, stroke: { color: 'green' } },
 };
 const mapSource = new MapSource(configData);
-mapSource.makeMap(document.getElementById('map'), communityJson, typeColors);
-mapSource.addGeoJson(communityJson, typeColors, { name: 'NAME' });
+mapSource.makeMap(document.getElementById('map'));
+mapSource.addGeoJson(enterprise, typeColors, { name: 'NSRMC', color: 'COLOR' });
+mapSource.addZoom();
+mapSource.addZoomslider();
 
 const handel = mapSource.getFeaturesHandle();
 handel.on('select', (e) => {
