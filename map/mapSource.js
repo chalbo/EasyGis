@@ -17,7 +17,7 @@ import { pointerMove } from 'ol/events/condition';
 import { ZoomSlider, Zoom } from 'ol/control';
 import Overlay from 'ol/Overlay';
 import {
-  Fill, Stroke, Style, Text, Circle as CircleStyle,
+  Fill, Stroke, Style, Text, Circle as CircleStyle, RegularShape,
 } from 'ol/style';
 
 // import proj from 'ol/proj';
@@ -71,20 +71,9 @@ class mapSource extends EventEmitter {
     return operate;
   };
 
-  getPointerMoveFeaturesHandle = (color = 'green') => {
-    const image = new CircleStyle({
-      radius: 8,
-      fill: new Fill({ color: 'transparent' }),
-      stroke: new Stroke({ color, width: 1 }),
-    });
-    const style = new Style({
-      image,
-      fill: new Fill({ color: 'transparent' }),
-      stroke: new Stroke({ color, width: 1 }),
-    });
+  getPointerMoveFeaturesHandle = () => {
     const operate = new Select({
       condition: pointerMove,
-      style,
     });
     this.map.addInteraction(operate);
     return operate;
@@ -104,20 +93,37 @@ class mapSource extends EventEmitter {
     const styles = {};
     Object.keys(typeColors).forEach((key) => {
       if (key === 'Point') {
-        const image = new CircleStyle({
-          radius: 8,
-          fill: new Fill({ color: feature.get(field.color) }),
-          stroke: new Stroke({ color: feature.get(field.color), width: field.width }),
-          // text: new Text({
-          //   text: feature.get(field.name),
-          // }),
-        });
-        styles[key] = new Style({
-          image,
-          // text: new Text({
-          //   text: feature.get(field.name),
-          // }),
-        });
+        if (field.pointRegularShape) {
+          const image = new RegularShape({
+            ...field.pointRegularShape,
+            fill: field.hollow ? null : new Fill({ color: feature.get(field.color) }),
+            stroke: new Stroke({ color: feature.get(field.color), width: field.width }),
+            // text: new Text({
+            //   text: feature.get(field.name),
+            // }),
+          });
+          styles[key] = new Style({
+            image,
+            // text: new Text({
+            //   text: feature.get(field.name),
+            // }),
+          });
+        } else {
+          const image = new CircleStyle({
+            radius: field.radius,
+            fill: field.hollow ? null : new Fill({ color: feature.get(field.color) }),
+            stroke: new Stroke({ color: feature.get(field.color), width: field.width }),
+            // text: new Text({
+            //   text: feature.get(field.name),
+            // }),
+          });
+          styles[key] = new Style({
+            image,
+            // text: new Text({
+            //   text: feature.get(field.name),
+            // }),
+          });
+        }
       } else {
         styles[key] = new Style({
           fill: new Fill({ ...typeColors[key].fill }),
