@@ -1,9 +1,9 @@
 /*!
  *  Map effects Javascript Library
- *  MapStareffects - v1.0.0 
+ *  MapStareffects - v1.0.0
  *  author - zhangbo
  *  构造器options: {x,y}canvas坐标，size 大小，starsize：最大圈大小colorNum rgb内颜色数字逗号隔开。ctx为绘制canvas
- * 
+ *
  */
 class Star {
   constructor(options) {
@@ -51,7 +51,7 @@ class Star {
       p.x,
       kfqcenter.y - py.y,
       p.x,
-      p.y
+      p.y,
     );
     const start = p.starSize / 21 - 0.2;
     const middle = p.starSize / 21;
@@ -81,11 +81,11 @@ class Star {
     // requestAnimationFrame(this.flashFace,canvas);
     this.shouldAnimationFrame = true;
     this.flashStarIntervals = requestAnimationFrame(
-      (t => {
+      ((t) => {
         this.shouldAnimationFrame = false;
         tTmp = fn(t);
         this.flashStar(tTmp, fn);
-      }).bind(this, Step)
+      }).bind(this, Step),
     );
   };
 }

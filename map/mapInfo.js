@@ -25,7 +25,7 @@ const typeColors = {
 };
 const mapSource = new MapSource(configData);
 mapSource.makeMap(document.getElementById('map'));
-mapSource.addGeoJson(enterprise, typeColors, { name: 'NSRMC', color: 'COLOR' });
+mapSource.addGeoJson(communityJson, typeColors, { name: 'NSRMC', color: 'COLOR' });
 mapSource.addZoom();
 mapSource.addZoomslider();
 

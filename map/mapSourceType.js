@@ -1,23 +1,25 @@
- 
 import { TileGrid } from 'ol/tilegrid';
-import { Image, Tile } from 'ol/layer'; 
-import { TileImage, Vector, TileArcGISRest, ImageArcGISRest, XYZ, OSM, Vector as VectorSource } from 'ol/source';
-import { transform  } from 'ol/proj'; // toLonLat
+import { Image, Tile } from 'ol/layer';
+import * as extent from 'ol/extent';
+import {
+  TileImage, TileArcGISRest, ImageArcGISRest, XYZ,
+} from 'ol/source';
+import * as proj from 'ol/proj';
+// toLonLat
 function getSourceType(config) {
-
-  const mapSourceType={
-    config: config,
+  const mapSourceType = {
+    config,
     arcgis: {
       source: () => {
         const source = new TileArcGISRest({
           ratio: 1,
           params: {},
-          url: config.map_Url
+          url: config.map_Url,
         });
         return [
           new Tile({
             source,
-          })
+          }),
         ];
         // , new ol.layer.Vector({ source: source })
       },
@@ -29,12 +31,12 @@ function getSourceType(config) {
         const source = new ImageArcGISRest({
           ratio: 1,
           params: {},
-          url: config.map_Url // 'http://21.58.255.10/arcgis/rest/services/dzdt2015/MapServer'
+          url: config.map_Url, // 'http://21.58.255.10/arcgis/rest/services/dzdt2015/MapServer'
         });
         return [
           new Image({
             source,
-          })
+          }),
         ];
         // , new ol.layer.Vector({ source: source })
       },
@@ -46,12 +48,11 @@ function getSourceType(config) {
         const amapsource = new XYZ({
           url: config.map_Url,
         });
-  
         return [
           new Tile({
             extent: [-180, -90, 180, 90],
             source: amapsource,
-          })
+          }),
         ];
         // , new ol.layer.Vector({ source: source })
       },
@@ -63,7 +64,6 @@ function getSourceType(config) {
         // 自定义分辨率和瓦片坐标系
         const resolutions = [];
         const { 'map-maxZoom': maxZoom } = config;
-  
         // 计算百度使用的分辨率
         for (let i = 0; i <= maxZoom; i += 1) {
           resolutions[i] = 2 ** (maxZoom - i);
@@ -72,16 +72,14 @@ function getSourceType(config) {
           origin: [0, 0],
           resolutions, // 设置分辨�?
         });
-  
         // 创建百度地图的数据源
         const baiduSource = new TileImage({
           projection: config.map_projection,
           tileGrid: tilegrid,
-          tileUrlFunction: tileCoord => {
+          tileUrlFunction: (tileCoord) => {
             const z = tileCoord[0];
             let x = tileCoord[1];
             let y = tileCoord[2];
-  
             // 百度瓦片服务url将负数使用M前缀来标�?
             if (x < 0) {
               x = -x;
@@ -97,8 +95,8 @@ function getSourceType(config) {
         });
         return [baiduMapLayer2];
       },
-      setPosition: gis => transform(gis, 'EPSG:4326', 'EPSG:3857'),
-      setRevertPosition: gis => transform(gis, 'EPSG:3857', 'EPSG:4326'),
+      setPosition: gis => proj.transform(gis, 'EPSG:4326', 'EPSG:3857'),
+      setRevertPosition: gis => proj.transform(gis, 'EPSG:3857', 'EPSG:4326'),
     },
     pgis: {
       source: () => {
@@ -106,12 +104,13 @@ function getSourceType(config) {
         //   url: Single.get("config").map_Url,// 'http://21.58.255.10/arcgis/rest/services/dzdt2015/MapServer'
         // });
         const projectionExtent = [-180, -90, 180, 90];
-        const tileOrigin = ol.extent.getTopLeft(projectionExtent);
+        const tileOrigin = extent.getTopLeft(projectionExtent);
         const resolutions = [];
         const { 'map-maxZoom': maxZoom } = config;
-        const maxResolution = ol.extent.getWidth(projectionExtent) / (256 * 2);
+        const maxResolution = extent.getWidth(projectionExtent) / (256 * 2);
         // 计算百度使用的分辨率
         for (let i = 0; i < maxZoom; i += 1) {
+          // eslint-disable-next-line no-mixed-operators
           resolutions[i] = maxResolution / 2 ** i;
         }
         const tilegrid = new TileGrid({
@@ -122,8 +121,8 @@ function getSourceType(config) {
         // 创建pgis地图的数据源
         const pgisSource = new TileImage({
           tileGrid: tilegrid,
-          projection: ol.proj.get(config.map_projection),
-          tileUrlFunction: tileCoord => {
+          projection: proj.get(config.map_projection),
+          tileUrlFunction: (tileCoord) => {
             const z = tileCoord[0] + 1;
             let x = tileCoord[1];
             const y = -tileCoord[2] - 1;
@@ -153,4 +152,4 @@ function getSourceType(config) {
   return mapSourceType;
 }
 
-export default  getSourceType
+export default getSourceType;
