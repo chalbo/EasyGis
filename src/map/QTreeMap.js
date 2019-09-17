@@ -1,20 +1,20 @@
-// 四分法递归
-/*
- * left:原点左方极限X坐标 left<x 87.XXXX lontitude
- * right:原点右方极限X坐标 right>x
- * top:原点上方极限Y坐标  top <y 43.XXX latitude
- * bottom:原点下方极限Y坐标 bottom>y
- * oriPoint:区域中心点
- * pointArr:坐标点集合
- * level:坐标数据层级（当前缩放比例）
- * id:象限id
- *
- *         |
- *    2    |   第一象限
- * -----（x,y）------
- *    3    |   4
- *         |
- */
+// // 四分法递归
+// /*
+//  * left:原点左方极限X坐标 left<x 87.XXXX lontitude
+//  * right:原点右方极限X坐标 right>x
+//  * top:原点上方极限Y坐标  top <y 43.XXX latitude
+//  * bottom:原点下方极限Y坐标 bottom>y
+//  * oriPoint:区域中心点
+//  * pointArr:坐标点集合
+//  * level:坐标数据层级（当前缩放比例）
+//  * id:象限id
+//  *
+//  *         |
+//  *    2    |   第一象限
+//  * -----（x,y）------
+//  *    3    |   4
+//  *         |
+//  */
 const mapSource = require('../common/mapSource');
 
 class QTreeMap {

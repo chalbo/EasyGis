@@ -10,7 +10,7 @@ const config = {
   mode: 'production',
   entry: {
     // mapInfo:'./map/mapInfo.js'
-    sugonGis: './map/sugonGis.js',
+    sugonGis: './src/map/sugonGis.js',
   },
   output: {
     // libraryTarget: ['commonjs2',
