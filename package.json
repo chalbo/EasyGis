@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "parcel ./map/mapInfo.html",
+    "start": "parcel ./src/map/mapInfo.html",
     "start2": "webpack-dev-server --progress --colors --hot --inline --progress --hot --watch",
     "build": "parcel build --public-url . index.html",
     "lintcss": "stylelint 'src/**/*.css' --fix"
@@ -45,21 +45,25 @@
     "webpack-dev-server": "^3.7.2"
   },
   "dependencies": {
-    "moment": "^2.24.0",
-    "app-root-path": "^2.2.1", 
+    "app-root-path": "^2.2.1",
+    "axios": "^0.18.0",
     "babel-runtime": "^6.26.0",
     "elasticsearch": "^16.3.0",
-    "axios": "^0.18.0",
     "eventemitter3": "^4.0.0",
+    "face-api.js": "^0.20.1",
     "koa": "^2.5.1",
     "koa-body": "^4.0.4",
     "koa-router": "^7.4.0",
     "koa-static": "^5.0.0",
     "log4js": "^3.0.2",
+    "moment": "^2.24.0",
     "ol": "^5.3.3",
     "pg": "^7.12.0",
+    "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "rxjs": "^6.5.2"
+    "rxjs": "^6.5.2",
+    "video.js": "^7.3.0",
+    "videojs-contrib-hls": "^5.15.0"
   }
 }

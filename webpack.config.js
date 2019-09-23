@@ -11,6 +11,7 @@ const config = {
   entry: {
     // mapInfo:'./map/mapInfo.js'
     sugonGis: './src/map/sugonGis.js',
+    sugonVideo: './src/video/sugonVideo.js',
   },
   output: {
     // libraryTarget: ['commonjs2',

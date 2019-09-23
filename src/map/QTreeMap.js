@@ -174,10 +174,8 @@ class QTreeMap {
       if (count == 0) { count = 1; }
       point.push(lon / count);
       point.push(lat / count);
-
     }
     return point;
-
   }
 }
 

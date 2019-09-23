@@ -25,6 +25,7 @@ module.exports = {
     "react/jsx-indent": "off",
     "react/jsx-first-prop-new-line": "off",
     "react/jsx-filename-extension": "off",
-    "no-restricted-syntax": "off"
+    "no-restricted-syntax": "off",
+    'react/require-default-props': 0,
   }
 }
