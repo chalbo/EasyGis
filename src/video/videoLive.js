@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import videojs from 'video.js';
+import MediaSource from './mediaSource';
 import styles from './style.less';
 import 'video.js/dist/video-js.min.css';
 import 'videojs-contrib-hls';
@@ -11,9 +12,19 @@ class VideoLive extends React.Component {
     this.cameraLive = new Map();
   }
 
+  componentDidMount() {
+    const { onRef } = this.props;
+    onRef(this);
+  }
+
   getPlayer = () => this.player;
 
   getVideo = () => this.Video;
+
+  getImage = () => {
+    const source = new MediaSource(this.Video);
+    return source.getBase64Image();
+  }
 
   closeVideo = () => {
     if (this.play) {
@@ -65,6 +76,7 @@ VideoLive.propTypes = {
   src: PropTypes.string,
   type: PropTypes.string,
   isPlay: PropTypes.bool,
+  onRef: PropTypes.func,
 };
 
 export default VideoLive;

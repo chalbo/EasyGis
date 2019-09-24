@@ -36,6 +36,27 @@ class MediaSource {
     }
   };
 
+  getBase64Image = () => {
+    const { video } = this;
+    const canvas = document.createElement('canvas');
+    canvas.height = video.videoHeight;
+    canvas.width = video.videoWidth;
+    const context = canvas.getContext('2d');
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.drawImage(
+      video,
+      0,
+      0,
+      canvas.width,
+      canvas.height,
+      0,
+      0,
+      canvas.width,
+      canvas.height,
+    );
+    return canvas.toDataURL('image/jpeg');
+  }
+
   faceRecognitionCanvas = async (video) => {
     const canvas = document.createElement('canvas');
     canvas.height = video.videoHeight;

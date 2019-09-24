@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import * as RX from 'rxjs';
 import MediaSource from './mediaSource';
+import Video from './videoLive';
 import 'video.js/dist/video-js.min.css';
 import 'videojs-contrib-hls';
 
 
-class CameraLive extends React.Component {
+class cameraM3u8Live extends React.Component {
   componentWillMount() { }
 
   componentDidMount() { }
@@ -30,6 +32,16 @@ class CameraLive extends React.Component {
     }, 1000);
   }
 
+  onRef = (ref) => {
+    this.child = ref;
+  }
+
+  close = () => {
+    this.child.close();
+  }
+
+  getImage = () => this.child.getImage();
+
   render() {
     const { isPlay, src } = this.props;
     let { type } = this.props;
@@ -46,27 +58,14 @@ class CameraLive extends React.Component {
     }
 
     return (
-      <video
-        ref={(ref) => {
-          if (ref) {
-            this.video = ref;
-          }
-        }}
-        id="videoCamera"
-        autoPlay={isPlay}
-        playsInline
-        loop
-        muted
-      >
-        <track src="" kind="captions" />
-      </video>
+      <Video onRef={this.onRef} src={src} isPlay={isPlay} type={type} />
     );
   }
 }
-CameraLive.propTypes = {
+cameraM3u8Live.propTypes = {
   src: PropTypes.string,
   type: PropTypes.string,
   isPlay: PropTypes.bool,
 };
 
-export default CameraLive;
+export default cameraM3u8Live;
