@@ -1,11 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as RX from 'rxjs';
-import MediaSource from './mediaSource';
+import { takeWhile, switchMap } from 'rxjs/operators';
 import Video from './videoLive';
-import 'video.js/dist/video-js.min.css';
-import 'videojs-contrib-hls';
+import request from '../request';
 
+export async function heartbeatUrl({ url, type = 'POST' }) {
+  return request(url, {
+    method: type,
+    body: {
+      method: type,
+    },
+  });
+}
 
 class cameraM3u8Live extends React.Component {
   componentWillMount() { }
@@ -15,22 +22,6 @@ class cameraM3u8Live extends React.Component {
   componentWillUnmount() { }
 
   getVideo = () => this.Video;
-
-  setVideoUserMedia = () => {
-    setTimeout(() => {
-      this.mediaSource = new MediaSource(this.video);
-      this.mediaSource.getMedia({
-        width: { min: 640, ideal: 1024, max: 1024 },
-        height: { min: 480, ideal: 725, max: 768 },
-      });
-      setTimeout(() => {
-        // this.mediaSource.faceSingleRecognition(this.video, 50, this.dowerRecognition);
-        this.canvasInput = this.mediaSource.createCanvas(this.video, -2);
-        this.canvasDrawer = this.mediaSource.createCanvas(this.video, 10000000);
-        this.startImageLoad(this.canvasInput, this.canvasDrawer);
-      }, 1000);
-    }, 1000);
-  }
 
   onRef = (ref) => {
     this.child = ref;
@@ -42,19 +33,22 @@ class cameraM3u8Live extends React.Component {
 
   getImage = () => this.child.getImage();
 
+  heartbeat = ({ quest: { url, type = 'POST' }, rate }) => {
+    RX.interval(rate)
+      .pipe(
+        switchMap(() => heartbeatUrl({ url, type })),
+        takeWhile((response) => {
+          console.log(response);
+        }),
+      );
+  }
+
   render() {
     const { isPlay, src } = this.props;
     let { type } = this.props;
 
     if (!type) {
       type = 'application/x-mpegURL';
-    }
-    if (!src) {
-      this.setVideoUserMedia();
-    } else {
-      setTimeout(() => {
-        this.video.src = src;
-      });
     }
 
     return (

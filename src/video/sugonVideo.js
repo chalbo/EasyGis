@@ -1,8 +1,9 @@
+import React from 'react';
 import ReactDOM from 'react-dom';
 import mediaSource from './mediaSource';
-import Video from './videoLive';
+import VideoLive from './videoLive';
 import CameraM3u8Live from './cameraM3u8Live';
-import cameraNativeLive from './cameraNativeLive';
+import CameraNativeLive from './cameraNativeLive';
 
 function getArgc() {
   const args = {};
@@ -20,12 +21,14 @@ function getArgc() {
 class SugonVideo {
   // 构造。
   constructor({
-    videoType, id = '', src = '', isPlay = false,
+    videoType, id = '', src = '', isPlay = false, cameraParam = {
+      width: { min: 320, ideal: 640, max: 1024 }, height: { min: 240, ideal: 480, max: 768 },
+    },
   }) {
     this.videoType = videoType; // nativeCamera video/mp4 ,application/x-mpegURL';
     switch (videoType) {
       case 'nativeCamera':
-        this.bindNativeVideo({ id });
+        this.bindNativeVideo({ id, cameraParam });
         break;
       case 'video/mp4':
         this.bindVideo({ id, src, isPlay });
@@ -46,16 +49,21 @@ class SugonVideo {
     this.child.close();
   }
 
+  play = () => {
+    this.child.play();
+  }
+
   getVideoObj = () => this.child
 
   getImage = () => this.child.getImage();
 
   bindNativeVideo = ({
-    id = '',
+    id = '', cameraParam,
   }) => {
     ReactDOM.render(
-      <cameraNativeLive
+      <CameraNativeLive
         onRef={this.onRef}
+        cameraParam={cameraParam}
       />,
       document.getElementById(id),
     );
@@ -65,7 +73,7 @@ class SugonVideo {
     id = '', src = '', isPlay = false,
   }) => {
     ReactDOM.render(
-      <Video
+      <VideoLive
         onRef={this.onRef}
         src={src}
         isPlay={isPlay}

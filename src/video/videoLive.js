@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import videojs from 'video.js';
 import MediaSource from './mediaSource';
-import styles from './style.less';
 import 'video.js/dist/video-js.min.css';
 import 'videojs-contrib-hls';
 
@@ -26,6 +25,10 @@ class VideoLive extends React.Component {
     return source.getBase64Image();
   }
 
+  play = () => {
+    this.player.play();
+  }
+
   closeVideo = () => {
     if (this.play) {
       this.play.pause();
@@ -39,7 +42,7 @@ class VideoLive extends React.Component {
     let { type } = this.props;
 
     if (!type) {
-      type = 'application/x-mpegURL';
+      type = 'video/mp4';
     }
 
     const videoJsOptions = {
@@ -55,7 +58,7 @@ class VideoLive extends React.Component {
     };
     return (
       <video
-        className={`video-js ${styles['video-js']}`}
+        style={{ width: '100%', height: '100%' }}
         ref={(ref) => {
           if (ref) {
             const player = videojs(ref, videoJsOptions);

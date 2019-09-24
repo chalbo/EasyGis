@@ -1,7 +1,7 @@
 import * as faceapi from 'face-api.js';
 import * as RX from 'rxjs';
-import signFaceUrl from '../assets/images/insight/signFace.png';
-import structureUrl from '../assets/images/insight/structure.png';
+import signFaceUrl from '../assets/images/signFace.png';
+import structureUrl from '../assets/images/structure.png';
 
 class MediaSource {
   constructor(video) {

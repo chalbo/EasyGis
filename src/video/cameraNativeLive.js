@@ -1,8 +1,5 @@
 import React from 'react';
-import * as RX from 'rxjs';
 import MediaSource from './mediaSource';
-import 'video.js/dist/video-js.min.css';
-import 'videojs-contrib-hls';
 
 
 class cameraNativeLive extends React.Component {
@@ -17,18 +14,16 @@ class cameraNativeLive extends React.Component {
   getVideo = () => this.Video;
 
   setVideoUserMedia = () => {
+    // eslint-disable-next-line react/prop-types
+    const { cameraParam } = this.props;
     setTimeout(() => {
       this.mediaSource = new MediaSource(this.video);
-      this.mediaSource.getMedia({
-        width: { min: 640, ideal: 1024, max: 1024 },
-        height: { min: 480, ideal: 725, max: 768 },
-      });
-      setTimeout(() => {
-        // this.mediaSource.faceSingleRecognition(this.video, 50, this.dowerRecognition);
-        this.canvasInput = this.mediaSource.createCanvas(this.video, -2);
-        this.canvasDrawer = this.mediaSource.createCanvas(this.video, 10000000);
-        this.startImageLoad(this.canvasInput, this.canvasDrawer);
-      }, 1000);
+      this.mediaSource.getMedia(cameraParam);
+      // setTimeout(() => {
+      //   // this.mediaSource.faceSingleRecognition(this.video, 50, this.dowerRecognition);
+      //   this.canvasInput = this.mediaSource.createCanvas(this.video, -2);
+      //   this.canvasDrawer = this.mediaSource.createCanvas(this.video, 10000000);
+      // }, 1000);
     }, 1000);
   }
 
@@ -45,6 +40,7 @@ class cameraNativeLive extends React.Component {
   render() {
     return (
       <video
+        style={{ width: '100%', height: '100%' }}
         ref={(ref) => {
           if (ref) {
             this.video = ref;
