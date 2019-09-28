@@ -6,12 +6,15 @@ const ExtractTextWebpackPlugin = require('extract-text-webpack-plugin');// 引�
 
 
 const config = {
-  //   mode: "development",
+  // mode: 'development',
   mode: 'production',
+  // devtool: 'source-map',lastDate
   entry: {
+    videotest: './src/video/videotest.js',
+    sugonVideo: './src/video/sugonVideo.js',
     // mapInfo:'./map/mapInfo.js'
     sugonGis: './src/map/sugonGis.js',
-    sugonVideo: './src/video/sugonVideo.js',
+
   },
   output: {
     // libraryTarget: ['commonjs2',
@@ -27,14 +30,14 @@ const config = {
     }),
 
     //   //配置html模板，因为是多页面，所以需配置多个模板
-    //   new HtmlWebpackPlugin({
-    //    title:'测试',//html标题
-    //    filename:'./mapInfo.html',//文件目录名
-    //    template:'./map/mapInfo.html',//文件模板目录
-    //    hash:true,//是否添加hash值
-    //    chunks:['a'],//模板需要引用的js块，vendors是定义的公共块，index是引用的自己编写的块
+    // new HtmlWebpackPlugin({
+    //  title:'测试',//html标题
+    //  filename:'./videotest.html',//文件目录名
+    //  template:'./map/videotest.html',//文件模板目录
+    //  hash:true,//是否添加hash值
+    //  chunks:['a'],//模板需要引用的js块，vendors是定义的公共块，index是引用的自己编写的块
 
-    //   }),
+    // }),
 
     //   new HtmlWebpackPlugin({
 
@@ -73,7 +76,7 @@ const config = {
   },
   // webpack-dev-server的配置
   devServer: {
-    contentBase: path.join(__dirname, './map/'),
+    contentBase: path.join(__dirname, './static/'),
     historyApiFallback: true,
     hot: true,
     inline: true,
@@ -83,7 +86,7 @@ const config = {
       aggregateTimeout: 300,
     },
     proxy: {
-      '/shuiwu': 'http://192.168.3.131:8080/',
+      '/video': 'http://10.6.6.58',
     },
   },
 

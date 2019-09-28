@@ -258,7 +258,40 @@ class MediaSource {
     const imgSrc = `${snapData}`;
     return imgSrc;
   };
+  // dowerRecognition = (imgs, canvas) => {
+  //   const detections = [imgs];
+  //   const { dispatch } = this.props;
+  //   dispatch({
+  //     type: 'signpad/fetchCameraInfoData',
+  //     payload: { detections },
+  //     callback: this.drawDetectionInfo(canvas),
+  //   });
+  // };
 
+  // eslint-disable-next-line no-unused-vars
+  drawDetectionInfoCallback = canvas => detections => {
+    // eslint-disable-next-line array-callback-return
+    detections.map(info => {
+      const context = canvas.getContext('2d');
+      const { imageWidth, imageHeight } = info;
+      const { x, y } = info;
+      if (!this.signFace) {
+        this.signFace = new Image();
+        this.signFace.src = signFaceUrl;
+      }
+      const drawImage = () => {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.drawImage(this.signFace, x, y, imageWidth, imageHeight);
+      };
+      if (this.signFace.complete) {
+        drawImage();
+      } else {
+        this.signFace.onload = () => {
+          drawImage();
+        };
+      }
+    });
+  };
   // eslint-disable-next-line no-unused-vars
   drawDetectionInfo = (detections, canvas) => {
     // eslint-disable-next-line array-callback-return

@@ -5,10 +5,11 @@ import { takeWhile, switchMap } from 'rxjs/operators';
 import Video from './videoLive';
 import request from '../request';
 
-export async function heartbeatUrl({ url, type = 'POST' }) {
+export async function heartbeatUrl({ url, type = 'POST' }, params) {
   return request(url, {
     method: type,
     body: {
+      ...params,
       method: type,
     },
   });
@@ -17,30 +18,31 @@ export async function heartbeatUrl({ url, type = 'POST' }) {
 class cameraM3u8Live extends React.Component {
   componentWillMount() { }
 
-  componentDidMount() { }
+  componentDidMount() {
+    const { onRef } = this.props;
+    onRef(this);
+  }
 
   componentWillUnmount() { }
 
-  getVideo = () => this.Video;
+  getVideo = () => this.video;
 
   onRef = (ref) => {
     this.child = ref;
   }
 
   close = () => {
-    this.child.close();
+    this.child.closeVideo();
   }
 
   getImage = () => this.child.getImage();
 
-  heartbeat = ({ quest: { url, type = 'POST' }, rate }) => {
-    RX.interval(rate)
+  heartbeat = ({ quest: { url, src, type = 'POST' }, rate }) => {
+    const interval = RX.interval(rate)
       .pipe(
-        switchMap(() => heartbeatUrl({ url, type })),
-        takeWhile((response) => {
-          console.log(response);
-        }),
+        switchMap(() => heartbeatUrl({ url, type }, { src })),
       );
+    interval.subscribe(response => console.log(response));
   }
 
   render() {
@@ -60,6 +62,7 @@ cameraM3u8Live.propTypes = {
   src: PropTypes.string,
   type: PropTypes.string,
   isPlay: PropTypes.bool,
+  onRef: PropTypes.func,
 };
 
 export default cameraM3u8Live;

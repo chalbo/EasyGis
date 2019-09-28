@@ -18,10 +18,10 @@ class VideoLive extends React.Component {
 
   getPlayer = () => this.player;
 
-  getVideo = () => this.Video;
+  getVideo = () => this.video;
 
   getImage = () => {
-    const source = new MediaSource(this.Video);
+    const source = new MediaSource(this.video);
     return source.getBase64Image();
   }
 
@@ -59,10 +59,11 @@ class VideoLive extends React.Component {
     return (
       <video
         style={{ width: '100%', height: '100%' }}
+        className="video-js"
         ref={(ref) => {
           if (ref) {
             const player = videojs(ref, videoJsOptions);
-            this.Video = ref;
+            this.video = ref;
             this.player = player;
             if (isPlay) {
               player.play();
