@@ -1,9 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import moment from 'moment';
 import mediaSource from './mediaSource';
 import VideoLive from './videoLive';
 import CameraM3u8Live from './cameraM3u8Live';
 import CameraNativeLive from './cameraNativeLive';
+
 
 function getArgc() {
   const args = {};
@@ -99,6 +101,15 @@ class SugonVideo {
 
 
 if (typeof window === 'object') {
+  // const nowtime = moment();
+  // const rq = moment('20191029', 'YYYYMMDD');
+  // if (rq < nowtime) {
+  //   // window.location.href = 'null';
+  //   window.sugonVideo = { SugonVideo: null, mediaSource: null, getArgc };
+  // } else {
+  //   window.sugonVideo = { SugonVideo, mediaSource, getArgc };
+  // }
+
   window.sugonVideo = { SugonVideo, mediaSource, getArgc };
 }
 

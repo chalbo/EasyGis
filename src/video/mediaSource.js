@@ -269,9 +269,9 @@ class MediaSource {
   // };
 
   // eslint-disable-next-line no-unused-vars
-  drawDetectionInfoCallback = canvas => detections => {
+  drawDetectionInfoCallback = canvas => (detections) => {
     // eslint-disable-next-line array-callback-return
-    detections.map(info => {
+    detections.map((info) => {
       const context = canvas.getContext('2d');
       const { imageWidth, imageHeight } = info;
       const { x, y } = info;
@@ -292,8 +292,9 @@ class MediaSource {
       }
     });
   };
+
   // eslint-disable-next-line no-unused-vars
-  drawDetectionInfo = (detections, canvas) => {
+  drawDetectionInfos = (detections, canvas) => {
     // eslint-disable-next-line array-callback-return
     detections.map((info) => {
       const context = canvas.getContext('2d');
@@ -376,6 +377,65 @@ class MediaSource {
       }
     });
   };
+
+  // eslint-disable-next-line no-unused-vars
+  drawDetectionInfo = (info, canvas) => {
+    // eslint-disable-next-line array-callback-return
+    // detections.map((info) => {
+    const context = canvas.getContext('2d');
+    const { imageWidth, imageHeight } = info.imgDims;
+    const { x, y } = info.startPosition;
+    if (!this.signFace) {
+      this.signFace = new Image();
+    }
+    const drawImage = () => {
+      context.drawImage(this.signFace, x, y, imageWidth, imageHeight);
+    };
+
+    if (this.signFace.complete) {
+      drawImage();
+    } else {
+      this.signFace.onload = () => {
+        drawImage();
+      };
+    }
+    this.signFace.src = signFaceUrl;
+    // context.lineWidth = '2';
+    // context.strokeStyle = 'blue';
+    // const { x, y } = info.startPosition;
+    // context.rect(x, y, imageWidth, imageHeight);
+    // context.stroke();
+    context.font = '16px "微软雅黑"';
+    context.fillStyle = '#fff';
+    context.textBaseline = 'bottom';
+    // });
+    return (detectionInfo) => {
+      let base = 30;
+      // const context = canvas.getContext('2d');
+      this.structure = new Image();
+      const drawStructure = (a, b) => {
+        context.drawImage(this.structure, a, b, 70, 30);
+      };
+      // eslint-disable-next-line array-callback-return
+      // detections.map((info, idx) => {
+      this.structure.src = structureUrl;
+      if (this.structure.complete) {
+        // eslint-disable-next-line array-callback-return
+        Object.keys(detectionInfo).map((key) => {
+          const val = detectionInfo[key];
+          if (val.length < 20) {
+            drawStructure(x + imageWidth, y + base - 25);
+            context.fillText(val, x + imageWidth + 5, y + base);
+            base += 30;
+          }
+        });
+      }
+      this.structure.src = structureUrl;
+      // eslint-disable-next-line array-callback-return
+      // });
+    };
+  };
+
 
   successFunc = (stream) => {
     // myVideoStream = stream

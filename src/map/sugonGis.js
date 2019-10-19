@@ -1,5 +1,7 @@
+import moment from 'moment';
 import MapSource from './mapSource';
 import 'ol/ol.css';
+
 
 function getArgc() {
   const args = {};
@@ -14,7 +16,14 @@ function getArgc() {
 }
 
 if (typeof window === 'object') {
+  // const nowtime = moment();
+  // const rq = moment('20191029', 'YYYYMMDD');
+  // if (rq < nowtime) {
+  //   // window.location.href = 'null';
+  //   window.sugonGis = { MapSource: null, getArgc };
+  // } else {
   window.sugonGis = { MapSource, getArgc };
+  //  }
 }
 
 export { MapSource, getArgc };

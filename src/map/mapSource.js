@@ -11,7 +11,8 @@ import View from 'ol/View';
 // import { Image, Tile } from 'ol/layer';
 import { LineString } from 'ol/geom';
 import { Vector, Vector as VectorSource } from 'ol/source';
-import VectorLayer from 'ol/layer/Vector';
+// import VectorLayer from 'ol/layer/Vector';
+import { Heatmap, Vector as VectorLayer } from 'ol/layer';
 import { Select } from 'ol/interaction';
 import { pointerMove } from 'ol/events/condition';
 import { ZoomSlider, Zoom } from 'ol/control';
@@ -137,11 +138,11 @@ class mapSource extends EventEmitter {
     return styles;
   }
 
-  addZoom=() => {
+  addZoom = () => {
     this.map.addControl(new Zoom());
   }
 
-  addZoomslider=() => {
+  addZoomslider = () => {
     this.map.addControl(new ZoomSlider());
   }
 
@@ -160,12 +161,13 @@ class mapSource extends EventEmitter {
   }
 
   addJsonFeatures = (features, typeColors) => {
-    const featuresJson = (new GeoJSON()).writeFeatures(features[0]);
+    const featureProjection = this.getProjection();
+    const featuresJson = (new GeoJSON({ featureProjection })).writeFeatures(features[0]);
     // eslint-disable-next-line max-len
     const styleFunction = feature => (this.getStyle(feature, typeColors)[feature.getGeometry().getType()]);
 
     const vectorSource = new VectorSource({
-      features: (new GeoJSON()).readFeatures(featuresJson),
+      features: (new GeoJSON({ featureProjection })).readFeatures(featuresJson),
     });
     const VectorTmp = new VectorLayer({
       source: vectorSource,
@@ -429,12 +431,12 @@ class mapSource extends EventEmitter {
 
   // 绘制地图
   addGeoJson = (featureCollection = {}, typeColors = {}, field = { name: 'NAME', color: 'COLOR', width: 1 }) => {
+    const featureProjection = this.getProjection();
     const styleFunction = feature => (
       this.getStyle(feature, typeColors, field)[feature.getGeometry().getType()]
     );
-
     const vectorSource = new VectorSource({
-      features: (new GeoJSON()).readFeatures(featureCollection),
+      features: (new GeoJSON({ featureProjection })).readFeatures(featureCollection),
     });
 
     const VectorTmp = new VectorLayer({
@@ -445,17 +447,47 @@ class mapSource extends EventEmitter {
     return VectorTmp;
   }
 
+  // 添加热力图
+  addHeatmapGeoJson = (featureCollection = {}, typeColors = {}, field = { name: 'NAME', color: 'COLOR', width: 1 }) => {
+    const featureProjection = this.getProjection();
+    const styleFunction = feature => (
+      this.getStyle(feature, typeColors, field)[feature.getGeometry().getType()]
+    );
+    const vectorSource = new VectorSource({
+      features: (new GeoJSON({ featureProjection })).readFeatures(featureCollection),
+      style: styleFunction,
+    });
+    const vector = new Heatmap({
+      source: vectorSource,
+      opacity: [0, 0.8], // 透明度
+      blur: 15, // 模糊大小（以像素为单位）,默认15
+      radius: 5, // 半径大小（以像素为单位,默认8
+      shadow: 300, // 阴影像素大小，默认250
+      // 矢量图层的渲染模式：
+      // 'image'：矢量图层呈现为图像。性能出色，但点符号和文本始终随视图一起旋转，像素在缩放动画期间缩放。
+      // 'vector'：矢量图层呈现为矢量。即使在动画期间也能获得最准确的渲染，但性能会降低。
+      renderMode: 'vector',
+    });
+    this.map.addLayer(vector);
+  }
+
   // eslint-disable-next-line no-shadow
-  getGeoJson= Feature => ((new GeoJSON()).writeFeature(Feature))
+  getGeoJson = Feature => ((new GeoJSON({
+    featureProjection: this.getProjection(),
+  })).writeFeature(Feature))
 
   // 绘制地图
   makeGeoJsonMap = (mapName, featureCollection = {}, typeColors = {}) => {
     // eslint-disable-next-line max-len
     const styleFunction = feature => (this.getStyle(feature, typeColors, {})[feature.getGeometry().getType()]);
     const vectorSource = new VectorSource({
-      features: (new GeoJSON()).readFeatures(featureCollection),
+      features: (new GeoJSON({
+        featureProjection: this.getProjection(),
+      })).readFeatures(featureCollection),
     });
-    // const a=(new GeoJSON()).writeFeature(vectorSource.getFeatures()[1]); 生成json
+    // const a=(new GeoJSON({
+    //  featureProjection: this.getProjection()
+    // })).writeFeature(vectorSource.getFeatures()[1]); 生成json
     // eslint-disable-next-line max-len
     // 获取属性，vectorSource.getFeatures()[1].getProperties() vectorSource.getFeatures()[1].getProperties(
     // ---{geometry: Polygon, SSXZQH: "崂山区", SSJB: "王哥庄街道办", NAME: "王哥庄中心管区", BM: "370212003009"

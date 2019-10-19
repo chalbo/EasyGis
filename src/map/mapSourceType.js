@@ -102,7 +102,7 @@ function getSourceType(config) {
       source: () => {
         // 创建XYZ图
         const XYZSource = new XYZ({
-          url: `${config.map_Url}/{z}/{x}/{y}.jpg`,
+          url: `${config.map_Url}`,
           wrapX: true,
         });
         const mapLayer = new Tile({
