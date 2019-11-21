@@ -17,8 +17,8 @@ const config = {
 
   },
   output: {
-    // libraryTarget: ['commonjs2',
-    filename: './[name].js',
+    libraryTarget: 'commonjs2',
+    filename: './[name]Commonjs.js',
     path: path.resolve(__dirname, './static'),
   },
 

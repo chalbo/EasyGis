@@ -383,8 +383,9 @@ class MediaSource {
     // eslint-disable-next-line array-callback-return
     // detections.map((info) => {
     const context = canvas.getContext('2d');
-    const { imageWidth, imageHeight } = info.imgDims;
-    const { x, y } = info.startPosition;
+    const {
+      imageWidth, imageHeight, x, y,
+    } = info;
     if (!this.signFace) {
       this.signFace = new Image();
     }
@@ -431,6 +432,48 @@ class MediaSource {
         });
       }
       this.structure.src = structureUrl;
+      // eslint-disable-next-line array-callback-return
+      // });
+    };
+  };
+
+  // eslint-disable-next-line no-unused-vars
+  drawRectangleDetectionInfo = (info, canvas, color) => {
+    // eslint-disable-next-line array-callback-return
+    // detections.map((info) => {
+    const context = canvas.getContext('2d');
+    const {
+      imageWidth, imageHeight, x, y,
+    } = info;
+
+
+    context.lineWidth = 2;
+    context.strokeStyle = color;
+    context.strokeRect(x, y, imageWidth, imageHeight);
+
+    return (detectionInfo) => {
+      let base = 30;
+      // const context = canvas.getContext('2d');
+      const drawStructure = (a, b) => {
+        context.beginPath();
+        context.fillStyle = color;
+        context.fillRect(a, b, 70, 30);
+        context.stroke();
+      };
+      // eslint-disable-next-line array-callback-return
+      Object.keys(detectionInfo).map((key) => {
+        const val = detectionInfo[key];
+        if (val.length < 20) {
+          drawStructure(x + imageWidth, y + base - 25);
+          context.font = '16px "微软雅黑"';
+          context.fillStyle = '#fff';
+          context.textBaseline = 'bottom';
+          context.fillText(val, x + imageWidth + 5, y + base);
+          base += 30;
+        }
+      });
+
+
       // eslint-disable-next-line array-callback-return
       // });
     };

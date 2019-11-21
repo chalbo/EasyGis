@@ -32,6 +32,10 @@ class cameraNativeLive extends React.Component {
 
   getVideo = () => this.video;
 
+  change = (src) => {
+    console.log(`nativeVideo none src change${src}`);
+  }
+
   getImage = () => {
     const source = new MediaSource(this.video);
     return source.getBase64Image();

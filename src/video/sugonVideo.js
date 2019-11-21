@@ -55,6 +55,10 @@ class SugonVideo {
     this.child.play();
   }
 
+  change = (src) => {
+    this.child.change(src);
+  }
+
   getVideoObj = () => this.child
 
   getImage = () => this.child.getImage();

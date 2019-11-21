@@ -29,6 +29,11 @@ class VideoLive extends React.Component {
     this.player.play();
   }
 
+  change = (src) => {
+    if (!src) { return; }
+    this.player.src(src);
+  }
+
   closeVideo = () => {
     if (this.play) {
       this.play.pause();
@@ -58,7 +63,7 @@ class VideoLive extends React.Component {
     };
     return (
       <video
-        style={{ width: '100%', height: '100%' }}
+        style={{ width: '100%', height: '100%', 'object-fit': 'fill' }}
         className="video-js"
         ref={(ref) => {
           if (ref) {

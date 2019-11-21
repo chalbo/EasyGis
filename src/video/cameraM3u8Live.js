@@ -31,6 +31,10 @@ class cameraM3u8Live extends React.Component {
     this.child = ref;
   }
 
+  change = (src) => {
+    this.child.change(src);
+  }
+
   close = () => {
     this.child.closeVideo();
   }
