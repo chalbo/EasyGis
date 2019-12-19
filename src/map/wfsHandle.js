@@ -1,7 +1,4 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
 import Map from 'ol/Map';
-
 import Feature from 'ol/Feature';
 import { GeoJSON } from 'ol/format';
 // import * as ol from 'ol';
@@ -15,7 +12,6 @@ import { Vector, Vector as VectorSource } from 'ol/source';
 import { Heatmap, Vector as VectorLayer } from 'ol/layer';
 import { Select } from 'ol/interaction';
 import { pointerMove } from 'ol/events/condition';
-import { ZoomSlider, Zoom } from 'ol/control';
 import Overlay from 'ol/Overlay';
 import {
   Fill, Stroke, Style, Text, Circle as CircleStyle, RegularShape,
@@ -24,36 +20,14 @@ import {
 // import proj from 'ol/proj';
 // import { transform, Projection, transformExtent } from 'ol/proj'; // toLonLat
 import Star from './star';
-import mapSourceType from './mapSourceType';
+import Base from './base';
 
-const EventEmitter = require('eventemitter3');
-
-class mapSource extends EventEmitter {
-  constructor(config) {
+class wfsHandle extends Base {
+  constructor(mapBase) {
     super();
-    this.config = config;
-    this.map = null;
-    this.userVectorSource = null; // 用户图层
-    this.MapSource = mapSourceType(config);
+    this.mapBase = mapBase;
+    this.userVectorSource = null;
   }
-
-  getMapSource = () => this.MapSource[this.config.map_type].source();
-
-  setMapPosition = gis => this.MapSource[this.config.map_type].setPosition(gis);
-
-  setRevertPosition = gis => this.MapSource[this.config.map_type].setRevertPosition(gis);
-
-  getMinZoom = () => this.config.map_minZoom;
-
-  getMaxZoom = () => this.config.map_maxZoom;
-
-  getZoom = () => this.config.map_zoom;
-
-  getProjection = () => this.config.map_projection;
-
-  getCenter = () => this.config.map_center;
-
-  clearMap = () => this.map.getOverlays().clear();
 
   getFeaturesHandle = (color, multi = false) => {
     const operate = new Select({
@@ -62,13 +36,13 @@ class mapSource extends EventEmitter {
         fill: new Fill({ color }),
       }),
     });
-    this.map.addInteraction(operate);
+    this.mapBase.map.addInteraction(operate);
     return operate;
   };
 
   getNoneStyleFeaturesHandle = () => {
     const operate = new Select();
-    this.map.addInteraction(operate);
+    this.mapBase.map.addInteraction(operate);
     return operate;
   };
 
@@ -76,19 +50,9 @@ class mapSource extends EventEmitter {
     const operate = new Select({
       condition: pointerMove,
     });
-    this.map.addInteraction(operate);
+    this.mapBase.map.addInteraction(operate);
     return operate;
   };
-  // addInteraction(typeStr, userInfo) {
-  //   if (typeStr !== 'None') {
-  //     const draw = new Draw({
-  //       source: this.userVectorSource,
-  //       type: typeStr,
-  //     });
-  //     draw.userInfo = userInfo;
-  //     map.addInteraction(draw);
-  //   }
-  // };
 
   getStyle = (feature, typeColors, field = {}) => {
     const styles = {};
@@ -138,14 +102,6 @@ class mapSource extends EventEmitter {
     return styles;
   }
 
-  addZoom = () => {
-    this.map.addControl(new Zoom());
-  }
-
-  addZoomslider = () => {
-    this.map.addControl(new ZoomSlider());
-  }
-
   addFeatures = (feature, typeColors) => {
     // eslint-disable-next-line max-len
     const styleFunction = featureTmp => (this.getStyle(featureTmp, typeColors)[featureTmp.getGeometry().getType()]);
@@ -157,7 +113,7 @@ class mapSource extends EventEmitter {
       source: vectorSource,
       style: styleFunction,
     });
-    this.map.addOverlay(VectorTmp);
+    this.mapBase.map.addOverlay(VectorTmp);
   }
 
   addJsonFeatures = (features, typeColors) => {
@@ -173,7 +129,7 @@ class mapSource extends EventEmitter {
       source: vectorSource,
       style: styleFunction,
     });
-    this.map.addOverlay(VectorTmp);
+    this.mapBase.map.addOverlay(VectorTmp);
   }
 
   setMourseMoveFeatures = (color) => {
@@ -186,45 +142,10 @@ class mapSource extends EventEmitter {
     }));
   }
 
-  // info={title:,extra:,lonLat:[]}
-  setMapLabel = (info, callBack) => {
-    const label = (
-      <div
-        className="ol-mapLabelContain"
-        id={info.id}
-        style={{
-          position: 'relative',
-          top: '-25px',
-          left: '-6px',
-          height: '25px',
-        }}
-        onClick={callBack}
-      >
-        <i className={info.faClass ? info.faClass : 'fa fa-map-marker mark'} />
-        <div className="ol-mapLabel">
-          {info.comparisonAddress}
-          <i dangerouslySetInnerHTML={{ __html: info.title }} />
-          <i dangerouslySetInnerHTML={{ __html: info.extra }} />
-        </div>
-      </div>
-    );
-    const contain = document.createElement('div');
-    contain.className = 'ol-contain';
-    contain.style.position = 'relative';
-    contain.style.height = 0;
-    ReactDOM.render(label, contain);
-    const overlay = new Overlay({
-      position: this.setMapPosition(info.lonLat),
-      element: contain,
-      stopEvent: true,
-      positioning: 'bottom-left',
-    });
-    this.map.addOverlay(overlay);
-  };
 
   // 绘制轨迹要求参数 cameras:[{lonLat:XX,count:25|default}]
   drawStar = (cameras, colorNum) => {
-    const { map } = this;
+    const { map } = this.mapBase;
     // eslint-disable-next-line array-callback-return
     cameras.map((val) => {
       const canvas = document.createElement('canvas');
@@ -253,7 +174,7 @@ class mapSource extends EventEmitter {
         stopEvent: false,
         positioning: 'bottom',
       });
-      overlay.setPosition(this.setMapPosition(val.lonLat));
+      overlay.setPosition(this.mapBase.setMapPosition(val.lonLat));
       map.addOverlay(overlay);
       setTimeout(() => { star.flashStar(20, star.render); }, 4000 * Math.random(1));
     });
@@ -261,7 +182,7 @@ class mapSource extends EventEmitter {
 
   // 绘制轨迹要求参数 cameras:{lonLat}
   drawTrackNoneConverge = (cameras) => {
-    const { map } = this;
+    const { map } = this.mapBase;
     // map.getOverlays().clear();
     if (cameras === undefined || cameras.length < 1 || map === undefined) {
       return;
@@ -273,13 +194,13 @@ class mapSource extends EventEmitter {
     cameras.map((list) => {
       const $urlDom = document.createElement('div');
       // this.showTrackImg(list, $urlDom, store);
-      point.push(this.setMapPosition(list.lonLat));
+      point.push(this.mapBase.setMapPosition(list.lonLat));
       const overlay = new Overlay({
         element: $urlDom,
         stopEvent: false,
         positioning: 'bottom-center',
       });
-      overlay.setPosition(this.setMapPosition(list.lonLat));
+      overlay.setPosition(this.mapBase.setMapPosition(list.lonLat));
       map.addOverlay(overlay);
     });
     // 进行画线
@@ -306,7 +227,7 @@ class mapSource extends EventEmitter {
       trackVector.setSource(
         new Vector({
           features,
-          projection: this.getProjection(),
+          projection: this.mapBase.getProjection(),
         }),
       );
       map.addLayer(trackVector);
@@ -323,7 +244,7 @@ class mapSource extends EventEmitter {
 
   // 绘制轨迹要求参数 cameras:{lonLat}
   drawTrack = (cameras) => {
-    const { map } = this;
+    const { map } = this.mapBase;
     // map.getOverlays().clear();
     if (cameras === undefined || cameras.length < 1 || map === undefined) {
       return;
@@ -351,13 +272,13 @@ class mapSource extends EventEmitter {
       const $urlDom = document.createElement('div');
       const list = fiter[idx];
       // this.showTrackImg(list, $urlDom, store);
-      point.push(this.setMapPosition(list[0].lonLat));
+      point.push(this.mapBase.setMapPosition(list[0].lonLat));
       const overlay = new Overlay({
         element: $urlDom,
         stopEvent: false,
         positioning: 'bottom-center',
       });
-      overlay.setPosition(this.setMapPosition(list[0].lonLat));
+      overlay.setPosition(this.mapBase.setMapPosition(list[0].lonLat));
       map.addOverlay(overlay);
     });
     Object.keys(fiter).forEach((idx) => {
@@ -396,7 +317,7 @@ class mapSource extends EventEmitter {
       trackVector.setSource(
         new Vector({
           features,
-          projection: this.getProjection(),
+          projection: this.mapBase.getProjection(),
         }),
       );
       map.addLayer(trackVector);
@@ -411,27 +332,10 @@ class mapSource extends EventEmitter {
     }
   };
 
-  // 绘制地图
-  makeMap = (mapName) => {
-    const map = new Map({
-      layers: [this.getMapSource()[0]],
-      view: new View({
-        minZoom: this.getMinZoom(),
-        maxZoom: this.getMaxZoom(),
-        zoom: this.getZoom(),
-        projection: this.getProjection(),
-        center: this.getCenter(),
-      }),
-      controls: [],
-      target: mapName,
-    });
-    this.map = map;
-    return map;
-  };
 
   // 绘制地图
   addGeoJson = (featureCollection = {}, typeColors = {}, field = { name: 'NAME', color: 'COLOR', width: 1 }) => {
-    const featureProjection = this.getProjection();
+    const featureProjection = this.mapBase.getProjection();
     const styleFunction = feature => (
       this.getStyle(feature, typeColors, field)[feature.getGeometry().getType()]
     );
@@ -443,13 +347,13 @@ class mapSource extends EventEmitter {
       source: vectorSource,
       style: styleFunction,
     });
-    this.map.addLayer(VectorTmp);
+    this.mapBase.map.addLayer(VectorTmp);
     return VectorTmp;
   }
 
   // 添加热力图
   addHeatmapGeoJson = (featureCollection = {}, typeColors = {}, field = { name: 'NAME', color: 'COLOR', width: 1 }) => {
-    const featureProjection = this.getProjection();
+    const featureProjection = this.mapBase.getProjection();
     const styleFunction = feature => (
       this.getStyle(feature, typeColors, field)[feature.getGeometry().getType()]
     );
@@ -468,12 +372,12 @@ class mapSource extends EventEmitter {
       // 'vector'：矢量图层呈现为矢量。即使在动画期间也能获得最准确的渲染，但性能会降低。
       renderMode: 'vector',
     });
-    this.map.addLayer(vector);
+    this.mapBase.map.addLayer(vector);
   }
 
   // eslint-disable-next-line no-shadow
   getGeoJson = Feature => ((new GeoJSON({
-    featureProjection: this.getProjection(),
+    featureProjection: this.mapBase.getProjection(),
   })).writeFeature(Feature))
 
   // 绘制地图
@@ -482,7 +386,7 @@ class mapSource extends EventEmitter {
     const styleFunction = feature => (this.getStyle(feature, typeColors, {})[feature.getGeometry().getType()]);
     const vectorSource = new VectorSource({
       features: (new GeoJSON({
-        featureProjection: this.getProjection(),
+        featureProjection: this.mapBase.getProjection(),
       })).readFeatures(featureCollection),
     });
     // const a=(new GeoJSON({
@@ -501,23 +405,23 @@ class mapSource extends EventEmitter {
     });
 
     const map = new Map({
-      layers: [this.getMapSource()[0], VectorTmp],
+      layers: [this.mapBase.getMapSource()[0], VectorTmp],
       view: new View({
-        minZoom: this.getMinZoom(),
-        maxZoom: this.getMaxZoom(),
-        zoom: this.getZoom(),
+        minZoom: this.mapBase.getMinZoom(),
+        maxZoom: this.mapBase.getMaxZoom(),
+        zoom: this.mapBase.getZoom(),
         // projection: 'EPSG:3857',
         // center: transform(this.getCenter(),'EPSG:4326', 'EPSG:3857'
-        projection: this.getProjection(),
-        center: this.getCenter(),
+        projection: this.mapBase.getProjection(),
+        center: this.mapBase.getCenter(),
       }),
       controls: [],
       target: mapName,
     });
-    this.map = map;
+    this.mapBase.map = map;
     this.userVectorSource = vectorSource;
     return map;
   };
 }
 
-export default mapSource;
+export default wfsHandle;

@@ -1,5 +1,7 @@
 import moment from 'moment';
 import MapSource from './mapSource';
+import WfsHandle from './wfsHandle';
+import MapInteractive from './mapInteractive';
 import 'ol/ol.css';
 
 
@@ -26,4 +28,6 @@ if (typeof window === 'object') {
   //  }
 }
 
-export { MapSource, getArgc };
+export {
+  MapSource, getArgc, WfsHandle, MapInteractive,
+};

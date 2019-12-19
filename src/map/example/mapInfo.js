@@ -1,7 +1,6 @@
-import { MapSource } from './sugonGis';
-import communityJson from './mapData/json/community';
-import enterprise from './mapData/Enterprise';
-
+import { MapSource } from '../sugonGis';
+import communityJson from '../mapData/json/community';
+import enterprise from '../mapData/Enterprise';
 
 const configData = {
   map_type: 'XYZ',

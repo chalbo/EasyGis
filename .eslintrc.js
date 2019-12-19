@@ -27,5 +27,6 @@ module.exports = {
     "react/jsx-filename-extension": "off",
     "no-restricted-syntax": "off",
     'react/require-default-props': 0,
+    camelcase: 1
   }
 }

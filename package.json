@@ -68,6 +68,7 @@
     "react-dom": "^16.9.0",
     "rxjs": "^6.5.2",
     "video.js": "^7.3.0",
-    "videojs-contrib-hls": "^5.15.0"
+    "videojs-contrib-hls": "^5.15.0",
+    "vx-easyui": "^1.2.2"
   }
 }

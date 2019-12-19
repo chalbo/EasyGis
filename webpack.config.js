@@ -10,7 +10,7 @@ const config = {
   mode: 'production',
   // devtool: 'source-map',lastDate
   entry: {
-    videotest: './src/video/videotest.js',
+    // videotest: './src/video/videotest.js',
     sugonVideo: './src/video/sugonVideo.js',
     // mapInfo:'./map/mapInfo.js'
     sugonGis: './src/map/sugonGis.js',
@@ -18,6 +18,7 @@ const config = {
   },
   output: {
     libraryTarget: 'commonjs2',
+    library: 'tools',
     filename: './[name]Commonjs.js',
     path: path.resolve(__dirname, './static'),
   },
