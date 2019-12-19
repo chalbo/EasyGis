@@ -23,7 +23,7 @@ import {
 
 // import proj from 'ol/proj';
 // import { transform, Projection, transformExtent } from 'ol/proj'; // toLonLat
-import Star from './star';
+import Star from './Star';
 import mapSourceType from './mapSourceType';
 
 const EventEmitter = require('eventemitter3');

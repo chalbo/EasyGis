@@ -19,10 +19,10 @@ import {
 
 // import proj from 'ol/proj';
 // import { transform, Projection, transformExtent } from 'ol/proj'; // toLonLat
-import Star from './star';
-import Base from './base';
+import Star from './Star';
+import Base from './Base';
 
-class wfsHandle extends Base {
+class WfsHandle extends Base {
   constructor(mapBase) {
     super();
     this.mapBase = mapBase;
@@ -424,4 +424,4 @@ class wfsHandle extends Base {
   };
 }
 
-export default wfsHandle;
+export default WfsHandle;

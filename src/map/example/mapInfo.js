@@ -1,6 +1,11 @@
-import { MapSource } from '../sugonGis';
+import React, { useState } from 'react';
+import ReactDOM from 'react-dom';
+import {
+  MapBase, MapSource, getArgc, WfsHandle, MapInteractive,
+} from '../sugonGis';
 import communityJson from '../mapData/json/community';
-import enterprise from '../mapData/Enterprise';
+// import enterprise from '../mapData/Enterprise';
+import '../map.css';
 
 const configData = {
   map_type: 'XYZ',
@@ -38,27 +43,36 @@ const hotmapdata = {
     { type: 'Point', coordinates: [101.01378, 22.818552], count: 100 },
   ],
 };
-const mapSource = new MapSource(configData);
-mapSource.makeMap(document.getElementById('map'));
-mapSource.setMapLabel({ title: '1111', lonLat: [120.419354, 36.122387] });
-mapSource.addGeoJson(communityJson, typeColors, { name: 'NSRMC', color: 'COLOR' });
-mapSource.addHeatmapGeoJson(hotmapdata, typeColors, { name: 'NSRMC', color: 'COLOR' });
-mapSource.addZoom();
-mapSource.addZoomslider();
+const mapBase = new MapBase(configData);
+const wfsHandle = new WfsHandle(mapBase);
+const mapInteractive = new MapInteractive(mapBase);
+mapBase.makeMap(document.getElementById('map'));
 
-const handel = mapSource.getFeaturesHandle();
+mapInteractive.setMapLabel({ title: '111122222', lonLat: [120.419354, 36.122387] });
+wfsHandle.addGeoJson(communityJson, typeColors, { name: 'NSRMC', color: 'COLOR' });
+wfsHandle.addHeatmapGeoJson(hotmapdata, typeColors, { name: 'NSRMC', color: 'COLOR' });
+// 气泡支持
+const a = {};
+mapInteractive.addMapPopup(<div>aaaccccaaa</div>, [101.243746, 25.109256], (changeStatus) => { a.changeStatus = changeStatus; });
+// a.changeStatus(true);
+
+// 工具栏
+mapBase.addZoom();
+mapBase.addZoomslider();
+
+const handel = wfsHandle.getFeaturesHandle();
 handel.on('select', (e) => {
   const features = e.target.getFeatures().getArray();
 
-  const json = mapSource.getGeoJson(features[0]);
+  const json = wfsHandle.getGeoJson(features[0]);
 
   // addGeoJson
-  const layer1 = mapSource.addGeoJson(json, {
+  const layer1 = wfsHandle.addGeoJson(json, {
     MultiPolygon: { fill: { color: 'yellow' }, stroke: { color: 'green' } },
     Polygon: { fill: { color: 'yellow' }, stroke: { color: 'green' } },
   }, { name: 'NAME' });
   setTimeout(() => {
-    mapSource.map.removeLayer(layer1);
+    wfsHandle.map.removeLayer(layer1);
   }, 1000);
 
 

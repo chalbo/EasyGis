@@ -1,21 +1,22 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 
 import Feature from 'ol/Feature';
 import { LineString } from 'ol/geom';
-import { Vector, Vector as VectorSource } from 'ol/source';
-import { Heatmap, Vector as VectorLayer } from 'ol/layer';
+import { Vector } from 'ol/source';
+import { Vector as VectorLayer } from 'ol/layer';
 import { Select } from 'ol/interaction';
 import { pointerMove } from 'ol/events/condition';
 import Overlay from 'ol/Overlay';
 import {
-  Fill, Stroke, Style, Text, Circle as CircleStyle, RegularShape,
+  Fill, Stroke, Style,
 } from 'ol/style';
 
-import Star from './star';
-import Base from './base.js'
+import Star from './Star';
+import Base from './Base';
+import './map.css';
 
-class MapDraw extends Base {
+class MapInteractive extends Base {
   constructor(mapBase) {
     super();
     this.mapBase = mapBase;
@@ -39,6 +40,55 @@ class MapDraw extends Base {
       }),
     }));
   }
+
+  // 添加地图弹层框
+  addMapPopup = (jsxContent, lonLat, showStatusHandel) => {
+    const Label = () => {
+      const [isShow, changeState] = useState(true);
+      showStatusHandel(changeState);
+      return (
+        <div id="aaaa" className="ol-popup" onClick={() => { alert('111'); }} style={{ display: isShow ? 'block' : 'none' }}>
+          <a href="#"
+            className="ol-popup-closer"
+            onClick={(e) => {
+              debugger;
+              changeState(false);
+              const aLink = e.target;
+              aLink.blur();
+              return false;
+            }}
+          />
+          <div className="ol-popup-content">
+            {jsxContent}
+          </div>
+        </div>
+      );
+    };
+    const contain = document.createElement('div');
+    contain.className = 'ol-contain';
+    contain.style.position = 'relative';
+    contain.style.height = 0;
+    ReactDOM.render(<Label />, contain);
+    const overlay = new Overlay({
+      position: this.mapBase.setMapPosition(lonLat),
+      element: contain,
+      stopEvent: true,
+      positioning: 'bottom-left',
+    });
+    this.mapBase.map.addOverlay(overlay);
+  };
+
+  // domInfo={dom:,extra:,lonLat:[]}
+  // 添加地图弹层
+  addMapLabelDom = (dom, lonLat) => {
+    const overlay = new Overlay({
+      position: this.mapBase.setMapPosition(lonLat),
+      element: dom,
+      stopEvent: true,
+      positioning: 'bottom-left',
+    });
+    this.mapBase.map.addOverlay(overlay);
+  };
 
   // info={title:,extra:,lonLat:[]}
   setMapLabel = (info, callBack) => {
@@ -68,7 +118,7 @@ class MapDraw extends Base {
     contain.style.height = 0;
     ReactDOM.render(label, contain);
     const overlay = new Overlay({
-      position: this.setMapPosition(info.lonLat),
+      position: this.mapBase.setMapPosition(info.lonLat),
       element: contain,
       stopEvent: true,
       positioning: 'bottom-left',
@@ -258,4 +308,4 @@ class MapDraw extends Base {
   };
 }
 
-export default MapDraw;
+export default MapInteractive;

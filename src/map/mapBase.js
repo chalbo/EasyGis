@@ -4,12 +4,11 @@ import View from 'ol/View';
 import { Select } from 'ol/interaction';
 import { pointerMove } from 'ol/events/condition';
 import { ZoomSlider, Zoom } from 'ol/control';
-import Overlay from 'ol/Overlay';
 import {
   Fill, Stroke, Style,
 } from 'ol/style';
 import mapSourceType from './mapSourceType';
-import Base from './base';
+import Base from './Base';
 
 class MapBase extends Base {
   constructor(config) {
@@ -58,22 +57,15 @@ class MapBase extends Base {
     }));
   }
 
-  // domInfo={dom:,extra:,lonLat:[]}
-  // 添加地图弹层
-  addMapLabelDom = (dom, lonLat) => {
-    const overlay = new Overlay({
-      position: this.setMapPosition(lonLat),
-      element: dom,
-      stopEvent: true,
-      positioning: 'bottom-left',
-    });
-    this.map.addOverlay(overlay);
-  };
-
   // eslint-disable-next-line no-shadow
   getGeoJson = Feature => ((new GeoJSON({
     featureProjection: this.getProjection(),
   })).writeFeature(Feature))
+
+  // 获取mapDOM
+  getMapDom = () => (this.map.getTargetElement())
+
+  getView = () => (this.map.getView())
 
   // 绘制地图
   makeMap = (mapName) => {
