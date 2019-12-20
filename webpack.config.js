@@ -6,19 +6,19 @@ const ExtractTextWebpackPlugin = require('extract-text-webpack-plugin');// å¼•å…
 
 
 const config = {
-  // mode: 'development',
-  mode: 'production',
+  mode: 'development',
+  // mode: 'production',
   // devtool: 'source-map',lastDate
   entry: {
     // videotest: './src/video/videotest.js',
     sugonVideo: './src/video/sugonVideo.js',
-    // mapInfo:'./map/mapInfo.js'
+    mapInfo: './src/map/example/mapInfo.js',
     sugonGis: './src/map/sugonGis.js',
 
   },
   output: {
-    libraryTarget: 'commonjs2',
-    library: 'tools',
+    // libraryTarget: 'commonjs2',
+    // library: 'tools',
     filename: './[name]Commonjs.js',
     path: path.resolve(__dirname, './static'),
   },
@@ -86,9 +86,9 @@ const config = {
     watchOptions: {
       aggregateTimeout: 300,
     },
-    proxy: {
-      '/video': 'http://10.6.6.58',
-    },
+    // proxy: {
+    //   '/video': 'http://10.6.6.58',
+    // },
   },
 
 

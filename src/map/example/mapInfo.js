@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react';
 import {
   MapBase, MapSource, getArgc, WfsHandle, MapInteractive,
 } from '../sugonGis';
@@ -48,14 +47,17 @@ const wfsHandle = new WfsHandle(mapBase);
 const mapInteractive = new MapInteractive(mapBase);
 mapBase.makeMap(document.getElementById('map'));
 
-mapInteractive.setMapLabel({ title: '111122222', lonLat: [120.419354, 36.122387] });
+mapInteractive.setMapLabel({ title: '111122222', lonLat: [120.419354, 36.122387] }, () => {
+  console.log(111111);
+  alert(1);
+});
 wfsHandle.addGeoJson(communityJson, typeColors, { name: 'NSRMC', color: 'COLOR' });
 wfsHandle.addHeatmapGeoJson(hotmapdata, typeColors, { name: 'NSRMC', color: 'COLOR' });
 // 气泡支持
 const a = {};
-mapInteractive.addMapPopup(<div>aaaccccaaa</div>, [101.243746, 25.109256], (changeStatus) => { a.changeStatus = changeStatus; });
+// eslint-disable-next-line max-len
+mapInteractive.addMapPopup(<div onClick={() => { alert(1111); }}>aaaccccaaa</div>, [101.243746, 25.109256], (changeStatus) => { a.changeStatus = changeStatus; });
 // a.changeStatus(true);
-
 // 工具栏
 mapBase.addZoom();
 mapBase.addZoomslider();

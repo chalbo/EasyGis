@@ -41,17 +41,16 @@ class MapInteractive extends Base {
     }));
   }
 
-  // 添加地图弹层框
+  // 添加地图弹层框气泡
   addMapPopup = (jsxContent, lonLat, showStatusHandel) => {
     const Label = () => {
       const [isShow, changeState] = useState(true);
       showStatusHandel(changeState);
       return (
-        <div id="aaaa" className="ol-popup" onClick={() => { alert('111'); }} style={{ display: isShow ? 'block' : 'none' }}>
+        <div className="ol-popup" style={{ display: isShow ? 'block' : 'none' }}>
           <a href="#"
             className="ol-popup-closer"
             onClick={(e) => {
-              debugger;
               changeState(false);
               const aLink = e.target;
               aLink.blur();
@@ -69,10 +68,11 @@ class MapInteractive extends Base {
     contain.style.position = 'relative';
     contain.style.height = 0;
     ReactDOM.render(<Label />, contain);
+    // document.body.appendChild(contain);
     const overlay = new Overlay({
       position: this.mapBase.setMapPosition(lonLat),
       element: contain,
-      stopEvent: true,
+      stopEvent: false,
       positioning: 'bottom-left',
     });
     this.mapBase.map.addOverlay(overlay);
@@ -80,7 +80,7 @@ class MapInteractive extends Base {
 
   // domInfo={dom:,extra:,lonLat:[]}
   // 添加地图弹层
-  addMapLabelDom = (dom, lonLat) => {
+  addMapDom = (dom, lonLat) => {
     const overlay = new Overlay({
       position: this.mapBase.setMapPosition(lonLat),
       element: dom,
@@ -120,7 +120,7 @@ class MapInteractive extends Base {
     const overlay = new Overlay({
       position: this.mapBase.setMapPosition(info.lonLat),
       element: contain,
-      stopEvent: true,
+      stopEvent: false,
       positioning: 'bottom-left',
     });
     this.mapBase.map.addOverlay(overlay);
