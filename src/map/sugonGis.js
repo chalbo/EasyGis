@@ -1,6 +1,7 @@
 import MapSource from './mapSource';
 import WfsHandle from './WfsHandle';
 import MapBase from './MapBase';
+import Base from './Base';
 import MapInteractive from './MapInteractive';
 import 'ol/ol.css';
 
@@ -29,5 +30,5 @@ if (typeof window === 'object') {
 }
 
 export {
-  MapBase, MapSource, getArgc, WfsHandle, MapInteractive,
+  Base, MapBase, MapSource, getArgc, WfsHandle, MapInteractive,
 };

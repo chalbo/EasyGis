@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  MapBase, MapSource, getArgc, WfsHandle, MapInteractive,
+  MapBase, Base, MapSource, getArgc, WfsHandle, MapInteractive,
 } from '../sugonGis';
 import communityJson from '../mapData/json/community';
 // import enterprise from '../mapData/Enterprise';
@@ -46,6 +46,7 @@ const mapBase = new MapBase(configData);
 const wfsHandle = new WfsHandle(mapBase);
 const mapInteractive = new MapInteractive(mapBase);
 mapBase.makeMap(document.getElementById('map'));
+Base.event.on('check', () => { alert(3); });
 
 mapInteractive.setMapLabel({ title: '111122222', lonLat: [120.419354, 36.122387] }, () => {
   console.log(111111);
@@ -55,8 +56,9 @@ wfsHandle.addGeoJson(communityJson, typeColors, { name: 'NSRMC', color: 'COLOR' 
 wfsHandle.addHeatmapGeoJson(hotmapdata, typeColors, { name: 'NSRMC', color: 'COLOR' });
 // 气泡支持
 const a = {};
+mapInteractive.on('changeName', () => { alert(2); });
 // eslint-disable-next-line max-len
-mapInteractive.addMapPopup(<div onClick={() => { alert(1111); }}>aaaccccaaa</div>, [101.243746, 25.109256], (changeStatus) => { a.changeStatus = changeStatus; });
+mapInteractive.addMapPopup(<div onClick={() => { alert(1111); mapInteractive.emit('changeName'); MapInteractive.event.emit('check'); }}>aaaccccaaa</div>, [101.243746, 25.109256], (changeStatus) => { a.changeStatus = changeStatus; });
 // a.changeStatus(true);
 // 工具栏
 mapBase.addZoom();

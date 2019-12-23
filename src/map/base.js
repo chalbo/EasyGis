@@ -6,4 +6,6 @@ class Base extends EventEmitter {
   }
 }
 
+Base.event = new Base();
+
 export default Base;
