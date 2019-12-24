@@ -16,6 +16,11 @@ const configData = {
   map_maxZoom: 20,
   map_zoom: 5,
 };
+const mapBase = new MapBase(configData);
+const wfsHandle = new WfsHandle(mapBase);
+const mapInteractive = new MapInteractive(mapBase);
+mapBase.makeMap(document.getElementById('map'));
+
 const typeColors = {
   Point: { fill: { color: 'yellow' }, stroke: { color: 'green' } },
   LineString: { fill: { color: 'yellow' }, stroke: { color: 'green' } },
@@ -42,10 +47,7 @@ const hotmapdata = {
     { type: 'Point', coordinates: [101.01378, 22.818552], count: 100 },
   ],
 };
-const mapBase = new MapBase(configData);
-const wfsHandle = new WfsHandle(mapBase);
-const mapInteractive = new MapInteractive(mapBase);
-mapBase.makeMap(document.getElementById('map'));
+
 Base.event.on('check', () => { alert(3); });
 
 mapInteractive.setMapLabel({ title: '111122222', lonLat: [120.419354, 36.122387] }, () => {

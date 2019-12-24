@@ -3,8 +3,8 @@ import WfsHandle from './WfsHandle';
 import MapBase from './MapBase';
 import Base from './Base';
 import MapInteractive from './MapInteractive';
+import request from '../request';
 import 'ol/ol.css';
-
 
 function getArgc() {
   const args = {};
@@ -30,5 +30,5 @@ if (typeof window === 'object') {
 }
 
 export {
-  Base, MapBase, MapSource, getArgc, WfsHandle, MapInteractive,
+  Base, MapBase, MapSource, getArgc, WfsHandle, MapInteractive, request,
 };

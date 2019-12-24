@@ -1,55 +1,9 @@
 import 'ol/ol.css';
-import Map from 'ol/Map';
-import View from 'ol/View';
 import Draw from 'ol/interaction/Draw';
-import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
-import { OSM, Vector as VectorSource } from 'ol/source';
+import { Vector as VectorLayer } from 'ol/layer';
+import { Vector as VectorSource } from 'ol/source';
 import Base from './Base';
 import './map.css';
-
-const raster = new TileLayer({
-  source: new OSM(),
-});
-
-const source = new VectorSource({ wrapX: false });
-
-const vector = new VectorLayer({
-  source,
-});
-
-const map = new Map({
-  layers: [raster, vector],
-  target: 'map',
-  view: new View({
-    center: [-11000000, 4600000],
-    zoom: 4,
-  }),
-});
-
-const typeSelect = document.getElementById('type');
-
-let draw; // global so we can remove it later
-function addInteraction() {
-  const { value } = typeSelect;
-  if (value !== 'None') {
-    draw = new Draw({
-      source,
-      type: typeSelect.value,
-    });
-    map.addInteraction(draw);
-  }
-}
-
-
-/**
- * Handle change event.
- */
-typeSelect.onchange = function () {
-  map.removeInteraction(draw);
-  addInteraction();
-};
-
-addInteraction();
 
 
 class DrawRendering extends Base {
@@ -57,20 +11,35 @@ class DrawRendering extends Base {
     super();
     this.mapBase = mapBase;
     this.userVectorSource = null;
+    this.draw = null;
+    this.source = new VectorSource({ wrapX: false });
   }
 
   renderingTypes = {
     Point: 'Point', LineString: 'LineString', Polygon: 'Polygon', Circle: 'Circle', None: 'None',
   }
 
-  addInteraction = () => {
-    const { value } = typeSelect;
-    if (value !== 'None') {
-      draw = new Draw({
-        source,
-        type: typeSelect.value,
+  clearDraw = () => {
+    this.mapBase.map.removeInteraction(this.draw);
+  }
+
+  addVectorLayer = () => {
+    const vector = new VectorLayer({
+      source: this.source,
+    });
+    this.mapBase.map.addVectorLayer(vector);
+  }
+
+  addInteraction = (renderingType) => {
+    const val = this.renderingTypes[renderingType];
+    if (val !== 'None') {
+      this.draw = new Draw({
+        source: this.source,
+        type: val,
       });
-      map.addInteraction(draw);
+      this.mapBase.map.addInteraction(this.draw);
+    } else {
+      console.error('error for renderingTypes');
     }
   }
 }
