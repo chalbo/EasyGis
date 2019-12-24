@@ -42,7 +42,7 @@ class MapInteractive extends Base {
   }
 
   // 添加地图弹层框气泡
-  addMapPopup = (jsxContent, lonLat, showStatusHandel) => {
+  addMapJSXPopup = (jsxContent, lonLat, showStatusHandel) => {
     const Label = () => {
       const [isShow, changeState] = useState(true);
       showStatusHandel(changeState);
@@ -60,6 +60,41 @@ class MapInteractive extends Base {
           <div className="ol-popup-content">
             {jsxContent}
           </div>
+        </div>
+      );
+    };
+    const contain = document.createElement('div');
+    contain.className = 'ol-contain';
+    contain.style.position = 'relative';
+    contain.style.height = 0;
+    ReactDOM.render(<Label />, contain);
+    // document.body.appendChild(contain);
+    const overlay = new Overlay({
+      position: this.mapBase.setMapPosition(lonLat),
+      element: contain,
+      stopEvent: false,
+      positioning: 'bottom-left',
+    });
+    this.mapBase.map.addOverlay(overlay);
+  };
+
+  // 添加地图弹层框气泡
+  addMapPopup = (content, lonLat, showStatusHandel) => {
+    const Label = () => {
+      const [isShow, changeState] = useState(true);
+      showStatusHandel(changeState);
+      return (
+        <div className="ol-popup" style={{ display: isShow ? 'block' : 'none' }}>
+          <a href="#"
+            className="ol-popup-closer"
+            onClick={(e) => {
+              changeState(false);
+              const aLink = e.target;
+              aLink.blur();
+              return false;
+            }}
+          />
+          <div className="ol-popup-content" dangerouslySetInnerHTML={{ __html: content }} />
         </div>
       );
     };
@@ -96,16 +131,24 @@ class MapInteractive extends Base {
       <div
         className="ol-mapLabelContain"
         id={info.id}
-        style={{
-          position: 'relative',
-          top: '-25px',
-          left: '-6px',
-          height: '25px',
-        }}
+        // style={{
+        //   position: 'relative',
+        //   top: '-25px',
+        //   left: '-6px',
+        //   height: '25px',
+        // }}
         onClick={callBack}
       >
-        <i className={info.faClass ? info.faClass : 'fa fa-map-marker mark'} />
-        <div className="ol-mapLabel">
+        <i className={info.faClass ? info.faClass : 'fa fa-map-marker mark'}
+          style={{
+            position: 'absolute', bottom: 0, left: '-4px', zindex: 99999,
+          }}
+        />
+        <div className="ol-mapLabel"
+          style={{
+            position: 'absolute', bottom: 0, left: 10, zindex: 99999,
+          }}
+        >
           {info.comparisonAddress}
           <i dangerouslySetInnerHTML={{ __html: info.title }} />
           <i dangerouslySetInnerHTML={{ __html: info.extra }} />
@@ -155,7 +198,7 @@ class MapInteractive extends Base {
       const overlay = new Overlay({
         element: canvas,
         stopEvent: false,
-        positioning: 'bottom',
+        positioning: 'bottom-left',
       });
       overlay.setPosition(this.mapBase.setMapPosition(val.lonLat));
       map.addOverlay(overlay);

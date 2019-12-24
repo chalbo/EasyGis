@@ -5,13 +5,20 @@ import {
 import communityJson from '../mapData/json/community';
 // import enterprise from '../mapData/Enterprise';
 import '../map.css';
+import 'font-awesome/css/font-awesome.min.css';
 
 const configData = {
-  map_type: 'XYZ',
+  // map_type: 'XYZ',
+  // map_Url:
+  //   'http://localhost:3000/terrain/{z}/{x}/{y}.jpg',
+  // map_center: [11224194.75460964, 2789606.398616877],
+  // map_projection: 'EPSG:3857',
+  map_type: 'amap',
   map_Url:
-    'http://localhost:3000/terrain/{z}/{x}/{y}.jpg',
-  map_center: [11224194.75460964, 2789606.398616877],
-  map_projection: 'EPSG:3857',
+    'http://wprd0{1-4}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&style=7&x={x}&y={y}&z={z}',
+
+  map_center: [101.243746, 25.109256],
+  map_projection: 'EPSG:4326',
   map_minZoom: 1,
   map_maxZoom: 20,
   map_zoom: 5,
@@ -54,19 +61,21 @@ mapInteractive.setMapLabel({ title: '111122222', lonLat: [120.419354, 36.122387]
   console.log(111111);
   alert(1);
 });
+mapInteractive.drawStar([{ count: 25, lonLat: [120.419354, 36.122387] }, { count: 25, lonLat: [101.243746, 25.109256] }], '123,123,123');
 wfsHandle.addGeoJson(communityJson, typeColors, { name: 'NSRMC', color: 'COLOR' });
 wfsHandle.addHeatmapGeoJson(hotmapdata, typeColors, { name: 'NSRMC', color: 'COLOR' });
 // 气泡支持
 const a = {};
 mapInteractive.on('changeName', () => { alert(2); });
 // eslint-disable-next-line max-len
-mapInteractive.addMapPopup(<div onClick={() => { alert(1111); mapInteractive.emit('changeName'); MapInteractive.event.emit('check'); }}>aaaccccaaa</div>, [101.243746, 25.109256], (changeStatus) => { a.changeStatus = changeStatus; });
+mapInteractive.addMapJSXPopup(<div onClick={() => { alert(1111); mapInteractive.emit('changeName'); MapInteractive.event.emit('check'); }}>aaaccccaaa</div>, [101.243746, 25.109256], (changeStatus) => { a.changeStatus = changeStatus; });
 // a.changeStatus(true);
+
 // 工具栏
 mapBase.addZoom();
 mapBase.addZoomslider();
 
-const handel = wfsHandle.getFeaturesHandle();
+const handel = wfsHandle.getFeaturesHandle('rgb(123,123,123,0.5)', true);
 handel.on('select', (e) => {
   const features = e.target.getFeatures().getArray();
 
@@ -77,9 +86,9 @@ handel.on('select', (e) => {
     MultiPolygon: { fill: { color: 'yellow' }, stroke: { color: 'green' } },
     Polygon: { fill: { color: 'yellow' }, stroke: { color: 'green' } },
   }, { name: 'NAME' });
-  setTimeout(() => {
-    wfsHandle.map.removeLayer(layer1);
-  }, 1000);
+  // setTimeout(() => {
+  //   wfsHandle.map.removeLayer(layer1);
+  // }, 1000);
 
 
   // mapSource.addJsonFeatures(features,{

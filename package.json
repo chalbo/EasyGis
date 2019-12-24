@@ -53,6 +53,7 @@
     "elasticsearch": "^16.3.0",
     "eventemitter3": "^4.0.0",
     "face-api.js": "^0.20.1",
+    "font-awesome": "^4.7.0",
     "hash.js": "^1.1.7",
     "koa": "^2.5.1",
     "koa-body": "^4.0.4",
