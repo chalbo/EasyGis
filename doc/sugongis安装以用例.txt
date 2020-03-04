@@ -1,0 +1,68 @@
+
+一、postgres安装
+sugongis使用 postpres  v10
+
+postpres sql 安装
+
+1 yum源
+
+#yum install https://download.postgresql.org/pub/repos/yum/10/redhat/rhel-7-x86_64/pgdg-centos10-10-2.noarch.rpm
+
+安装： 
+#yum install postgresql10
+#yum install postgresql10-server
+
+初始化：
+
+ #/usr/pgsql-10/bin/postgresql-10-setup initdb
+开启启动
+
+#systemctl enable postgresql-10
+
+#systemctl start postgresql-10
+二、安装PostGIS
+
+#yum  install wget net-tools epel-release -y
+#yum install postgis24_10 postgis24_10-client -y
+
+扩展
+#yum install ogr_fdw10 -y
+#yum install pgrouting_10 -y
+
+
+首先修改/var/lib/pgsql/10/data/pg_hba.conf，验证方式：md5
+创建sugongis数据库： 
+
+
+CREATE DATABASE sugonGis_db OWNER postgres;
+
+安装地址
+vim /usr/lib/systemd/system/postgresql-10.service
+#\c sugonGis_db
+
+安装PostGis扩展
+sugonGis_db=# CREATE EXTENSION postgis;
+sugonGis_db =# CREATE EXTENSION postgis_topology;
+sugonGis_db =# CREATE EXTENSION ogr_fdw;
+
+查看安装 
+SELECT postgis_full_version();
+
+#### POSTGIS="2.4.8 r17696" PGSQL="100" GEOS="3.8.0-CAPI-1.13.1 " PROJ="Rel. 6.2.1,
+####November 1st, 2019" GDAL="GDAL 3.0.2, released 2019/10/28" LIBXML="2.9.1" LIBJSO
+####N="0.11" LIBPROTOBUF="1.0.2" TOPOLOGY RASTER
+####(1 row)  
+#
+三、范例-创建城市表：
+#CREATE TABLE cities(id varchar(20),name varchar(50));
+#CREATE TABLE line(id varchar(20),name varchar(50));
+添加gis空间字段
+#SELECT AddGeometryColumn ('cities', 'the_geom', 4326, 'POINT', 2);
+#SELECT AddGeometryColumn ('line', 'the_geom', 4326, 'MultiLineString', 2);
+插入数据
+#INSERT INTO cities (id, the_geom, name) VALUES (2,ST_GeomFromText('POINT(116.406568 39.911172)',4326),'北京'); 
+#INSERT INTO cities (id, the_geom, name) VALUES (1,ST_GeomFromText('POINT(120.384984 36.068777)',4326),'青岛'); 
+
+#INSERT INTO line (id, the_geom, name) VALUES (1,ST_GeomFromText('MultiLineString((120.384984 36.068777,116.406568 39.911172))',4326),'青岛'); 
+
+

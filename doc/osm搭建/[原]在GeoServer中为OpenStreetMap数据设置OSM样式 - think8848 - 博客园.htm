@@ -1,0 +1,2181 @@
+<!DOCTYPE html>
+<!-- saved from url=(0048)https://www.cnblogs.com/think8848/p/6013939.html -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="origin">
+    <meta property="og:description" content="转载请注明作者think8848和出处(http://think8848.cnblogs.com) 在前面几篇文章中，我们讲到了部署Postgresql,部署PostGis，部署GeoServer以及">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <title>[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园</title>
+    
+    <link rel="stylesheet" href="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/blog-common.min.css">
+    <link id="MainCss" rel="stylesheet" href="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/bundle-clearscreen01.min.css">
+    
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/bundle-clearscreen01-mobile.min.css">
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/think8848/rss">
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/think8848/rsd.xml">
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/think8848/wlwmanifest.xml">
+    <script src="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/amp4ads-host-v0.js"></script><script src="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/pubads_impl_rendering_2019111801.js"></script><script async="" src="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/analytics.js"></script><script type="text/javascript" src="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/encoder.js"></script><script src="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/jquery-2.2.0.min.js"></script>
+    <script src="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/blog-common.min.js"></script>
+    <script>
+        var currentBlogId = 4468;
+        var currentBlogApp = 'think8848';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+    </script>
+    
+    
+    
+<link rel="preload" href="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/f.txt" as="script"><script type="text/javascript" src="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/f.txt"></script><script src="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/pubads_impl_2019111801.js" async=""></script><link rel="prefetch" href="https://tpc.googlesyndication.com/safeframe/1-0-36/html/container.html"></head>
+<body>
+    <a name="top"></a>
+    
+    <!--done-->
+<div id="header">
+	
+<!--done-->
+<div class="header">
+	<div class="headerText">
+		<a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/think8848/">Warmth &amp; Chilliness</a>
+<br>
+		
+i miss u now, where a u go away...
+
+	</div>
+</div>
+
+
+</div>
+<div id="mylinks">
+
+<a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+&nbsp;&nbsp;::&nbsp;
+
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/think8848/">
+首页</a>
+&nbsp;&nbsp;::&nbsp;
+
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+&nbsp;&nbsp;::&nbsp;
+
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/think8848">
+联系</a>&nbsp;&nbsp;::&nbsp;
+
+<a id="blog_nav_rss" class="menu" href="https://www.cnblogs.com/think8848/rss/">
+订阅</a>&nbsp;
+<a id="blog_nav_rss_image" href="https://www.cnblogs.com/think8848/rss/">
+    <img src="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/xml.gif" alt="订阅">
+</a>&nbsp;&nbsp;::&nbsp;
+
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+
+
+</div>
+<div id="mytopmenu">
+	
+		<div id="mystats">
+			<!--done-->
+<div class="blogStats">
+posts - 
+116,&nbsp;
+comments - 
+260,&nbsp;
+trackbacks - 
+1
+
+</div>
+
+</div>
+	
+</div>
+<div id="main">
+    <div id="leftcontent">
+	    
+		    <div id="leftcontentcontainer">
+			    
+<div id="sidebar_news" class="newsItem"><!--done-->
+<div class="news">公告</div>
+	<div class="newsItem">
+		
+<div id="blog-news">
+    出发，无所谓先后，一路向北，<br>登顶，无所谓高低，一路向北，<br>探寻，无所谓昼夜，一路向北...
+    <div id="profile_block">
+        昵称：
+        <a href="https://home.cnblogs.com/u/think8848/">
+            think8848
+        </a>
+        <br>
+        园龄：
+        <a href="https://home.cnblogs.com/u/think8848/" title="入园时间：2004-07-27">
+            15年3个月
+        </a>
+        <br>
+        粉丝：
+        <a href="https://home.cnblogs.com/u/think8848/followers/">
+            96
+        </a>
+        <br>
+        关注：
+        <a href="https://home.cnblogs.com/u/think8848/followees/">
+            0
+        </a>
+        <div id="p_b_follow">
+<a href="javascript:void(0)" onclick="follow(&#39;ed83310b-63cf-dd11-9e4d-001cf0cd104b&#39;)">+加关注</a></div>
+        <script>getFollowStatus('ed83310b-63cf-dd11-9e4d-001cf0cd104b');</script>
+    </div>
+</div>
+	</div>
+
+</div>
+
+			    <div id="blog-calendar" style="">
+
+<table id="blogCalendar" class="Cal" cellspacing="0" cellpadding="0" title="Calendar" border="0">
+    <tbody>
+        <tr>
+            <td colspan="7">
+                <table class="CalTitle" cellspacing="0" border="0">
+                    <tbody>
+                        <tr>
+                            <td class="CalNextPrev">
+                                <a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2019/10/25&#39;); return false;">&lt;</a>
+                            </td>
+                            <td align="center">2019年11月</td>
+                            <td align="right" class="CalNextPrev">
+                                <a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2019/12/25&#39;); return false;">&gt;</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
+                    <th class="CalDayHeader" align="center" abbr="日" scope="col">日</th>
+                    <th class="CalDayHeader" align="center" abbr="一" scope="col">一</th>
+                    <th class="CalDayHeader" align="center" abbr="二" scope="col">二</th>
+                    <th class="CalDayHeader" align="center" abbr="三" scope="col">三</th>
+                    <th class="CalDayHeader" align="center" abbr="四" scope="col">四</th>
+                    <th class="CalDayHeader" align="center" abbr="五" scope="col">五</th>
+                    <th class="CalDayHeader" align="center" abbr="六" scope="col">六</th>
+        </tr>
+            <tr>
+                            <td class="CalOtherMonthDay" align="center">27</td>
+                            <td class="CalOtherMonthDay" align="center">28</td>
+                            <td class="CalOtherMonthDay" align="center">29</td>
+                            <td class="CalOtherMonthDay" align="center">30</td>
+                            <td class="CalOtherMonthDay" align="center">31</td>
+                        <td class="" align="center">
+                            1
+                        </td>
+                    <td class="CalWeekendDay" align="center">
+                        2
+                    </td>
+            </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            3
+                        </td>
+                            <td class="" align="center">
+                                4
+                            </td>
+                            <td class="" align="center">
+                                5
+                            </td>
+                            <td class="" align="center">
+                                6
+                            </td>
+                            <td class="" align="center">
+                                7
+                            </td>
+                            <td class="" align="center">
+                                8
+                            </td>
+                        <td class="CalWeekendDay" align="center">
+                            9
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            10
+                        </td>
+                            <td class="" align="center">
+                                11
+                            </td>
+                            <td class="" align="center">
+                                12
+                            </td>
+                            <td class="" align="center">
+                                13
+                            </td>
+                            <td class="" align="center">
+                                14
+                            </td>
+                            <td class="" align="center">
+                                15
+                            </td>
+                        <td class="CalWeekendDay" align="center">
+                            16
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            17
+                        </td>
+                            <td class="" align="center">
+                                18
+                            </td>
+                            <td class="" align="center">
+                                19
+                            </td>
+                            <td class="" align="center">
+                                20
+                            </td>
+                            <td class="" align="center">
+                                21
+                            </td>
+                            <td class="" align="center">
+                                22
+                            </td>
+                        <td class="CalWeekendDay" align="center">
+                            23
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            24
+                        </td>
+                            <td class="CalTodayDay" align="center">
+                                25
+                            </td>
+                            <td class="" align="center">
+                                26
+                            </td>
+                            <td class="" align="center">
+                                27
+                            </td>
+                            <td class="" align="center">
+                                28
+                            </td>
+                            <td class="" align="center">
+                                29
+                            </td>
+                        <td class="CalWeekendDay" align="center">
+                            30
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalOtherMonthDay" align="center">
+                            1
+                        </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                2
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                3
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                4
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                5
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                6
+                            </td>
+                        <td class="CalOtherMonthDay" align="center">
+                            7
+                        </td>
+                </tr>
+    </tbody>
+</table></div><script>loadBlogDefaultCalendar();</script>
+			    <div id="blog-sidecolumn">
+<!-- 搜索 -->
+<div id="sidebar_search" class="sidebar-block">
+    <div id="sidebar_search" class="mySearch">
+        <h3 class="catListTitle">搜索</h3>
+        <div id="sidebar_search_box">
+            <div id="widget_my_zzk" class="div_my_zzk">
+                <input type="text" id="q" onkeydown="return zzk_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="zzk_go()" type="button" value="找找看" id="btnZzk" class="btn_my_zzk">
+            </div>
+            <div id="widget_my_google" class="div_my_zzk">
+                <input type="text" name="google_q" id="google_q" onkeydown="return google_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="google_go()" type="button" value="谷歌搜索" class="btn_my_zzk">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 常用链接 -->
+
+
+<!-- 最新随笔 -->
+
+
+
+<!-- 我的标签 -->
+<div id="sidebar_toptags" class="sidebar-block">
+    
+<h3>我的标签</h3>
+<div id="MyTag">
+    <ul>
+        
+        <li>
+            <a href="https://www.cnblogs.com/think8848/tag/ASP.NET%20MVC/">ASP.NET MVC</a>(16)
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/think8848/tag/.NET/">.NET</a>(11)
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/think8848/tag/Silverlight/">Silverlight</a>(9)
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/think8848/tag/Web/">Web</a>(8)
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/think8848/tag/JavaScript/">JavaScript</a>(8)
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/think8848/tag/RESTful/">RESTful</a>(8)
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/think8848/tag/PostGis/">PostGis</a>(7)
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/think8848/tag/CentOS/">CentOS</a>(7)
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/think8848/tag/openstreetmap/">openstreetmap</a>(6)
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/think8848/tag/JSF/">JSF</a>(6)
+        </li>
+            <li>
+                <a href="https://www.cnblogs.com/think8848/tag/">更多</a>
+            </li>
+
+    </ul>
+</div>
+
+</div>
+
+<!-- 积分与排名 -->
+<div id="sidebar_scorerank" class="sidebar-block">
+    <h3>积分与排名</h3>
+<ul>
+    <li>
+        积分 - 
+138079
+    </li>
+    <li>
+        排名 - 
+3722
+    </li>
+</ul>
+</div>
+
+<!-- 随笔分类、随笔档案、文章分类、新闻分类、相册、链接 -->
+<div id="sidebar_categories">
+    
+<!--done-->
+		<h1 class="catListTitle">
+
+随笔分类
+<span style="font-size:11px;font-weight:normal">(171)</span>
+
+</h1>
+				<ul class="catList">
+			
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/877347.html" rel="" target="">
+    .NET Core(1)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/74981.html" rel="" target="">
+    .NET 技术(40)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/1091523.html" rel="" target="">
+    AngularJS(1)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/882750.html" rel="" target="">
+    ASP.NET Core(1)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/288081.html" rel="" target="">
+    ASP.NET MVC(15)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/1091526.html" rel="" target="">
+    bootstrap(1)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/131970.html" rel="" target="">
+    Database(6)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/952236.html" rel="" target="">
+    Docker(2)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/899514.html" rel="" target="">
+    GeoServer(3)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/899513.html" rel="" target="">
+    Gis(12)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/219754.html" rel="" target="">
+    Google API(3)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/74982.html" rel="" target="">
+    Java(6)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/129666.html" rel="" target="">
+    JavaScript &amp; Ajax(12)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/222211.html" rel="" target="">
+    jQuery(6)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/1091525.html" rel="" target="">
+    mapbox-gl(1)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/908232.html" rel="" target="">
+    mapnik(5)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/1240588.html" rel="" target="">
+    MongoDB(2)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/908233.html" rel="" target="">
+    node.js(7)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/341804.html" rel="" target="">
+    Object-C &amp; iOS(1)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/901827.html" rel="" target="">
+    PostGis(7)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/882911.html" rel="" target="">
+    PostgreSQL(4)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/1021151.html" rel="" target="">
+    RabbitMQ(1)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/166199.html" rel="" target="">
+    Silverlight 2(6)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/204004.html" rel="" target="">
+    Silverlight 3(9)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/158991.html" rel="" target="">
+    SOA(4)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/1517455.html" rel="" target="">
+    Spring Boot
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/1517456.html" rel="" target="">
+    Spring Cloud
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/964290.html" rel="" target="">
+    SuperMap(1)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/221197.html" rel="" target="">
+    Web Services(8)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/1091524.html" rel="" target="">
+    webpack(1)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/219745.html" rel="" target="">
+    XML(1)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/74984.html" rel="" target="">
+    随笔(4)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/1517457.html" rel="" target="">
+    微服务架构
+</a>
+
+</li>
+			
+				</ul>
+		<h1 class="catListTitle">
+
+随笔档案
+<span style="font-size:11px;font-weight:normal">(116)</span>
+
+</h1>
+				<ul class="catList">
+			
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2018/06.html" rel="" target="">
+    2018年6月(2)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2017/10.html" rel="" target="">
+    2017年10月(1)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2017/07.html" rel="" target="">
+    2017年7月(3)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2017/06.html" rel="" target="">
+    2017年6月(3)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2017/03.html" rel="" target="">
+    2017年3月(2)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2017/02.html" rel="" target="">
+    2017年2月(2)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2017/01.html" rel="" target="">
+    2017年1月(4)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2016/11.html" rel="" target="">
+    2016年11月(1)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2016/10.html" rel="" target="">
+    2016年10月(5)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2016/09.html" rel="" target="">
+    2016年9月(2)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2012/01.html" rel="" target="">
+    2012年1月(1)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2011/12.html" rel="" target="">
+    2011年12月(1)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2011/10.html" rel="" target="">
+    2011年10月(1)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2011/09.html" rel="" target="">
+    2011年9月(3)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2011/07.html" rel="" target="">
+    2011年7月(9)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2011/06.html" rel="" target="">
+    2011年6月(4)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2011/05.html" rel="" target="">
+    2011年5月(4)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2011/04.html" rel="" target="">
+    2011年4月(1)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2011/03.html" rel="" target="">
+    2011年3月(10)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2011/02.html" rel="" target="">
+    2011年2月(1)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2010/05.html" rel="" target="">
+    2010年5月(1)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2009/12.html" rel="" target="">
+    2009年12月(6)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2009/11.html" rel="" target="">
+    2009年11月(6)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2009/10.html" rel="" target="">
+    2009年10月(2)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2009/08.html" rel="" target="">
+    2009年8月(2)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2009/07.html" rel="" target="">
+    2009年7月(4)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2009/06.html" rel="" target="">
+    2009年6月(1)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2008/12.html" rel="" target="">
+    2008年12月(4)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2008/10.html" rel="" target="">
+    2008年10月(5)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2008/09.html" rel="" target="">
+    2008年9月(3)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2008/08.html" rel="" target="">
+    2008年8月(3)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2008/06.html" rel="" target="">
+    2008年6月(4)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2008/05.html" rel="" target="">
+    2008年5月(4)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2008/04.html" rel="" target="">
+    2008年4月(11)
+</a>
+
+</li>
+			
+				</ul>
+
+
+</div>
+
+<!-- 最新评论 -->
+<div id="sidebar_recentcomments" class="sidebar-block">
+    <div id="recent_comments_wrap" class="RecentComment">
+    <h3 class="catListTitle">最新评论</h3>
+    <div class="RecentCommentBlock">
+        <ul>
+                    <li class="recent_comment_title"><a href="https://www.cnblogs.com/think8848/p/7100079.html#4357306">1. Re:Rappid 消除试用版的弹出框</a></li>
+                    <li class="recent_comment_body">你好，文件下载链接挂了，能再发一份给我吗？1062661124@qq.com</li>
+                    <li class="recent_comment_author">--我为wy成全栈</li>
+                    <li class="recent_comment_title"><a href="https://www.cnblogs.com/think8848/p/6011073.html#4293931">2. Re:[原]CentOS7部署osm2pgsql</a></li>
+                    <li class="recent_comment_body">楼主，你好。 咨询个问题，china.osm.pbf 使用osm2pgsql 导入到postgres数据库，再用QGIS显示时，地图出现了不对，道路信息全集中在一起。我用Qgis直接打开china.o...</li>
+                    <li class="recent_comment_author">--双鹰</li>
+                    <li class="recent_comment_title"><a href="https://www.cnblogs.com/think8848/p/6241836.html#4291663">3. Re:[原]使用node-mapnik生成openstreetmap-carto风格的瓦片</a></li>
+                    <li class="recent_comment_body"><br>补一个转化的图。</li>
+                    <li class="recent_comment_author">--双鹰</li>
+                    <li class="recent_comment_title"><a href="https://www.cnblogs.com/think8848/p/6241836.html#4291661">4. Re:[原]使用node-mapnik生成openstreetmap-carto风格的瓦片</a></li>
+                    <li class="recent_comment_body">楼主你好，按照你的步骤，我在本地搭建了离线openstreetmap，但出现了一点问题，1：carto project.mml &gt; mapnil.xml 的时候出现 以上问题， openstreetm...</li>
+                    <li class="recent_comment_author">--双鹰</li>
+                    <li class="recent_comment_title"><a href="https://www.cnblogs.com/think8848/archive/2011/07/17/2108570.html#4279448">5. Re:[原]jQuery .tmpl(), .template()学习</a></li>
+                    <li class="recent_comment_body">很棒</li>
+                    <li class="recent_comment_author">--隰荷华</li>
+                    <li class="recent_comment_title"><a href="https://www.cnblogs.com/think8848/archive/2011/06/25/2090254.html#4266361">6. Re:[原]jQuery Tab插件，用于在Tab中显示iframe，附源码和详细说明</a></li>
+                    <li class="recent_comment_body">请教下，使用CleverTabs新增tab然后保存名字到数据库额？</li>
+                    <li class="recent_comment_author">--荷默</li>
+                    <li class="recent_comment_title"><a href="https://www.cnblogs.com/think8848/p/6011073.html#4199100">7. Re:[原]CentOS7部署osm2pgsql</a></li>
+                    <li class="recent_comment_body">那么 我怎么对外发布这个服务呢？</li>
+                    <li class="recent_comment_author">--Abore1</li>
+                    <li class="recent_comment_title"><a href="https://www.cnblogs.com/think8848/p/6357727.html#4195955">8. Re:[原]OpenStreetMap数据瓦片服务性能篇</a></li>
+                    <li class="recent_comment_body">我在您帖子的一系列指导下，简单实现了 Docker 下的openstreetmap地图的容器化部署，写的比较粗糙，基本能用，<a href="https://www.cnblogs.com/think8848/p/6013939.html" target="_blank"></a></li>
+                    <li class="recent_comment_author">--酷睿2</li>
+                    <li class="recent_comment_title"><a href="https://www.cnblogs.com/think8848/p/6056378.html#4150895">9. Re:[原]CentOS7.2部署node-mapnik</a></li>
+                    <li class="recent_comment_body">@think8848 楼主老帖子还回复不？请教一下，我现在就gdal出现了问题 Checking for gdal-config --libs... yes Checking for gdal-con...</li>
+                    <li class="recent_comment_author">--zxp209</li>
+                    <li class="recent_comment_title"><a href="https://www.cnblogs.com/think8848/p/6056378.html#4125040">10. Re:[原]CentOS7.2部署node-mapnik</a></li>
+                    <li class="recent_comment_body">不用安装node-mapnik也可以运行，亲测 已经成功。安装过程太闹心了 深有体会</li>
+                    <li class="recent_comment_author">--GoInSky</li>
+        </ul>
+    </div>
+</div>
+</div>
+
+
+
+<!-- 阅读排行榜 -->
+<div id="sidebar_topviewedposts" class="sidebar-block">
+    
+<div id="topview_posts_wrap">
+    <h3 class="catListTitle">阅读排行榜</h3>
+    <div id="TopViewPostsBlock">
+        <ul style="word-break:break-all">
+                    <li>
+                        <a href="https://www.cnblogs.com/think8848/archive/2011/07/17/2108570.html">
+                            1. [原]jQuery .tmpl(), .template()学习(54734)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/think8848/p/5877076.html">
+                            2. CentOS7下安装并简单设置PostgreSQL笔记(32101)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/think8848/archive/2011/03/06/1972195.html">
+                            3. [原]ASP.NET MVC 3 使用 DotNetOpenAuth 实现SSO(15644)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/think8848/p/6591238.html">
+                            4. node.js的Promise库-bluebird示例(10479)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/think8848/archive/2011/03/18/1988427.html">
+                            5. [原]使用ASP.NET MVC构建RESTful服务(8747)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/think8848/archive/2011/07/12/2103971.html">
+                            6. C# WinForm下DataGridView绘制背景图(7814)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/think8848/p/6013939.html">
+                            7. [原]在GeoServer中为OpenStreetMap数据设置OSM样式(7671)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/think8848/archive/2011/09/28/2193990.html">
+                            8. [原]jQuery ListBox Plugin(ListBox插件)(7121)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/think8848/archive/2011/02/27/1966520.html">
+                            9. [原]ASP.NET MVC 3 使用jqGrid之TreeGrid(6961)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/think8848/archive/2008/05/27/1208216.html">
+                            10. MyEclipse 6.5注册(6814)
+                        </a>
+                    </li>
+        </ul>
+    </div>
+</div>
+</div>
+
+<!-- 评论排行榜 -->
+
+
+<!-- 推荐排行榜 -->
+</div>
+                    <script>loadBlogSideColumn();</script></div>
+	    
+    </div>
+    <div id="centercontent">
+	    <div id="post_detail">
+<!--done-->
+<div class="post">
+	<div class="postTitle">
+		
+<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/think8848/p/6013939.html">[原]在GeoServer中为OpenStreetMap数据设置OSM样式</a>
+
+	</div>
+	
+<div id="cnblogs_post_body" class="blogpost-body ">
+    <p>转载请注明作者think8848和出处(http://think8848.cnblogs.com)</p>
+<p>在前面几篇文章中，我们讲到了<a href="http://www.cnblogs.com/think8848/p/5877076.html" target="_blank">部署Postgresql</a>,<a href="http://www.cnblogs.com/think8848/p/6010695.html" target="_blank">部署PostGis</a>，<a href="http://www.cnblogs.com/think8848/p/5992736.html" target="_blank">部署GeoServer</a>以及<a href="http://www.cnblogs.com/think8848/p/6011073.html" target="_blank">部署osm2pgsql并导入openstreetmap数据</a>，现在到了发布和呈现OSM数据的时候了，今天我们先来个简单的，使用开源的样式文件呈现地图，本文主要参考了<a href="http://workshops.boundlessgeo.com/tutorial-osm/" target="_blank">这里</a>。</p>
+<h1>1. 创建图层数据表</h1>
+<p>到目前为止，chinaosmgisdb中包含了planet_osm_line,planet_osm_point,planet_osm_polygon和planet_osm_roads四个数据表，我们要为各个图层分别配置样式，就应该为这些数据归归类，方法有两种，一是使用这四个基础数据表中再创建新的数据表，二是以这四个表为基础，创建视图(View)，效果都一样，不过视图在应用时会慢点，我的CPU太低级，但是硬盘还凑合，所以我们采用第一种方式吧。</p>
+<p><img src="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/1781-20161030190022671-1216748939.png" alt=""></p>
+<p>先下载本文中将用到的各种脚本和批处理文件<a href="http://files.cnblogs.com/files/think8848/osmsld.zip" target="_blank">osmsld.zip</a>，然后放到合适的位置解压</p>
+<div class="cnblogs_code">
+<pre>wget -O osmsld.zip http://files.cnblogs.com/files/think8848/osmsld.zip<br><br>unzip osmsld.zip</pre>
+</div>
+<p>现在就可以正式创建图层表了，登录postgres用户，然后使用chinaosmgisdb的owner(<strong><span style="color: #ff0000;">你想要在GeoServer中使用的那个用户运行SQL脚本文件</span></strong>)，不要使用无关用户，不然后面你得一个个得去修改权限。</p>
+<div class="cnblogs_code">
+<pre><span style="color: #000000;">su postgres
+
+psql </span>-U think8848 -W -d chinaosmgisdb -a <span style="color: #008080;">-f</span> /tmp/osmsld/create_tables.sql</pre>
+</div>
+<p>倒也没有非常慢，大概2分钟生成完了，我们来看一下数据库结构，可以看出来比之前多了不少表出来。</p>
+<p><img src="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/1781-20161030193003953-1967556955.png" alt=""></p>
+<h1>2. 在GeoServer中创建工作空间和数据源</h1>
+<p>不好描述过程，直接上图</p>
+<p>创建工作空间</p>
+<p><img src="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/1781-20161030193718296-1743834268.png" alt=""></p>
+<p>创建数据源</p>
+<p><img src="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/1781-20161030193801375-752821465.png" alt=""></p>
+<h1>3. 创建样式和图表</h1>
+<p>可以手动创建，也可以使用批处理文件自动创建，样式和图表加起来近50个，你选哪个？反正我选自动创建了</p>
+<p>回到GeoServer的服务端，将之前我们下载的osmsld.zip文件中的sld.zip解压开&nbsp;<span class="cnblogs_code">unzip sld.zip</span>&nbsp;，然后稍修改下SLD_create.sh文件，主要是修改GeoServer的REST API相关参数，如下：</p>
+<p><img src="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/1781-20161030201628593-2108625141.png" alt=""></p>
+<p>通常而言，既然是REST服务了，应该远程和本地调用都没有问题，然而在本例中，<strong><span style="color: #ff0000;">经实测，发现localhost可以，如果在另一台linux上远程调用REST服务，会出现错误，导致不能创建图层</span></strong>，原因以后在查吧，先使用本地调用。</p>
+<p>在本文件的最下面，也修改点内容，将两行暂不用的命令注释掉，如下：</p>
+<p><img src="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/1781-20161030194625937-415757281.png" alt=""></p>
+<p>然后进入刚才解压sld.zip形成的sld目录&nbsp;<span class="cnblogs_code">cd sld</span>&nbsp;，然后调用以下命令</p>
+<div class="cnblogs_code">
+<pre>sudo sh /tmp/osmsld/SLD_create.sh</pre>
+</div>
+<p><img src="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/1781-20161030202135828-1538771575.png" alt=""></p>
+<p>看到上面这个画面就说明成功了。</p>
+<p>如果整个过程顺利应该就可以在GeoServer的图层和样式里面能看到结果了：</p>
+<p>图层</p>
+<p><img src="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/1781-20161030202219718-1619593720.png" alt=""></p>
+<p>样式</p>
+<p><img src="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/1781-20161030202304875-1493906851.png" alt=""></p>
+<p>如果你的点比较低，很有可能只能看见样式，而看不见图层，那最好找找原因，得新来一遍，osmsld.zip包中有一个SLD_delete.sh文件可以自动帮你清理刚才的工作，<strong><span style="color: #ff0000;">不过貌似它清理过头了，把工作空间和数据源也给清掉了</span></strong><span style="color: #ff0000;"><span style="color: #000000;">，因为我都在测试环境下在用，所以会看到在清理后工作空间和数据源里面空空如也，所以<strong><span style="color: #ff0000;">SLD_delete.sh批处理文件慎用</span></strong>，不要将你其他有用的东西删掉了！！！</span></span></p>
+<p><span style="color: #ff0000;"><span style="color: #000000;">在使用SLD_delete.sh之前，照例先修改下其配置，如下：</span></span></p>
+<p><span style="color: #ff0000;"><span style="color: #000000;"><img src="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/1781-20161030202745968-399059578.png" alt=""></span></span></p>
+<p>&nbsp;</p>
+<h1>4. 创建图层组</h1>
+<p>执行到上一步，应该是可以看到图层样式了，但是那只能显示整个地图的一个层，我们还需要建个完整的图层组，用来展示完整地图，同样手动方式和自动方式让你选，你选哪个？</p>
+<p>我还是用自动方式吧</p>
+<p>先做个准备工作，打开osmsld.zip包中的layergroup.xml文件，将ocean这一节给删掉，为啥要删呢？因为我们并没有导入海图数据，因我电脑太搓的原因，今天时间有限，不导ocean数据了，另找时间专门开贴导ocean数据吧</p>
+<p><img src="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/1781-20161030203413312-1444883574.png" alt=""></p>
+<p>随后打开SLD_create.sh，滚动到最底部看一眼，我们要照着这两行命令创建图层组</p>
+<p><img src="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/1781-20161030204011250-978408761.png" alt=""></p>
+<p>查看建好的图层组：</p>
+<p><img src="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/1781-20161030204217296-34612543.png" alt=""></p>
+<p>包含图层：</p>
+<p><img src="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/1781-20161030204239187-1835870571.png" alt=""></p>
+<p>最后，如果想使用命令删除掉这个图层使用下列命令即可</p>
+<div class="cnblogs_code">
+<pre>curl -v -u admin:111111 -XDELETE http://localhost:8080/geoserver/rest/workspaces/chinaosm/layergroups/osm</pre>
+</div>
+<h1>5. 添加地名中文字体</h1>
+<p>进行完上一步操作后，在Layer Preview中就可以预览地图了，但是地名的显示字体不一定是我们想要的，所以接下来我们看看如果添加相要的字体，如微软雅黑，设置字体部分参考了<a href="http://www.cnblogs.com/rwxwsblog/p/5281792.html" target="_blank">这里</a>。</p>
+<p>首先，给GeoServer所在的CentOS7安装微软雅黑，从Windows操作系统的C:\Windows\Fonts中复制微软雅黑，放到一个指定文件夹中，就会得到一两个文件：msyh.ttf、msyhbd.ttf，将这两个字体打包到一个zip文件夹中，然后想办法弄到CentOS的/tmp文件夹中。怎么弄自已想办法（我为了方便，在Windows上弄了个web服务器，这样不论怎么折腾虚拟机，服务器上的东西都可以使用）</p>
+<p>安装字体管理工具</p>
+<div class="cnblogs_code">
+<pre>sudo yum install  fontconfig mkfontscale -y</pre>
+</div>
+<p>&nbsp;创建字体目录，并且将msyh.ttf和msyhbd.ttf复制到字体目录中</p>
+<div class="cnblogs_code">
+<pre>sudo mkdir -p /usr/share/fonts/<span style="color: #000000;">win
+
+sudo mv msyh.ttf msyhbd.ttf </span>/usr/share/fonts/win</pre>
+</div>
+<p>建立字体索引信息，更新字体缓存</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre>cd /usr/share/fonts/<span style="color: #000000;">win
+
+sudo mkfontscale
+
+sudo mkfontdir
+
+fc</span>-cache</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>然后重启系统，&nbsp;<span class="cnblogs_code">reboot</span>&nbsp;，重启好后先查看服务器状态，由原来28个字体可用变为30个字体可用了，good!看一眼</p>
+<p><img src="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/1781-20161030210549312-1212668067.png" alt=""></p>
+<p>打开GeoServer的Styles菜单，查找到highway-label样式，并打开编辑，将其中的样式内容复制到notepad中，然后全使用Ctrl + H将所有“DejaVu Sans”替换成"微软雅黑"，再将notepad中的样式复制到样式编辑器中，然后点击Validate验证，如果没有错误就可以保存了。</p>
+<p><img src="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/1781-20161030211305984-1207679886.png" alt=""></p>
+<p>最后，我们在Layer Preview中使用OpenLayers预览一下地图吧</p>
+<p><img src="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/1781-20161030211606953-89346702.png" alt=""></p>
+<p>------------------------<span style="color: #ff0000;">2016年12月30日更新</span>------------------------</p>
+<p>这是经过专业配图后的样式(我们称之为“午夜蓝”Y(^_^)Y)</p>
+<p><img src="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/1781-20161230144534867-1065491069.png" alt=""></p>
+<p>------------------------<span style="color: #ff0000;">2016年12月30日更新结束</span>------------------------</p>
+<p>最后让我们来对比一下OpenStreetMap,左边是我刚发布的图，右边是OpenStreetMap在线地图，貌似还有不少的差距，但是总算是有个良好的开端了:)</p>
+<p><img src="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/1781-20161030212032312-168525749.png" alt=""></p>
+<p>&nbsp;</p>
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block"><div id="BlogPostCategory">
+    分类: 
+            <a href="https://www.cnblogs.com/think8848/category/899514.html" target="_blank">GeoServer</a>,             <a href="https://www.cnblogs.com/think8848/category/899513.html" target="_blank">Gis</a>,             <a href="https://www.cnblogs.com/think8848/category/901827.html" target="_blank">PostGis</a></div>
+<div id="EntryTag">
+    标签: 
+            <a href="https://www.cnblogs.com/think8848/tag/openstreetmap/">openstreetmap</a>,             <a href="https://www.cnblogs.com/think8848/tag/osm/">osm</a>,             <a href="https://www.cnblogs.com/think8848/tag/sld/">sld</a>,             <a href="https://www.cnblogs.com/think8848/tag/GeoServer/">GeoServer</a>,             <a href="https://www.cnblogs.com/think8848/tag/PostGis/">PostGis</a></div>
+
+    <div id="blog_post_info">
+<div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(6013939,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+        <a id="green_channel_follow" onclick="follow(&#39;ed83310b-63cf-dd11-9e4d-001cf0cd104b&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="https://home.cnblogs.com/u/think8848/">think8848</a><br>
+            <a href="https://home.cnblogs.com/u/think8848/followees/">关注 - 0</a><br>
+            <a href="https://home.cnblogs.com/u/think8848/followers/">粉丝 - 96</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;ed83310b-63cf-dd11-9e4d-001cf0cd104b&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(6013939,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">0</span>
+    </div>
+    <div class="buryit" onclick="votePost(6013939,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+
+<script type="text/javascript">
+    currentDiggType = 0;
+</script></div>
+    <div class="clear"></div>
+    <div id="post_next_prev">
+
+    <a href="https://www.cnblogs.com/think8848/p/6011073.html" class="p_n_p_prefix">« </a> 上一篇：    <a href="https://www.cnblogs.com/think8848/p/6011073.html" title="发布于 2016-10-29 15:56">[原]CentOS7部署osm2pgsql</a>
+    <br>
+    <a href="https://www.cnblogs.com/think8848/p/6016984.html" class="p_n_p_prefix">» </a> 下一篇：    <a href="https://www.cnblogs.com/think8848/p/6016984.html" title="发布于 2016-10-31 19:06">[原]导入OpenStreetMap海图数据，并在GeoServer上发布</a>
+
+</div>
+</div>
+	<div class="postDesc">posted on 
+<span id="post-date">2016-10-30 21:22</span>&nbsp;<a href="https://www.cnblogs.com/think8848/">think8848</a> 阅读(<span id="post_view_count">7671</span>) 评论(<span id="post_comment_count">23</span>) <a href="https://i.cnblogs.com/EditPosts.aspx?postid=6013939" rel="nofollow"> 编辑</a> <a href="javascript:void(0)" onclick="AddToWz(6013939); return false;">收藏</a>
+</div>
+</div>
+
+
+<script src="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 4468, cb_blogApp = 'think8848', cb_blogUserGuid = 'ed83310b-63cf-dd11-9e4d-001cf0cd104b';
+    var cb_entryId = 6013939, cb_entryCreatedDate = '2016-10-30 21:22', cb_postType = 1; 
+    loadViewCount(cb_entryId);
+</script><a name="!comments"></a>
+<div id="blog-comments-placeholder">
+
+<div id="comment_pager_top">
+    
+</div>
+
+<!--done-->
+<a name="feedback"></a>
+<div class="feedback">
+	<div class="feedbackTitle">
+		Feedback
+	</div>
+	<div class="feedbackNoItems"><div class="feedbackNoItems"></div></div>
+	
+			<div class="feedbackItem">
+				<div class="feedbackListTitle">
+<a href="https://www.cnblogs.com/think8848/p/6013939.html#3584625" class="layer">#1楼</a>
+<a name="3584625" id="comment_anchor_3584625"></a>
+
+</div>
+				<div class="feedbackListSubtitle">
+					
+<span class="comment_date">2016-12-19 16:47</span>
+
+ | 
+
+            <a id="a_comment_author_3584625" href="https://home.cnblogs.com/u/568997/" target="_blank">12105212</a>
+
+				</div>
+				
+<div id="comment_body_3584625" class="blog_comment_body">
+    楼主你好，我做到sudo sh /tmp/osmsld/SLD_create.sh这一步的时候，出现了错误，错误是<br>* Connection #0 to host localhost left intact<br>Warning: Couldn't read data from file "*.sld", this makes an empty POST.<br>*   Trying 127.0.0.1...<br>* Connected to localhost (127.0.0.1) port 8080 (#0)<br>* Server auth using Basic with user 'admin'<br>&gt; PUT /geoserver/rest/workspaces/chinaosm/styles/* HTTP/1.1<br>&gt; Host: localhost:8080<br>&gt; Authorization: Basic YWRtaW46Z2Vvc2VydmVy<br>&gt; User-Agent: curl/7.47.0<br>&gt; Accept: */*<br>&gt; Content-type: application/vnd.ogc.sld+xml<br>&gt; Content-Length: 0<br>&gt; <br>&lt; HTTP/1.1 500 <br>&lt; Transfer-Encoding: chunked<br>&lt; Date: Mon, 19 Dec 2016 08:42:09 GMT<br>&lt; Connection: close<br>&lt; <br>* Closing connection 0<br>org.xml.sax.SAXParseException; lineNumber: 1; columnNumber: 1; 文件提前结束。*   Trying 127.0.0.1...<br>Connected to localhost (127.0.0.1) port 8080 (#0)<br>* Server auth using Basic with user 'admin'<br>&gt; PUT /geoserver/rest/layers/chinaosm:* HTTP/1.1<br>&gt; Host: localhost:8080<br>&gt; Authorization: Basic YWRtaW46Z2Vvc2VydmVy<br>&gt; User-Agent: curl/7.47.0<br>&gt; Accept: */*<br>&gt; Content-type: text/xml<br>&gt; Content-Length: 112<br>&gt; <br>* upload completely sent off: 112 out of 112 bytes<br>&lt; HTTP/1.1 404 <br>&lt; Content-Type: text/plain<br>&lt; Transfer-Encoding: chunked<br>&lt; Date: Mon, 19 Dec 2016 08:42:09 GMT<br>&lt; <br>* Connection #0 to host localhost left intact<br>No such layer: chinaosm:*<br><br>看不到任何图层和样式，请问有哪里有问题吗？都是按照你的步骤做的。求指点。
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3584625, &#39;Digg&#39;, this.parentElement, false);">
+                支持(0)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(3584625, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        
+
+				&nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+			</div>
+			<div class="feedbackItem">
+				<div class="feedbackListTitle">
+<a href="https://www.cnblogs.com/think8848/p/6013939.html#3586603" class="layer">#2楼</a>
+<a name="3586603" id="comment_anchor_3586603"></a>
+[<span class="louzhu">楼主</span>]
+</div>
+				<div class="feedbackListSubtitle">
+					
+<span class="comment_date">2016-12-21 21:47</span>
+
+ | 
+
+            <a id="a_comment_author_3586603" href="https://www.cnblogs.com/think8848/" target="_blank">think8848</a>
+
+				</div>
+				
+<div id="comment_body_3586603" class="blog_comment_body">
+    <a href="https://www.cnblogs.com/think8848/p/6013939.html#3584625" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3584625);">@</a>
+12105212<br>你能确定GeoServer的用户名是admin吗？admin的密码是111111吗？试着看看用这个用户名密码登录GeoServer，这个问题貌似出在你正确访问GeoServer的REST服务上
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3586603, &#39;Digg&#39;, this.parentElement, false);">
+                支持(0)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(3586603, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        
+
+				&nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+			</div>
+			<div class="feedbackItem">
+				<div class="feedbackListTitle">
+<a href="https://www.cnblogs.com/think8848/p/6013939.html#3608562" class="layer">#3楼</a>
+<a name="3608562" id="comment_anchor_3608562"></a>
+
+</div>
+				<div class="feedbackListSubtitle">
+					
+<span class="comment_date">2017-01-22 17:33</span>
+
+ | 
+
+            <a id="a_comment_author_3608562" href="https://www.cnblogs.com/W-Seven/" target="_blank">W-Seven</a>
+
+				</div>
+				
+<div id="comment_body_3608562" class="blog_comment_body">
+    楼主你好，请问只能生成样式而图层生成不了有可能是什么原因呢？还有你说的点比较低是什么意思？求指导。。。
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3608562, &#39;Digg&#39;, this.parentElement, false);">
+                支持(0)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(3608562, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        
+
+				&nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+			</div>
+			<div class="feedbackItem">
+				<div class="feedbackListTitle">
+<a href="https://www.cnblogs.com/think8848/p/6013939.html#3650611" class="layer">#4楼</a>
+<a name="3650611" id="comment_anchor_3650611"></a>
+
+</div>
+				<div class="feedbackListSubtitle">
+					
+<span class="comment_date">2017-03-24 16:01</span>
+
+ | 
+
+            <a id="a_comment_author_3650611" href="https://home.cnblogs.com/u/1133450/" target="_blank">渐行渐远的术士</a>
+
+				</div>
+				
+<div id="comment_body_3650611" class="blog_comment_body">
+    OpenLayers预览地图，是空白啊。。是什么原因？
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3650611, &#39;Digg&#39;, this.parentElement, false);">
+                支持(1)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(3650611, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        
+
+				&nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+			</div>
+			<div class="feedbackItem">
+				<div class="feedbackListTitle">
+<a href="https://www.cnblogs.com/think8848/p/6013939.html#3650702" class="layer">#5楼</a>
+<a name="3650702" id="comment_anchor_3650702"></a>
+
+</div>
+				<div class="feedbackListSubtitle">
+					
+<span class="comment_date">2017-03-24 16:47</span>
+
+ | 
+
+            <a id="a_comment_author_3650702" href="https://home.cnblogs.com/u/1133450/" target="_blank">渐行渐远的术士</a>
+
+				</div>
+				
+<div id="comment_body_3650702" class="blog_comment_body">
+    楼主，用你的方法做的样式不显示是什么原因？。。如果用自带的line,point等都可以正常显示
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3650702, &#39;Digg&#39;, this.parentElement, false);">
+                支持(0)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(3650702, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        
+
+				&nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+			</div>
+			<div class="feedbackItem">
+				<div class="feedbackListTitle">
+<a href="https://www.cnblogs.com/think8848/p/6013939.html#3650912" class="layer">#6楼</a>
+<a name="3650912" id="comment_anchor_3650912"></a>
+[<span class="louzhu">楼主</span>]
+</div>
+				<div class="feedbackListSubtitle">
+					
+<span class="comment_date">2017-03-24 21:59</span>
+
+ | 
+
+            <a id="a_comment_author_3650912" href="https://www.cnblogs.com/think8848/" target="_blank">think8848</a>
+
+				</div>
+				
+<div id="comment_body_3650912" class="blog_comment_body">
+    <a href="https://www.cnblogs.com/think8848/p/6013939.html#3650702" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3650702);">@</a>
+渐行渐远的术士<br>额..我不知道您“自带的”是什么概念，是否是GeoServer自带的图层浏览器？其实我也是在自带的图层浏览器截的这个图。<br>如果你使用单独的ol页面加载这个数据，那么出现这个情况，就有可能是代码写的有问题了。
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3650912, &#39;Digg&#39;, this.parentElement, false);">
+                支持(0)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(3650912, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        
+
+				&nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+			</div>
+			<div class="feedbackItem">
+				<div class="feedbackListTitle">
+<a href="https://www.cnblogs.com/think8848/p/6013939.html#3652234" class="layer">#7楼</a>
+<a name="3652234" id="comment_anchor_3652234"></a>
+
+</div>
+				<div class="feedbackListSubtitle">
+					
+<span class="comment_date">2017-03-27 10:01</span>
+
+ | 
+
+            <a id="a_comment_author_3652234" href="https://www.cnblogs.com/xyj0922/" target="_blank">渐行渐远的术士</a>
+
+				</div>
+				
+<div id="comment_body_3652234" class="blog_comment_body">
+    <a href="https://www.cnblogs.com/think8848/p/6013939.html#3650912" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3650912);">@</a>
+think8848 <br>我发现问题了。。。是样式的问题，比例尺不合适。。。得放大几次后才能看到地图
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3652234, &#39;Digg&#39;, this.parentElement, false);">
+                支持(1)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(3652234, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        
+
+				&nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+			</div>
+			<div class="feedbackItem">
+				<div class="feedbackListTitle">
+<a href="https://www.cnblogs.com/think8848/p/6013939.html#3653444" class="layer">#8楼</a>
+<a name="3653444" id="comment_anchor_3653444"></a>
+
+</div>
+				<div class="feedbackListSubtitle">
+					
+<span class="comment_date">2017-03-28 13:24</span>
+
+ | 
+
+            <a id="a_comment_author_3653444" href="https://www.cnblogs.com/xyj0922/" target="_blank">渐行渐远的术士</a>
+
+				</div>
+				
+<div id="comment_body_3653444" class="blog_comment_body">
+    不过博主，你有windows的批处理方式吗？或者大概给个链接，我去研究一下
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3653444, &#39;Digg&#39;, this.parentElement, false);">
+                支持(0)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(3653444, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        
+
+				&nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+			</div>
+			<div class="feedbackItem">
+				<div class="feedbackListTitle">
+<a href="https://www.cnblogs.com/think8848/p/6013939.html#3755642" class="layer">#9楼</a>
+<a name="3755642" id="comment_anchor_3755642"></a>
+
+</div>
+				<div class="feedbackListSubtitle">
+					
+<span class="comment_date">2017-08-11 13:46</span>
+
+ | 
+
+            <a id="a_comment_author_3755642" href="https://home.cnblogs.com/u/619938/" target="_blank">詹瞭远</a>
+
+				</div>
+				
+<div id="comment_body_3755642" class="blog_comment_body">
+    楼主，我用GeoServer自带的图层浏览器浏览，地图不显示，浏览器调试器中监听到请求返回的是一张空白图片是什么原因？
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3755642, &#39;Digg&#39;, this.parentElement, false);">
+                支持(1)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(3755642, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        
+
+				&nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+			</div>
+			<div class="feedbackItem">
+				<div class="feedbackListTitle">
+<a href="https://www.cnblogs.com/think8848/p/6013939.html#3807584" class="layer">#10楼</a>
+<a name="3807584" id="comment_anchor_3807584"></a>
+
+</div>
+				<div class="feedbackListSubtitle">
+					
+<span class="comment_date">2017-10-11 16:50</span>
+
+ | 
+
+            <a id="a_comment_author_3807584" href="https://www.cnblogs.com/520db/" target="_blank">摘梅煮酒</a>
+
+				</div>
+				
+<div id="comment_body_3807584" class="blog_comment_body">
+    博主，你好，我想请教一下。我的地图打开字体显示部分是方框，什么原因造成的。
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3807584, &#39;Digg&#39;, this.parentElement, false);">
+                支持(0)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(3807584, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        <span id="comment_3807584_avatar" style="display:none">
+            https://pic.cnblogs.com/face/1186386/20180422213155.png
+        </span>
+
+				&nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+			</div>
+			<div class="feedbackItem">
+				<div class="feedbackListTitle">
+<a href="https://www.cnblogs.com/think8848/p/6013939.html#3809181" class="layer">#11楼</a>
+<a name="3809181" id="comment_anchor_3809181"></a>
+[<span class="louzhu">楼主</span>]
+</div>
+				<div class="feedbackListSubtitle">
+					
+<span class="comment_date">2017-10-13 10:24</span>
+
+ | 
+
+            <a id="a_comment_author_3809181" href="https://www.cnblogs.com/think8848/" target="_blank">think8848</a>
+
+				</div>
+				
+<div id="comment_body_3809181" class="blog_comment_body">
+    <a href="https://www.cnblogs.com/think8848/p/6013939.html#3807584" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3807584);">@</a>
+他滴不在<br>一般情况下这个原因是有一些文字，比如说拉丁文、或是藏文，在渲染的时候没有找到相应的字体
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3809181, &#39;Digg&#39;, this.parentElement, false);">
+                支持(0)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(3809181, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        
+
+				&nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+			</div>
+			<div class="feedbackItem">
+				<div class="feedbackListTitle">
+<a href="https://www.cnblogs.com/think8848/p/6013939.html#3876512" class="layer">#12楼</a>
+<a name="3876512" id="comment_anchor_3876512"></a>
+
+</div>
+				<div class="feedbackListSubtitle">
+					
+<span class="comment_date">2017-12-28 18:04</span>
+
+ | 
+
+            <a id="a_comment_author_3876512" href="https://home.cnblogs.com/u/1308397/" target="_blank">花瓣</a>
+
+				</div>
+				
+<div id="comment_body_3876512" class="blog_comment_body">
+    楼主你好，请问osmsld.zip这个文件是在哪下载的？
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3876512, &#39;Digg&#39;, this.parentElement, false);">
+                支持(0)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(3876512, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        
+
+				&nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+			</div>
+			<div class="feedbackItem">
+				<div class="feedbackListTitle">
+<a href="https://www.cnblogs.com/think8848/p/6013939.html#3877750" class="layer">#13楼</a>
+<a name="3877750" id="comment_anchor_3877750"></a>
+[<span class="louzhu">楼主</span>]
+</div>
+				<div class="feedbackListSubtitle">
+					
+<span class="comment_date">2017-12-30 00:57</span>
+
+ | 
+
+            <a id="a_comment_author_3877750" href="https://www.cnblogs.com/think8848/" target="_blank">think8848</a>
+
+				</div>
+				
+<div id="comment_body_3877750" class="blog_comment_body">
+    <a href="https://www.cnblogs.com/think8848/p/6013939.html#3876512" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3876512);">@</a>
+花瓣<br><fieldset class="comment_quote"><legend><a href="https://www.cnblogs.com/think8848/p/6013939.html#3876512" title="查看引用原文">引用</a></legend><br>楼主你好，请问osmsld.zip这个文件是在哪下载的？<br></fieldset><br>文章内有下载链接，你没有好好的找
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3877750, &#39;Digg&#39;, this.parentElement, false);">
+                支持(0)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(3877750, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        
+
+				&nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+			</div>
+			<div class="feedbackItem">
+				<div class="feedbackListTitle">
+<a href="https://www.cnblogs.com/think8848/p/6013939.html#3879149" class="layer">#14楼</a>
+<a name="3879149" id="comment_anchor_3879149"></a>
+
+</div>
+				<div class="feedbackListSubtitle">
+					
+<span class="comment_date">2018-01-02 10:35</span>
+
+ | 
+
+            <a id="a_comment_author_3879149" href="https://home.cnblogs.com/u/1308397/" target="_blank">花瓣</a>
+
+				</div>
+				
+<div id="comment_body_3879149" class="blog_comment_body">
+    <a href="https://www.cnblogs.com/think8848/p/6013939.html#3877750" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3877750);">@</a>
+think8848<br>您的我找到了  只是我想了解一下   这个文件是怎么来的  我刚接触不是很了解  这个文件是您写的  还是有什么网址可以下载相应的sld文件？
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3879149, &#39;Digg&#39;, this.parentElement, false);">
+                支持(0)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(3879149, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        
+
+				&nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+			</div>
+			<div class="feedbackItem">
+				<div class="feedbackListTitle">
+<a href="https://www.cnblogs.com/think8848/p/6013939.html#3879871" class="layer">#15楼</a>
+<a name="3879871" id="comment_anchor_3879871"></a>
+[<span class="louzhu">楼主</span>]
+</div>
+				<div class="feedbackListSubtitle">
+					
+<span class="comment_date">2018-01-02 20:58</span>
+
+ | 
+
+            <a id="a_comment_author_3879871" href="https://www.cnblogs.com/think8848/" target="_blank">think8848</a>
+
+				</div>
+				
+<div id="comment_body_3879871" class="blog_comment_body">
+    <a href="https://www.cnblogs.com/think8848/p/6013939.html#3879149" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3879149);">@</a>
+花瓣<br><fieldset class="comment_quote"><legend><a href="https://www.cnblogs.com/think8848/p/6013939.html#3879149" title="查看引用原文">引用</a></legend><br>@think8848<br>您的我找到了  只是我想了解一下   这个文件是怎么来的  我刚接触不是很了解  这个文件是您写的  还是有什么网址可以下载相应的sld文件？<br></fieldset><br>下载的这个是从github上找到的，蓝色的配图是我们自己配的
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3879871, &#39;Digg&#39;, this.parentElement, false);">
+                支持(0)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(3879871, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        
+
+				&nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+			</div>
+			<div class="feedbackItem">
+				<div class="feedbackListTitle">
+<a href="https://www.cnblogs.com/think8848/p/6013939.html#3880467" class="layer">#16楼</a>
+<a name="3880467" id="comment_anchor_3880467"></a>
+
+</div>
+				<div class="feedbackListSubtitle">
+					
+<span class="comment_date">2018-01-03 15:08</span>
+
+ | 
+
+            <a id="a_comment_author_3880467" href="https://home.cnblogs.com/u/1308397/" target="_blank">花瓣</a>
+
+				</div>
+				
+<div id="comment_body_3880467" class="blog_comment_body">
+    <a href="https://www.cnblogs.com/think8848/p/6013939.html#3879871" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3879871);">@</a>
+think8848<br>我用的是windows的环境  在osm上直接下载的中国的shp文件  其中包含了许多shp文件，它和您的那个osmsld样式不能匹配   您下好的osm数据与样式是直接匹配的吗？
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3880467, &#39;Digg&#39;, this.parentElement, false);">
+                支持(0)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(3880467, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        
+
+				&nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+			</div>
+			<div class="feedbackItem">
+				<div class="feedbackListTitle">
+<a href="https://www.cnblogs.com/think8848/p/6013939.html#3883046" class="layer">#17楼</a>
+<a name="3883046" id="comment_anchor_3883046"></a>
+[<span class="louzhu">楼主</span>]
+</div>
+				<div class="feedbackListSubtitle">
+					
+<span class="comment_date">2018-01-06 11:24</span>
+
+ | 
+
+            <a id="a_comment_author_3883046" href="https://www.cnblogs.com/think8848/" target="_blank">think8848</a>
+
+				</div>
+				
+<div id="comment_body_3883046" class="blog_comment_body">
+    <a href="https://www.cnblogs.com/think8848/p/6013939.html#3880467" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3880467);">@</a>
+花瓣<br><fieldset class="comment_quote"><legend><a href="https://www.cnblogs.com/think8848/p/6013939.html#3880467" title="查看引用原文">引用</a></legend><br>@think8848<br>我用的是windows的环境  在osm上直接下载的中国的shp文件  其中包含了许多shp文件，它和您的那个osmsld样式不能匹配   您下好的osm数据与样式是直接匹配的吗？<br></fieldset><br>和操作系统无关，数据需要自己处理一下的
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3883046, &#39;Digg&#39;, this.parentElement, false);">
+                支持(0)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(3883046, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        
+
+				&nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+			</div>
+			<div class="feedbackItem">
+				<div class="feedbackListTitle">
+<a href="https://www.cnblogs.com/think8848/p/6013939.html#3884036" class="layer">#18楼</a>
+<a name="3884036" id="comment_anchor_3884036"></a>
+
+</div>
+				<div class="feedbackListSubtitle">
+					
+<span class="comment_date">2018-01-08 10:50</span>
+
+ | 
+
+            <a id="a_comment_author_3884036" href="https://home.cnblogs.com/u/1308397/" target="_blank">花瓣</a>
+
+				</div>
+				
+<div id="comment_body_3884036" class="blog_comment_body">
+    <a href="https://www.cnblogs.com/think8848/p/6013939.html#3883046" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3883046);">@</a>
+think8848<br>嗯嗯  我的弄好了  谢谢您的解答
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3884036, &#39;Digg&#39;, this.parentElement, false);">
+                支持(0)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(3884036, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        
+
+				&nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+			</div>
+			<div class="feedbackItem">
+				<div class="feedbackListTitle">
+<a href="https://www.cnblogs.com/think8848/p/6013939.html#4009836" class="layer">#19楼</a>
+<a name="4009836" id="comment_anchor_4009836"></a>
+
+</div>
+				<div class="feedbackListSubtitle">
+					
+<span class="comment_date">2018-07-01 07:53</span>
+
+ | 
+
+            <a id="a_comment_author_4009836" href="https://www.cnblogs.com/weihanhua/" target="_blank">weihanhua</a>
+
+				</div>
+				
+<div id="comment_body_4009836" class="blog_comment_body">
+    <a href="https://www.cnblogs.com/think8848/p/6013939.html#3652234" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3652234);">@</a>
+渐行渐远的术士<br>调整Openlayers的width, height后，用chrome或firefox进行浏览的时候可以看到+-（放大缩小），但是经过放大（缩小）全部范围后，还是看不到地图？<br><img src="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/1431792-20180701075317862-1239173908.png" alt="" border="0" "="">
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(4009836, &#39;Digg&#39;, this.parentElement, false);">
+                支持(0)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(4009836, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        
+
+				&nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+			</div>
+			<div class="feedbackItem">
+				<div class="feedbackListTitle">
+<a href="https://www.cnblogs.com/think8848/p/6013939.html#4009837" class="layer">#20楼</a>
+<a name="4009837" id="comment_anchor_4009837"></a>
+
+</div>
+				<div class="feedbackListSubtitle">
+					
+<span class="comment_date">2018-07-01 07:55</span>
+
+ | 
+
+            <a id="a_comment_author_4009837" href="https://www.cnblogs.com/weihanhua/" target="_blank">weihanhua</a>
+
+				</div>
+				
+<div id="comment_body_4009837" class="blog_comment_body">
+    <a href="https://www.cnblogs.com/think8848/p/6013939.html#3877750" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3877750);">@</a>
+think8848<br>调整Openlayers的width, height后，用chrome或firefox进行浏览的时候可以看到+-（放大缩小），但是经过放大（缩小）全部范围后，还是看不到地图？<img src="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/1431792-20180701075512820-1143442974.png" alt="" border="0" "="">
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(4009837, &#39;Digg&#39;, this.parentElement, false);">
+                支持(0)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(4009837, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        
+
+				&nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+			</div>
+			<div class="feedbackItem">
+				<div class="feedbackListTitle">
+<a href="https://www.cnblogs.com/think8848/p/6013939.html#4010125" class="layer">#21楼</a>
+<a name="4010125" id="comment_anchor_4010125"></a>
+
+</div>
+				<div class="feedbackListSubtitle">
+					
+<span class="comment_date">2018-07-01 17:38</span>
+
+ | 
+
+            <a id="a_comment_author_4010125" href="https://www.cnblogs.com/weihanhua/" target="_blank">weihanhua</a>
+
+				</div>
+				
+<div id="comment_body_4010125" class="blog_comment_body">
+    <a href="https://www.cnblogs.com/think8848/p/6013939.html#3755642" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3755642);">@</a>
+詹瞭远<br>OpenLayers返回空白图片的问题解决了吗？
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(4010125, &#39;Digg&#39;, this.parentElement, false);">
+                支持(0)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(4010125, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        
+
+				&nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+			</div>
+			<div class="feedbackItem">
+				<div class="feedbackListTitle">
+<a href="https://www.cnblogs.com/think8848/p/6013939.html#4033161" class="layer">#22楼</a>
+<a name="4033161" id="comment_anchor_4033161"></a>
+
+</div>
+				<div class="feedbackListSubtitle">
+					
+<span class="comment_date">2018-08-01 11:17</span>
+
+ | 
+
+            <a id="a_comment_author_4033161" href="https://home.cnblogs.com/u/1454581/" target="_blank">summerDayLover</a>
+
+				</div>
+				
+<div id="comment_body_4033161" class="blog_comment_body">
+    <a href="https://www.cnblogs.com/think8848/p/6013939.html#3584625" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3584625);">@</a>
+12105212<br>你是不是没有解压sld.zip 而且把*.sld文件和SLD_create放同一级。而且只能通过localhost，本地服务创建
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(4033161, &#39;Digg&#39;, this.parentElement, false);">
+                支持(0)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(4033161, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        
+
+				&nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+			</div>
+			<div class="feedbackItem">
+				<div class="feedbackListTitle">
+<a href="https://www.cnblogs.com/think8848/p/6013939.html#4033385" class="layer">#23楼</a>
+<a name="4033385" id="comment_anchor_4033385"></a>
+
+        <span id="comment-maxId" style="display:none">4033385</span>
+        <span id="comment-maxDate" style="display:none">2018/8/1 下午3:30:16</span>
+</div>
+				<div class="feedbackListSubtitle">
+					
+<span class="comment_date">2018-08-01 15:30</span>
+
+ | 
+
+            <a id="a_comment_author_4033385" href="https://home.cnblogs.com/u/1454581/" target="_blank">summerDayLover</a>
+
+				</div>
+				
+<div id="comment_body_4033385" class="blog_comment_body">
+    一步一步踩着坑过岸啊。。楼主大大，除了highway-label要改字体 <br>placenames-medium中也要改字体。。不然字体全是空格显示
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(4033385, &#39;Digg&#39;, this.parentElement, false);">
+                支持(0)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(4033385, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        
+
+				&nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+			</div>
+</div>
+
+
+
+<div id="comment_pager_bottom">
+    
+</div>
+
+
+</div>
+<script>
+    var commentManager = new blogCommentManager();
+    commentManager.renderComments(0);
+</script>
+
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="https://www.cnblogs.com/think8848/p/6013939.html#" onclick="return RefreshPage();">刷新页面</a><a href="https://www.cnblogs.com/think8848/p/6013939.html#top">返回顶部</a></div>
+    <div id="comment_form_container"><div class="login_tips">
+    注册用户登录后才能发表评论，请 
+    <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login(&#39;commentform&#39;);">登录</a>
+     或 
+    <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，
+    <a href="https://www.cnblogs.com/">访问</a> 网站首页。
+</div></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"><a href="https://cloud.tencent.com/act/pro/overseas?fromSource=gwzcw.3090393.3090393.3090393&amp;utm_medium=cpc&amp;utm_id=gwzcw.3090393.3090393.3090393" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-腾讯云&#39;)">【推荐】腾讯云海外1核2G云服务器低至2折，半价续费券限量免费领取！</a><br><a href="http://click.aliyun.com/m/1000081987/" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-阿里云&#39;)">【推荐】阿里云双11返场来袭，热门产品低至一折等你来抢！</a><br><a href="http://www.ucancode.com/index.htm" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-工控&#39;)">【推荐】超50万行VC++源码: 大型组态工控、电力仿真CAD与GIS源码库</a><br><a href="https://group.cnblogs.com/topic/90800.html?800019197" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-马士兵&#39;)">【提升】这个价值 50W 年薪的问题，终于被马老师说明白啦...</a><br><a href="https://www.ctyun.cn/activity/20191111?hmsr=%E7%9C%8B%E7%9C%8B-%E5%8D%9A%E5%AE%A2%E5%9B%AD-%E5%8F%8C11-1106&amp;hmpl=&amp;hmcu=&amp;hmkw=&amp;hmci=" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-天翼云&#39;)">【推荐】天翼云双十一翼降到底，云主机11.11元起，抽奖送大礼</a><br><a href="https://www.uibot.com.cn/sem/bky.html" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-uibot_T2&#39;)">【推荐】流程自动化专家UiBot，体系化教程成就高薪RPA工程师</a><br></div>
+    <div id="opt_under_post"></div>
+    <script async="async" src="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/gpt.js"></script>
+    <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+    </script>
+    <script>
+        googletag.cmd.push(function () {
+            googletag.defineSlot("/1090369/C1", [300, 250], "div-gpt-ad-1546353474406-0").addService(googletag.pubads());
+            googletag.defineSlot("/1090369/C2", [468, 60], "div-gpt-ad-1539008685004-0").addService(googletag.pubads());
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+    <div id="cnblogs_c1" class="c_ad_block">
+        <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;" data-google-query-id="CIG9oZ7BhOYCFcowlgodJW8AzQ"><div id="google_ads_iframe_/1090369/C1_0__container__" style="border: 0pt none;"><iframe id="google_ads_iframe_/1090369/C1_0" title="3rd party ad content" name="google_ads_iframe_/1090369/C1_0" width="300" height="250" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" style="border: 0px; vertical-align: bottom;" data-google-container-id="1" data-load-complete="true" src="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/saved_resource.html"></iframe></div></div>
+    </div>
+    <div id="under_post_news"><div class="recomm-block"><b>相关博文：</b><br>·  <a title="[原]导入OpenStreetMap海图数据，并在GeoServer上发布" href="https://www.cnblogs.com/think8848/p/6016984.html" target="_blank" onclick="clickRecomItmem(6016984)">[原]导入OpenStreetMap海图数据，并在GeoServer上发布</a><br>·  <a title="利用OpenStreetMap（OSM）数据搭建一个地图服务" href="https://www.cnblogs.com/LBSer/p/4451471.html" target="_blank" onclick="clickRecomItmem(4451471)">利用OpenStreetMap（OSM）数据搭建一个地图服务</a><br>·  <a title="几种导入osm（openstreetmap）数据的方法" href="https://www.cnblogs.com/BigFishFly/p/6308972.html" target="_blank" onclick="clickRecomItmem(6308972)">几种导入osm（openstreetmap）数据的方法</a><br>·  <a title="Leaflet 操作OSM(OpenStreetMap) 设置地图style" href="https://www.cnblogs.com/RainyBear/p/6645945.html" target="_blank" onclick="clickRecomItmem(6645945)">Leaflet 操作OSM(OpenStreetMap) 设置地图style</a><br>·  <a title="OpenStreetMap(OSM) for developers" href="https://www.cnblogs.com/boonya/p/3803715.html" target="_blank" onclick="clickRecomItmem(3803715)">OpenStreetMap(OSM) for developers</a><br>»  <a target="_blank" href="https://recomm.cnblogs.com/blogpost/6013939">更多推荐...</a><div id="cnblogs_t5"><a href="https://developer.aliyun.com/ask/257834?utm_content=g_1000088953" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T5-阿里云开发者社区&#39;)">大咖问答：D2 前端技术专场问答</a></div></div></div>
+    <div id="cnblogs_c2" class="c_ad_block">
+        <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;" data-google-query-id="CIK9oZ7BhOYCFcowlgodJW8AzQ">
+            
+        <div id="google_ads_iframe_/1090369/C2_0__container__" style="border: 0pt none;"><iframe id="google_ads_iframe_/1090369/C2_0" title="3rd party ad content" name="google_ads_iframe_/1090369/C2_0" width="468" height="60" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" style="border: 0px; vertical-align: bottom;" data-google-container-id="2" data-load-complete="true" src="./[原]在GeoServer中为OpenStreetMap数据设置OSM样式 - think8848 - 博客园_files/saved_resource(1).html"></iframe></div></div>
+    </div>
+    <div id="under_post_kb">
+<div class="itnews c_ad_block">
+    <b>最新 IT 新闻</b>:
+    <br>
+ ·              <a href="https://news.cnblogs.com/n/649995/" target="_blank">谷歌、Facebook、微软……一大堆互联网巨头正在各大洋的海底较劲</a>
+            <br>
+ ·              <a href="https://news.cnblogs.com/n/649994/" target="_blank">新的 5G 通信协议恐干扰天气预报</a>
+            <br>
+ ·              <a href="https://news.cnblogs.com/n/649993/" target="_blank">OPPO自研芯片曝光 M1处理器已注册商标</a>
+            <br>
+ ·              <a href="https://news.cnblogs.com/n/649992/" target="_blank">大数据流程挖掘公司Celonis融资2.9亿美元 估值达25亿美元</a>
+            <br>
+ ·              <a href="https://news.cnblogs.com/n/649991/" target="_blank">中国核电：安全系数很“硬核”</a>
+            <br>
+    » <a href="https://news.cnblogs.com/" title="IT 新闻" target="_blank">更多新闻...</a>
+</div></div>
+    <div id="HistoryToday" class="c_ad_block"></div>
+    <script type="text/javascript">
+        fixPostBody();
+        setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+        deliverAdT2();
+        deliverAdC1();
+        deliverAdC2();
+        loadNewsAndKb();
+        loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);        LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+        GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+        loadOptUnderPost();
+        GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div></div>
+
+
+    </div>
+</div>
+<!--done-->
+<div class="footer">
+	Powered by: 
+	<br>
+	
+	
+<a href="https://www.cnblogs.com/" id="Footer1_Hyperlink3" style="font-size: 12px; font-family: Verdana">博客园</a>
+	<br>
+	Copyright © 2019 think8848
+<br><span id="poweredby">Powered by .NET Core 3.0.0 on Linux</span>
+
+</div>
+
+
+
+
+
+    
+
+
+</body></html>

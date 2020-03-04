@@ -1,0 +1,40 @@
+## Basic reverse proxy server ##
+## Apache backend for www.redis.com.cn ##
+upstream apachephp  {
+    server ip:8080; #Apache
+}
+
+## Start www.redis.com.cn ##
+server {
+    listen 80;
+    server_name  www.redis.com.cn;
+
+    access_log  logs/redis.access.log  main;
+    error_log  logs/redis.error.log;
+    root   html;
+    index  index.html index.htm index.php;
+
+    ## send request back to apache ##
+    location / {
+       。。。。。。。。。
+   }
+    location /api {
+        proxy_pass  http://123.123.123.1:8000;
+
+        #Proxy Settings
+        proxy_redirect     off;
+        proxy_set_header   Host             $host;
+        proxy_set_header   X-Real-IP        $remote_addr;
+        proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;
+        proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;
+        proxy_max_temp_file_size 0;
+        proxy_connect_timeout      90;
+        proxy_send_timeout         90;
+        proxy_read_timeout         90;
+        proxy_buffer_size          4k;
+        proxy_buffers              4 32k;
+        proxy_busy_buffers_size    64k;
+        proxy_temp_file_write_size 64k;
+   }
+}
+## End www.redis.com.cn ##

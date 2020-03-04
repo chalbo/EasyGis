@@ -1,0 +1,1534 @@
+<!DOCTYPE html>
+<!-- saved from url=(0048)https://www.cnblogs.com/think8848/p/6011073.html -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="origin">
+    <meta property="og:description" content="转载请注明原作者(think8848)和出处(http://think8848.cnblogs.com) 部署Postgresql和部署PostGis请参考前两篇文章 本文主要参考GitHub上osm">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <title>[原]CentOS7部署osm2pgsql - think8848 - 博客园</title>
+    
+    <link rel="stylesheet" href="./[原]CentOS7部署osm2pgsql - think8848 - 博客园_files/blog-common.min.css">
+    <link id="MainCss" rel="stylesheet" href="./[原]CentOS7部署osm2pgsql - think8848 - 博客园_files/bundle-clearscreen01.min.css">
+    
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="./[原]CentOS7部署osm2pgsql - think8848 - 博客园_files/bundle-clearscreen01-mobile.min.css">
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/think8848/rss">
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/think8848/rsd.xml">
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/think8848/wlwmanifest.xml">
+    <script src="./[原]CentOS7部署osm2pgsql - think8848 - 博客园_files/amp4ads-host-v0.js"></script><script src="./[原]CentOS7部署osm2pgsql - think8848 - 博客园_files/pubads_impl_rendering_2019111801.js"></script><script async="" src="./[原]CentOS7部署osm2pgsql - think8848 - 博客园_files/analytics.js"></script><script type="text/javascript" src="./[原]CentOS7部署osm2pgsql - think8848 - 博客园_files/encoder.js"></script><script src="./[原]CentOS7部署osm2pgsql - think8848 - 博客园_files/jquery-2.2.0.min.js"></script>
+    <script src="./[原]CentOS7部署osm2pgsql - think8848 - 博客园_files/blog-common.min.js"></script>
+    <script>
+        var currentBlogId = 4468;
+        var currentBlogApp = 'think8848';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+    </script>
+    
+    
+    
+<link rel="preload" href="./[原]CentOS7部署osm2pgsql - think8848 - 博客园_files/f.txt" as="script"><script type="text/javascript" src="./[原]CentOS7部署osm2pgsql - think8848 - 博客园_files/f.txt"></script><script src="./[原]CentOS7部署osm2pgsql - think8848 - 博客园_files/pubads_impl_2019111801.js" async=""></script><link rel="prefetch" href="https://tpc.googlesyndication.com/safeframe/1-0-36/html/container.html"></head>
+<body>
+    <a name="top"></a>
+    
+    <!--done-->
+<div id="header">
+	
+<!--done-->
+<div class="header">
+	<div class="headerText">
+		<a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/think8848/">Warmth &amp; Chilliness</a>
+<br>
+		
+i miss u now, where a u go away...
+
+	</div>
+</div>
+
+
+</div>
+<div id="mylinks">
+
+<a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+&nbsp;&nbsp;::&nbsp;
+
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/think8848/">
+首页</a>
+&nbsp;&nbsp;::&nbsp;
+
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+&nbsp;&nbsp;::&nbsp;
+
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/think8848">
+联系</a>&nbsp;&nbsp;::&nbsp;
+
+<a id="blog_nav_rss" class="menu" href="https://www.cnblogs.com/think8848/rss/">
+订阅</a>&nbsp;
+<a id="blog_nav_rss_image" href="https://www.cnblogs.com/think8848/rss/">
+    <img src="./[原]CentOS7部署osm2pgsql - think8848 - 博客园_files/xml.gif" alt="订阅">
+</a>&nbsp;&nbsp;::&nbsp;
+
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+
+
+</div>
+<div id="mytopmenu">
+	
+		<div id="mystats">
+			<!--done-->
+<div class="blogStats">
+posts - 
+116,&nbsp;
+comments - 
+260,&nbsp;
+trackbacks - 
+1
+
+</div>
+
+</div>
+	
+</div>
+<div id="main">
+    <div id="leftcontent">
+	    
+		    <div id="leftcontentcontainer">
+			    
+<div id="sidebar_news" class="newsItem"><!--done-->
+<div class="news">公告</div>
+	<div class="newsItem">
+		
+<div id="blog-news">
+    出发，无所谓先后，一路向北，<br>登顶，无所谓高低，一路向北，<br>探寻，无所谓昼夜，一路向北...
+    <div id="profile_block">
+        昵称：
+        <a href="https://home.cnblogs.com/u/think8848/">
+            think8848
+        </a>
+        <br>
+        园龄：
+        <a href="https://home.cnblogs.com/u/think8848/" title="入园时间：2004-07-27">
+            15年3个月
+        </a>
+        <br>
+        粉丝：
+        <a href="https://home.cnblogs.com/u/think8848/followers/">
+            96
+        </a>
+        <br>
+        关注：
+        <a href="https://home.cnblogs.com/u/think8848/followees/">
+            0
+        </a>
+        <div id="p_b_follow">
+<a href="javascript:void(0)" onclick="follow(&#39;ed83310b-63cf-dd11-9e4d-001cf0cd104b&#39;)">+加关注</a></div>
+        <script>getFollowStatus('ed83310b-63cf-dd11-9e4d-001cf0cd104b');</script>
+    </div>
+</div>
+	</div>
+
+</div>
+
+			    <div id="blog-calendar" style="">
+
+<table id="blogCalendar" class="Cal" cellspacing="0" cellpadding="0" title="Calendar" border="0">
+    <tbody>
+        <tr>
+            <td colspan="7">
+                <table class="CalTitle" cellspacing="0" border="0">
+                    <tbody>
+                        <tr>
+                            <td class="CalNextPrev">
+                                <a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2019/10/25&#39;); return false;">&lt;</a>
+                            </td>
+                            <td align="center">2019年11月</td>
+                            <td align="right" class="CalNextPrev">
+                                <a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2019/12/25&#39;); return false;">&gt;</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
+                    <th class="CalDayHeader" align="center" abbr="日" scope="col">日</th>
+                    <th class="CalDayHeader" align="center" abbr="一" scope="col">一</th>
+                    <th class="CalDayHeader" align="center" abbr="二" scope="col">二</th>
+                    <th class="CalDayHeader" align="center" abbr="三" scope="col">三</th>
+                    <th class="CalDayHeader" align="center" abbr="四" scope="col">四</th>
+                    <th class="CalDayHeader" align="center" abbr="五" scope="col">五</th>
+                    <th class="CalDayHeader" align="center" abbr="六" scope="col">六</th>
+        </tr>
+            <tr>
+                            <td class="CalOtherMonthDay" align="center">27</td>
+                            <td class="CalOtherMonthDay" align="center">28</td>
+                            <td class="CalOtherMonthDay" align="center">29</td>
+                            <td class="CalOtherMonthDay" align="center">30</td>
+                            <td class="CalOtherMonthDay" align="center">31</td>
+                        <td class="" align="center">
+                            1
+                        </td>
+                    <td class="CalWeekendDay" align="center">
+                        2
+                    </td>
+            </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            3
+                        </td>
+                            <td class="" align="center">
+                                4
+                            </td>
+                            <td class="" align="center">
+                                5
+                            </td>
+                            <td class="" align="center">
+                                6
+                            </td>
+                            <td class="" align="center">
+                                7
+                            </td>
+                            <td class="" align="center">
+                                8
+                            </td>
+                        <td class="CalWeekendDay" align="center">
+                            9
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            10
+                        </td>
+                            <td class="" align="center">
+                                11
+                            </td>
+                            <td class="" align="center">
+                                12
+                            </td>
+                            <td class="" align="center">
+                                13
+                            </td>
+                            <td class="" align="center">
+                                14
+                            </td>
+                            <td class="" align="center">
+                                15
+                            </td>
+                        <td class="CalWeekendDay" align="center">
+                            16
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            17
+                        </td>
+                            <td class="" align="center">
+                                18
+                            </td>
+                            <td class="" align="center">
+                                19
+                            </td>
+                            <td class="" align="center">
+                                20
+                            </td>
+                            <td class="" align="center">
+                                21
+                            </td>
+                            <td class="" align="center">
+                                22
+                            </td>
+                        <td class="CalWeekendDay" align="center">
+                            23
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            24
+                        </td>
+                            <td class="CalTodayDay" align="center">
+                                25
+                            </td>
+                            <td class="" align="center">
+                                26
+                            </td>
+                            <td class="" align="center">
+                                27
+                            </td>
+                            <td class="" align="center">
+                                28
+                            </td>
+                            <td class="" align="center">
+                                29
+                            </td>
+                        <td class="CalWeekendDay" align="center">
+                            30
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalOtherMonthDay" align="center">
+                            1
+                        </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                2
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                3
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                4
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                5
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                6
+                            </td>
+                        <td class="CalOtherMonthDay" align="center">
+                            7
+                        </td>
+                </tr>
+    </tbody>
+</table></div><script>loadBlogDefaultCalendar();</script>
+			    <div id="blog-sidecolumn">
+<!-- 搜索 -->
+<div id="sidebar_search" class="sidebar-block">
+    <div id="sidebar_search" class="mySearch">
+        <h3 class="catListTitle">搜索</h3>
+        <div id="sidebar_search_box">
+            <div id="widget_my_zzk" class="div_my_zzk">
+                <input type="text" id="q" onkeydown="return zzk_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="zzk_go()" type="button" value="找找看" id="btnZzk" class="btn_my_zzk">
+            </div>
+            <div id="widget_my_google" class="div_my_zzk">
+                <input type="text" name="google_q" id="google_q" onkeydown="return google_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="google_go()" type="button" value="谷歌搜索" class="btn_my_zzk">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 常用链接 -->
+
+
+<!-- 最新随笔 -->
+
+
+
+<!-- 我的标签 -->
+<div id="sidebar_toptags" class="sidebar-block">
+    
+<h3>我的标签</h3>
+<div id="MyTag">
+    <ul>
+        
+        <li>
+            <a href="https://www.cnblogs.com/think8848/tag/ASP.NET%20MVC/">ASP.NET MVC</a>(16)
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/think8848/tag/.NET/">.NET</a>(11)
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/think8848/tag/Silverlight/">Silverlight</a>(9)
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/think8848/tag/Web/">Web</a>(8)
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/think8848/tag/JavaScript/">JavaScript</a>(8)
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/think8848/tag/RESTful/">RESTful</a>(8)
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/think8848/tag/PostGis/">PostGis</a>(7)
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/think8848/tag/CentOS/">CentOS</a>(7)
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/think8848/tag/openstreetmap/">openstreetmap</a>(6)
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/think8848/tag/JSF/">JSF</a>(6)
+        </li>
+            <li>
+                <a href="https://www.cnblogs.com/think8848/tag/">更多</a>
+            </li>
+
+    </ul>
+</div>
+
+</div>
+
+<!-- 积分与排名 -->
+<div id="sidebar_scorerank" class="sidebar-block">
+    <h3>积分与排名</h3>
+<ul>
+    <li>
+        积分 - 
+138079
+    </li>
+    <li>
+        排名 - 
+3722
+    </li>
+</ul>
+</div>
+
+<!-- 随笔分类、随笔档案、文章分类、新闻分类、相册、链接 -->
+<div id="sidebar_categories">
+    
+<!--done-->
+		<h1 class="catListTitle">
+
+随笔分类
+<span style="font-size:11px;font-weight:normal">(171)</span>
+
+</h1>
+				<ul class="catList">
+			
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/877347.html" rel="" target="">
+    .NET Core(1)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/74981.html" rel="" target="">
+    .NET 技术(40)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/1091523.html" rel="" target="">
+    AngularJS(1)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/882750.html" rel="" target="">
+    ASP.NET Core(1)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/288081.html" rel="" target="">
+    ASP.NET MVC(15)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/1091526.html" rel="" target="">
+    bootstrap(1)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/131970.html" rel="" target="">
+    Database(6)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/952236.html" rel="" target="">
+    Docker(2)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/899514.html" rel="" target="">
+    GeoServer(3)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/899513.html" rel="" target="">
+    Gis(12)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/219754.html" rel="" target="">
+    Google API(3)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/74982.html" rel="" target="">
+    Java(6)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/129666.html" rel="" target="">
+    JavaScript &amp; Ajax(12)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/222211.html" rel="" target="">
+    jQuery(6)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/1091525.html" rel="" target="">
+    mapbox-gl(1)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/908232.html" rel="" target="">
+    mapnik(5)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/1240588.html" rel="" target="">
+    MongoDB(2)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/908233.html" rel="" target="">
+    node.js(7)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/341804.html" rel="" target="">
+    Object-C &amp; iOS(1)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/901827.html" rel="" target="">
+    PostGis(7)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/882911.html" rel="" target="">
+    PostgreSQL(4)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/1021151.html" rel="" target="">
+    RabbitMQ(1)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/166199.html" rel="" target="">
+    Silverlight 2(6)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/204004.html" rel="" target="">
+    Silverlight 3(9)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/158991.html" rel="" target="">
+    SOA(4)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/1517455.html" rel="" target="">
+    Spring Boot
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/1517456.html" rel="" target="">
+    Spring Cloud
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/964290.html" rel="" target="">
+    SuperMap(1)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/221197.html" rel="" target="">
+    Web Services(8)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/1091524.html" rel="" target="">
+    webpack(1)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/219745.html" rel="" target="">
+    XML(1)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/74984.html" rel="" target="">
+    随笔(4)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/category/1517457.html" rel="" target="">
+    微服务架构
+</a>
+
+</li>
+			
+				</ul>
+		<h1 class="catListTitle">
+
+随笔档案
+<span style="font-size:11px;font-weight:normal">(116)</span>
+
+</h1>
+				<ul class="catList">
+			
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2018/06.html" rel="" target="">
+    2018年6月(2)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2017/10.html" rel="" target="">
+    2017年10月(1)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2017/07.html" rel="" target="">
+    2017年7月(3)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2017/06.html" rel="" target="">
+    2017年6月(3)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2017/03.html" rel="" target="">
+    2017年3月(2)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2017/02.html" rel="" target="">
+    2017年2月(2)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2017/01.html" rel="" target="">
+    2017年1月(4)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2016/11.html" rel="" target="">
+    2016年11月(1)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2016/10.html" rel="" target="">
+    2016年10月(5)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2016/09.html" rel="" target="">
+    2016年9月(2)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2012/01.html" rel="" target="">
+    2012年1月(1)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2011/12.html" rel="" target="">
+    2011年12月(1)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2011/10.html" rel="" target="">
+    2011年10月(1)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2011/09.html" rel="" target="">
+    2011年9月(3)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2011/07.html" rel="" target="">
+    2011年7月(9)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2011/06.html" rel="" target="">
+    2011年6月(4)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2011/05.html" rel="" target="">
+    2011年5月(4)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2011/04.html" rel="" target="">
+    2011年4月(1)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2011/03.html" rel="" target="">
+    2011年3月(10)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2011/02.html" rel="" target="">
+    2011年2月(1)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2010/05.html" rel="" target="">
+    2010年5月(1)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2009/12.html" rel="" target="">
+    2009年12月(6)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2009/11.html" rel="" target="">
+    2009年11月(6)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2009/10.html" rel="" target="">
+    2009年10月(2)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2009/08.html" rel="" target="">
+    2009年8月(2)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2009/07.html" rel="" target="">
+    2009年7月(4)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2009/06.html" rel="" target="">
+    2009年6月(1)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2008/12.html" rel="" target="">
+    2008年12月(4)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2008/10.html" rel="" target="">
+    2008年10月(5)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2008/09.html" rel="" target="">
+    2008年9月(3)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2008/08.html" rel="" target="">
+    2008年8月(3)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2008/06.html" rel="" target="">
+    2008年6月(4)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2008/05.html" rel="" target="">
+    2008年5月(4)
+</a>
+
+</li>
+				<li class="catListItem"> 
+<a href="https://www.cnblogs.com/think8848/archive/2008/04.html" rel="" target="">
+    2008年4月(11)
+</a>
+
+</li>
+			
+				</ul>
+
+
+</div>
+
+<!-- 最新评论 -->
+<div id="sidebar_recentcomments" class="sidebar-block">
+    <div id="recent_comments_wrap" class="RecentComment">
+    <h3 class="catListTitle">最新评论</h3>
+    <div class="RecentCommentBlock">
+        <ul>
+                    <li class="recent_comment_title"><a href="https://www.cnblogs.com/think8848/p/7100079.html#4357306">1. Re:Rappid 消除试用版的弹出框</a></li>
+                    <li class="recent_comment_body">你好，文件下载链接挂了，能再发一份给我吗？1062661124@qq.com</li>
+                    <li class="recent_comment_author">--我为wy成全栈</li>
+                    <li class="recent_comment_title"><a href="https://www.cnblogs.com/think8848/p/6011073.html#4293931">2. Re:[原]CentOS7部署osm2pgsql</a></li>
+                    <li class="recent_comment_body">楼主，你好。 咨询个问题，china.osm.pbf 使用osm2pgsql 导入到postgres数据库，再用QGIS显示时，地图出现了不对，道路信息全集中在一起。我用Qgis直接打开china.o...</li>
+                    <li class="recent_comment_author">--双鹰</li>
+                    <li class="recent_comment_title"><a href="https://www.cnblogs.com/think8848/p/6241836.html#4291663">3. Re:[原]使用node-mapnik生成openstreetmap-carto风格的瓦片</a></li>
+                    <li class="recent_comment_body"><br>补一个转化的图。</li>
+                    <li class="recent_comment_author">--双鹰</li>
+                    <li class="recent_comment_title"><a href="https://www.cnblogs.com/think8848/p/6241836.html#4291661">4. Re:[原]使用node-mapnik生成openstreetmap-carto风格的瓦片</a></li>
+                    <li class="recent_comment_body">楼主你好，按照你的步骤，我在本地搭建了离线openstreetmap，但出现了一点问题，1：carto project.mml &gt; mapnil.xml 的时候出现 以上问题， openstreetm...</li>
+                    <li class="recent_comment_author">--双鹰</li>
+                    <li class="recent_comment_title"><a href="https://www.cnblogs.com/think8848/archive/2011/07/17/2108570.html#4279448">5. Re:[原]jQuery .tmpl(), .template()学习</a></li>
+                    <li class="recent_comment_body">很棒</li>
+                    <li class="recent_comment_author">--隰荷华</li>
+                    <li class="recent_comment_title"><a href="https://www.cnblogs.com/think8848/archive/2011/06/25/2090254.html#4266361">6. Re:[原]jQuery Tab插件，用于在Tab中显示iframe，附源码和详细说明</a></li>
+                    <li class="recent_comment_body">请教下，使用CleverTabs新增tab然后保存名字到数据库额？</li>
+                    <li class="recent_comment_author">--荷默</li>
+                    <li class="recent_comment_title"><a href="https://www.cnblogs.com/think8848/p/6011073.html#4199100">7. Re:[原]CentOS7部署osm2pgsql</a></li>
+                    <li class="recent_comment_body">那么 我怎么对外发布这个服务呢？</li>
+                    <li class="recent_comment_author">--Abore1</li>
+                    <li class="recent_comment_title"><a href="https://www.cnblogs.com/think8848/p/6357727.html#4195955">8. Re:[原]OpenStreetMap数据瓦片服务性能篇</a></li>
+                    <li class="recent_comment_body">我在您帖子的一系列指导下，简单实现了 Docker 下的openstreetmap地图的容器化部署，写的比较粗糙，基本能用，<a href="https://www.cnblogs.com/think8848/p/6011073.html" target="_blank"></a></li>
+                    <li class="recent_comment_author">--酷睿2</li>
+                    <li class="recent_comment_title"><a href="https://www.cnblogs.com/think8848/p/6056378.html#4150895">9. Re:[原]CentOS7.2部署node-mapnik</a></li>
+                    <li class="recent_comment_body">@think8848 楼主老帖子还回复不？请教一下，我现在就gdal出现了问题 Checking for gdal-config --libs... yes Checking for gdal-con...</li>
+                    <li class="recent_comment_author">--zxp209</li>
+                    <li class="recent_comment_title"><a href="https://www.cnblogs.com/think8848/p/6056378.html#4125040">10. Re:[原]CentOS7.2部署node-mapnik</a></li>
+                    <li class="recent_comment_body">不用安装node-mapnik也可以运行，亲测 已经成功。安装过程太闹心了 深有体会</li>
+                    <li class="recent_comment_author">--GoInSky</li>
+        </ul>
+    </div>
+</div>
+</div>
+
+
+
+<!-- 阅读排行榜 -->
+<div id="sidebar_topviewedposts" class="sidebar-block">
+    
+<div id="topview_posts_wrap">
+    <h3 class="catListTitle">阅读排行榜</h3>
+    <div id="TopViewPostsBlock">
+        <ul style="word-break:break-all">
+                    <li>
+                        <a href="https://www.cnblogs.com/think8848/archive/2011/07/17/2108570.html">
+                            1. [原]jQuery .tmpl(), .template()学习(54734)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/think8848/p/5877076.html">
+                            2. CentOS7下安装并简单设置PostgreSQL笔记(32101)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/think8848/archive/2011/03/06/1972195.html">
+                            3. [原]ASP.NET MVC 3 使用 DotNetOpenAuth 实现SSO(15644)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/think8848/p/6591238.html">
+                            4. node.js的Promise库-bluebird示例(10479)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/think8848/archive/2011/03/18/1988427.html">
+                            5. [原]使用ASP.NET MVC构建RESTful服务(8747)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/think8848/archive/2011/07/12/2103971.html">
+                            6. C# WinForm下DataGridView绘制背景图(7814)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/think8848/p/6013939.html">
+                            7. [原]在GeoServer中为OpenStreetMap数据设置OSM样式(7671)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/think8848/archive/2011/09/28/2193990.html">
+                            8. [原]jQuery ListBox Plugin(ListBox插件)(7121)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/think8848/archive/2011/02/27/1966520.html">
+                            9. [原]ASP.NET MVC 3 使用jqGrid之TreeGrid(6961)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/think8848/archive/2008/05/27/1208216.html">
+                            10. MyEclipse 6.5注册(6814)
+                        </a>
+                    </li>
+        </ul>
+    </div>
+</div>
+</div>
+
+<!-- 评论排行榜 -->
+
+
+<!-- 推荐排行榜 -->
+</div>
+                    <script>loadBlogSideColumn();</script></div>
+	    
+    </div>
+    <div id="centercontent">
+	    <div id="post_detail">
+<!--done-->
+<div class="post">
+	<div class="postTitle">
+		
+<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/think8848/p/6011073.html">[原]CentOS7部署osm2pgsql</a>
+
+	</div>
+	
+<div id="cnblogs_post_body" class="blogpost-body ">
+    <p>转载请注明原作者(think8848)和出处(http://think8848.cnblogs.com)</p>
+<p><a href="http://www.cnblogs.com/think8848/p/5877076.html" target="_blank">部署Postgresql</a>和<a href="http://www.cnblogs.com/think8848/p/6010695.html" target="_blank">部署PostGis</a>请参考前两篇文章</p>
+<p>本文主要参考GitHub上osm2pgsql的<a href="https://github.com/openstreetmap/osm2pgsql" target="_blank">说明文档</a></p>
+<h1>1. 先安装Git</h1>
+<div class="cnblogs_code">
+<pre>sudo yum install git -y</pre>
+</div>
+<h1>2. 下载osm2pgsql源码</h1>
+<div class="cnblogs_code">
+<pre><span style="color: #000000;">cd ~
+
+git clone git:</span>//github.com/openstreetmap/osm2pgsql.git</pre>
+</div>
+<p>在GitHub上下载文档实在是慢的难以忍受，建议还是使用&nbsp;<span class="cnblogs_code">wget -O osm2pgsql-master.zip https://codeload.github.com/openstreetmap/osm2pgsql/zip/master</span>&nbsp;下载，或者干脆用迅雷下载好，再想办法放到CentOS中。</p>
+<p>如果下载的文件是zip格式，那么就需要使用unzip将文件解压，先使用&nbsp;<span class="cnblogs_code">sudo yum install unzip -y</span>&nbsp;安装unzip，然后再使用&nbsp;<span class="cnblogs_code">unzip osm2pgsql-master.zip</span>&nbsp;解压。</p>
+<h1>3. 安装依赖包</h1>
+<p>请确保epel-release已经安装了</p>
+<div class="cnblogs_code">
+<pre>sudo yum install cmake gcc-c++ boost-devel expat-devel zlib-devel bzip2-devel postgresql-devel geos-devel proj-devel proj-epsg lua-devel -y</pre>
+</div>
+<h1>4. 进入osm2pgsql源码目录，进行配置编译安装</h1>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./[原]CentOS7部署osm2pgsql - think8848 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre>cd osm2pgsql-<span style="color: #000000;">master
+
+mkdir build </span>&amp;&amp;<span style="color: #000000;"> cd build
+<br><span style="color: #008000;">#如果是照着前两篇文章一直走到这里，有可能在cmake时报POSTGRESQL***目录找不到之类的错误，</span><br><span style="color: #008000;">#解决办法是重启电脑，然后清除/tmp/osm2pgsql-master/build目录下所有文件和文件夹，重新使用cmake ..命令</span><br>
+cmake ..
+
+make 
+
+sudo make install</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./[原]CentOS7部署osm2pgsql - think8848 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>-------------------------2016年11月10更新-------------------------</p>
+<p>如果在cmake .. 配置过程中出现Could not find Postgresql (missing PostgreSQL_LIBRARY_DIRS...之类的错误，请尝试使用下列命令执行后，再次cmake ..</p>
+<p>&nbsp;</p>
+<div class="cnblogs_code">
+<pre>sudo yum install postgresql95-devel</pre>
+</div>
+<p>&nbsp;</p>
+<p>-------------------------2016年11月10更新-------------------------</p>
+<p>&nbsp;</p>
+<p><img src="./[原]CentOS7部署osm2pgsql - think8848 - 博客园_files/1781-20161029151410796-278315363.png" alt=""></p>
+<p>验证安装&nbsp;<span class="cnblogs_code">osm2pgsql -version</span>&nbsp;,版本号显示出来了，但是下面莫名奇妙的出了一个错误提示，貌似没啥影响，处女座的朋友可以不验证，哈哈...</p>
+<p><img src="./[原]CentOS7部署osm2pgsql - think8848 - 博客园_files/1781-20161029151553218-1629242541.png" alt=""></p>
+<h1>5. 导入osm数据(不包含openstreetmap-carto样式)</h1>
+<p>openstreetmap中国数据下载地址：<a href="http://download.geofabrik.de/asia.html" target="_blank">http://download.geofabrik.de/asia.html</a></p>
+<p>为了postgres有访问权限，建议将china-latest.osm.pbf下载到/tmp目录下</p>
+<p>如果你是看了《<a id="ArchiveMonth1_Days_ctl00_Entries_TitleUrl_0" class="entrylistItemTitle" href="http://www.cnblogs.com/think8848/p/6010695.html" target="_blank">CentOS7部署PostGis</a>》之后再看这里，那么就安装下hstore扩展，如果你没有阅读这篇文章，请在此先参考下如何建一个PostGis数据库，安装hstore扩展(有关更多hstore信息，请参见<a href="https://github.com/diogob/activerecord-postgres-hstore" target="_blank">这里</a>和<a href="http://www.codeweblog.com/postgres-hstore%E4%B8%8Ejson%E5%A4%A7%E6%AF%94%E6%8B%BC/" target="_blank">这里</a>)：</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./[原]CentOS7部署osm2pgsql - think8848 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #000000;">su postgres
+
+psql </span>-<span style="color: #000000;">d chinaosmgisdb;
+
+CREATE EXTENSION hstore;<br><br>\q</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./[原]CentOS7部署osm2pgsql - think8848 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>正式导入数据</p>
+<div class="cnblogs_code">
+<pre>osm2pgsql -s -U think8848 -H 127.0.0.1 -P 5432 -W -d chinaosmgisdb /tmp/china-latest.osm.pbf</pre>
+</div>
+<h1>6. 导入openstreetmap-carto样式</h1>
+<p>先<a href="https://codeload.github.com/gravitystorm/openstreetmap-carto/zip/master" target="_blank">下载</a>openstreetmap-carto，然后解压，最后复制到/home/postgresql_data中</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./[原]CentOS7部署osm2pgsql - think8848 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre>cd /<span style="color: #000000;">tmp
+
+wget </span>-O openstreetmap-carto-master.zip https://codeload.github.com/gravitystorm/openstreetmap-carto/zip/master<br><br>unzip openstreetmap-carto-master.zip<br><br>mv openstreetmap-carto-master /home/postgresql_data</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./[原]CentOS7部署osm2pgsql - think8848 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>做好准备工作后就可以导入了</p>
+<div class="cnblogs_code">
+<pre><span style="color: #000000;">su postgres
+
+osm2pgsql </span>-s -U think8848 -H 127.0.0.1 -P 5432 -W -d chinaosmgisdb /tmp/china-latest.osm.pbf --style /home/postgresql_data/openstreetmap-carto-master/openstreetmap-carto.style</pre>
+</div>
+<p>经过一会儿的等待，就导入OK了。</p>
+<p>&nbsp;<img src="./[原]CentOS7部署osm2pgsql - think8848 - 博客园_files/1781-20161029194129468-1228413062.png" alt=""></p>
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block"><div id="BlogPostCategory">
+    分类: 
+            <a href="https://www.cnblogs.com/think8848/category/899513.html" target="_blank">Gis</a>,             <a href="https://www.cnblogs.com/think8848/category/901827.html" target="_blank">PostGis</a></div>
+<div id="EntryTag">
+    标签: 
+            <a href="https://www.cnblogs.com/think8848/tag/PostgreSQL/">PostgreSQL</a>,             <a href="https://www.cnblogs.com/think8848/tag/PostGis/">PostGis</a>,             <a href="https://www.cnblogs.com/think8848/tag/osm2pgsql/">osm2pgsql</a></div>
+
+    <div id="blog_post_info">
+<div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(6011073,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+        <a id="green_channel_follow" onclick="follow(&#39;ed83310b-63cf-dd11-9e4d-001cf0cd104b&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./[原]CentOS7部署osm2pgsql - think8848 - 博客园_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./[原]CentOS7部署osm2pgsql - think8848 - 博客园_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="https://home.cnblogs.com/u/think8848/">think8848</a><br>
+            <a href="https://home.cnblogs.com/u/think8848/followees/">关注 - 0</a><br>
+            <a href="https://home.cnblogs.com/u/think8848/followers/">粉丝 - 96</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;ed83310b-63cf-dd11-9e4d-001cf0cd104b&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(6011073,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">1</span>
+    </div>
+    <div class="buryit" onclick="votePost(6011073,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+
+<script type="text/javascript">
+    currentDiggType = 0;
+</script></div>
+    <div class="clear"></div>
+    <div id="post_next_prev">
+
+    <a href="https://www.cnblogs.com/think8848/p/6010695.html" class="p_n_p_prefix">« </a> 上一篇：    <a href="https://www.cnblogs.com/think8848/p/6010695.html" title="发布于 2016-10-29 13:12">[原]CentOS7部署PostGis</a>
+    <br>
+    <a href="https://www.cnblogs.com/think8848/p/6013939.html" class="p_n_p_prefix">» </a> 下一篇：    <a href="https://www.cnblogs.com/think8848/p/6013939.html" title="发布于 2016-10-30 21:22">[原]在GeoServer中为OpenStreetMap数据设置OSM样式</a>
+
+</div>
+</div>
+	<div class="postDesc">posted on 
+<span id="post-date">2016-10-29 15:56</span>&nbsp;<a href="https://www.cnblogs.com/think8848/">think8848</a> 阅读(<span id="post_view_count">3321</span>) 评论(<span id="post_comment_count">8</span>) <a href="https://i.cnblogs.com/EditPosts.aspx?postid=6011073" rel="nofollow"> 编辑</a> <a href="javascript:void(0)" onclick="AddToWz(6011073); return false;">收藏</a>
+</div>
+</div>
+
+
+<script src="./[原]CentOS7部署osm2pgsql - think8848 - 博客园_files/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 4468, cb_blogApp = 'think8848', cb_blogUserGuid = 'ed83310b-63cf-dd11-9e4d-001cf0cd104b';
+    var cb_entryId = 6011073, cb_entryCreatedDate = '2016-10-29 15:56', cb_postType = 1; 
+    loadViewCount(cb_entryId);
+</script><a name="!comments"></a>
+<div id="blog-comments-placeholder">
+
+<div id="comment_pager_top">
+    
+</div>
+
+<!--done-->
+<a name="feedback"></a>
+<div class="feedback">
+	<div class="feedbackTitle">
+		Feedback
+	</div>
+	<div class="feedbackNoItems"><div class="feedbackNoItems"></div></div>
+	
+			<div class="feedbackItem">
+				<div class="feedbackListTitle">
+<a href="https://www.cnblogs.com/think8848/p/6011073.html#3637078" class="layer">#1楼</a>
+<a name="3637078" id="comment_anchor_3637078"></a>
+
+</div>
+				<div class="feedbackListSubtitle">
+					
+<span class="comment_date">2017-03-10 15:24</span>
+
+ | 
+
+            <a id="a_comment_author_3637078" href="https://home.cnblogs.com/u/1122915/" target="_blank">chenyiwan</a>
+
+				</div>
+				
+<div id="comment_body_3637078" class="blog_comment_body">
+    我把第5步  执行了 5. 导入osm数据(不包含openstreetmap-carto样式)<br><br><br>看到了第6步，还要加style样式 ，能不能单独再添加一样样式 。不然第6步导数据的操作就和第5步重复了，并且这个操作耗时很长。。。
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3637078, &#39;Digg&#39;, this.parentElement, false);">
+                支持(0)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(3637078, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        
+
+				&nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+			</div>
+			<div class="feedbackItem">
+				<div class="feedbackListTitle">
+<a href="https://www.cnblogs.com/think8848/p/6011073.html#3637556" class="layer">#2楼</a>
+<a name="3637556" id="comment_anchor_3637556"></a>
+[<span class="louzhu">楼主</span>]
+</div>
+				<div class="feedbackListSubtitle">
+					
+<span class="comment_date">2017-03-11 09:08</span>
+
+ | 
+
+            <a id="a_comment_author_3637556" href="https://www.cnblogs.com/think8848/" target="_blank">think8848</a>
+
+				</div>
+				
+<div id="comment_body_3637556" class="blog_comment_body">
+    <a href="https://www.cnblogs.com/think8848/p/6011073.html#3637078" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3637078);">@</a>
+chenyiwan<br>你这个问题我也遇到过，找了很多资料，然而并没有找到可以“补”style的方法。不过貌似无论导入osm数据时有没有style参数，数据库里的数据都没有啥变化(也许有变化，只是太细微了，我没有观察出来)，总之，一回生，二回熟，相信你也是第一次先体验下，以后在生产环境里面记得加上style参数:)
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3637556, &#39;Digg&#39;, this.parentElement, false);">
+                支持(0)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(3637556, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        
+
+				&nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+			</div>
+			<div class="feedbackItem">
+				<div class="feedbackListTitle">
+<a href="https://www.cnblogs.com/think8848/p/6011073.html#3637659" class="layer">#3楼</a>
+<a name="3637659" id="comment_anchor_3637659"></a>
+
+</div>
+				<div class="feedbackListSubtitle">
+					
+<span class="comment_date">2017-03-11 11:45</span>
+
+ | 
+
+            <a id="a_comment_author_3637659" href="https://home.cnblogs.com/u/1122915/" target="_blank">chenyiwan</a>
+
+				</div>
+				
+<div id="comment_body_3637659" class="blog_comment_body">
+    <a href="https://www.cnblogs.com/think8848/p/6011073.html#3637556" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3637556);">@</a>
+think8848<br>我把第五部停止了，直接执行第6步，现在开始导海图数据了
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3637659, &#39;Digg&#39;, this.parentElement, false);">
+                支持(0)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(3637659, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        
+
+				&nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+			</div>
+			<div class="feedbackItem">
+				<div class="feedbackListTitle">
+<a href="https://www.cnblogs.com/think8848/p/6011073.html#3842014" class="layer">#4楼</a>
+<a name="3842014" id="comment_anchor_3842014"></a>
+
+</div>
+				<div class="feedbackListSubtitle">
+					
+<span class="comment_date">2017-11-16 10:42</span>
+
+ | 
+
+            <a id="a_comment_author_3842014" href="https://www.cnblogs.com/520db/" target="_blank">摘梅煮酒</a>
+
+				</div>
+				
+<div id="comment_body_3842014" class="blog_comment_body">
+    Osm2pgsql failed due to ERROR: Connection to database failed: FATAL:  remaining connection slots are reserved for non-replication superuser connections<br>楼主。跟你步骤一样。出这样的错有那些原因导致的啊。
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3842014, &#39;Digg&#39;, this.parentElement, false);">
+                支持(0)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(3842014, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        <span id="comment_3842014_avatar" style="display:none">
+            https://pic.cnblogs.com/face/1186386/20180422213155.png
+        </span>
+
+				&nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+			</div>
+			<div class="feedbackItem">
+				<div class="feedbackListTitle">
+<a href="https://www.cnblogs.com/think8848/p/6011073.html#3842078" class="layer">#5楼</a>
+<a name="3842078" id="comment_anchor_3842078"></a>
+
+</div>
+				<div class="feedbackListSubtitle">
+					
+<span class="comment_date">2017-11-16 11:31</span>
+
+ | 
+
+            <a id="a_comment_author_3842078" href="https://www.cnblogs.com/520db/" target="_blank">摘梅煮酒</a>
+
+				</div>
+				
+<div id="comment_body_3842078" class="blog_comment_body">
+    弄好了。😄
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3842078, &#39;Digg&#39;, this.parentElement, false);">
+                支持(0)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(3842078, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        <span id="comment_3842078_avatar" style="display:none">
+            https://pic.cnblogs.com/face/1186386/20180422213155.png
+        </span>
+
+				&nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+			</div>
+			<div class="feedbackItem">
+				<div class="feedbackListTitle">
+<a href="https://www.cnblogs.com/think8848/p/6011073.html#4000591" class="layer">#6楼</a>
+<a name="4000591" id="comment_anchor_4000591"></a>
+
+</div>
+				<div class="feedbackListSubtitle">
+					
+<span class="comment_date">2018-06-19 10:14</span>
+
+ | 
+
+            <a id="a_comment_author_4000591" href="https://www.cnblogs.com/guofeiji/" target="_blank">Unchained Melody</a>
+
+				</div>
+				
+<div id="comment_body_4000591" class="blog_comment_body">
+    导入快吗，我的不到100k
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(4000591, &#39;Digg&#39;, this.parentElement, false);">
+                支持(0)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(4000591, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        
+
+				&nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+			</div>
+			<div class="feedbackItem">
+				<div class="feedbackListTitle">
+<a href="https://www.cnblogs.com/think8848/p/6011073.html#4199100" class="layer">#7楼</a>
+<a name="4199100" id="comment_anchor_4199100"></a>
+
+</div>
+				<div class="feedbackListSubtitle">
+					
+<span class="comment_date">2019-03-11 15:37</span>
+
+ | 
+
+            <a id="a_comment_author_4199100" href="https://home.cnblogs.com/u/1433689/" target="_blank">Abore1</a>
+
+				</div>
+				
+<div id="comment_body_4199100" class="blog_comment_body">
+    那么 我怎么对外发布这个服务呢？
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(4199100, &#39;Digg&#39;, this.parentElement, false);">
+                支持(0)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(4199100, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        
+
+				&nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+			</div>
+			<div class="feedbackItem">
+				<div class="feedbackListTitle">
+<a href="https://www.cnblogs.com/think8848/p/6011073.html#4293931" class="layer">#8楼</a>
+<a name="4293931" id="comment_anchor_4293931"></a>
+
+        <span id="comment-maxId" style="display:none">4293931</span>
+        <span id="comment-maxDate" style="display:none">2019/7/5 上午10:18:49</span>
+</div>
+				<div class="feedbackListSubtitle">
+					
+<span class="comment_date">2019-07-05 10:18</span>
+
+ | 
+
+            <a id="a_comment_author_4293931" href="https://www.cnblogs.com/MacleLiang/" target="_blank">双鹰</a>
+
+				</div>
+				
+<div id="comment_body_4293931" class="blog_comment_body">
+    楼主，你好。<br> 咨询个问题，china.osm.pbf 使用osm2pgsql 导入到postgres数据库，再用QGIS显示时，地图出现了不对，道路信息全集中在一起。<br>我用Qgis直接打开china.osm.pbf是显示的信息就没问题了。<br>后来查了下 osm2pgsql导入时，默认把china.osm.pbf的数据转成900913格式了。 但是调了QGIS的坐标貌似也没用。<br>使用 osm2pgsql  指定 -E 提示不能知道proj/epsg  ?<br>这是什么问题。纠结了好久，解决不了？
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(4293931, &#39;Digg&#39;, this.parentElement, false);">
+                支持(0)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(4293931, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        
+
+				&nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+			</div>
+</div>
+
+
+
+<div id="comment_pager_bottom">
+    
+</div>
+
+
+</div>
+<script>
+    var commentManager = new blogCommentManager();
+    commentManager.renderComments(0);
+</script>
+
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="https://www.cnblogs.com/think8848/p/6011073.html#" onclick="return RefreshPage();">刷新页面</a><a href="https://www.cnblogs.com/think8848/p/6011073.html#top">返回顶部</a></div>
+    <div id="comment_form_container"><div class="login_tips">
+    注册用户登录后才能发表评论，请 
+    <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login(&#39;commentform&#39;);">登录</a>
+     或 
+    <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，
+    <a href="https://www.cnblogs.com/">访问</a> 网站首页。
+</div></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"><a href="https://cloud.tencent.com/act/pro/overseas?fromSource=gwzcw.3090393.3090393.3090393&amp;utm_medium=cpc&amp;utm_id=gwzcw.3090393.3090393.3090393" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-腾讯云&#39;)">【推荐】腾讯云海外1核2G云服务器低至2折，半价续费券限量免费领取！</a><br><a href="http://click.aliyun.com/m/1000081987/" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-阿里云&#39;)">【推荐】阿里云双11返场来袭，热门产品低至一折等你来抢！</a><br><a href="http://www.ucancode.com/index.htm" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-工控&#39;)">【推荐】超50万行VC++源码: 大型组态工控、电力仿真CAD与GIS源码库</a><br><a href="https://group.cnblogs.com/topic/90800.html?800019197" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-马士兵&#39;)">【提升】这个价值 50W 年薪的问题，终于被马老师说明白啦...</a><br><a href="https://www.ctyun.cn/activity/20191111?hmsr=%E7%9C%8B%E7%9C%8B-%E5%8D%9A%E5%AE%A2%E5%9B%AD-%E5%8F%8C11-1106&amp;hmpl=&amp;hmcu=&amp;hmkw=&amp;hmci=" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-天翼云&#39;)">【推荐】天翼云双十一翼降到底，云主机11.11元起，抽奖送大礼</a><br><a href="https://www.uibot.com.cn/sem/bky.html" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-uibot_T2&#39;)">【推荐】流程自动化专家UiBot，体系化教程成就高薪RPA工程师</a><br></div>
+    <div id="opt_under_post"></div>
+    <script async="async" src="./[原]CentOS7部署osm2pgsql - think8848 - 博客园_files/gpt.js"></script>
+    <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+    </script>
+    <script>
+        googletag.cmd.push(function () {
+            googletag.defineSlot("/1090369/C1", [300, 250], "div-gpt-ad-1546353474406-0").addService(googletag.pubads());
+            googletag.defineSlot("/1090369/C2", [468, 60], "div-gpt-ad-1539008685004-0").addService(googletag.pubads());
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+    <div id="cnblogs_c1" class="c_ad_block">
+        <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;" data-google-query-id="CN_ssIfBhOYCFccdKgodZxEGyA"><div id="google_ads_iframe_/1090369/C1_0__container__" style="border: 0pt none;"><iframe id="google_ads_iframe_/1090369/C1_0" title="3rd party ad content" name="google_ads_iframe_/1090369/C1_0" width="300" height="250" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" style="border: 0px; vertical-align: bottom;" data-google-container-id="1" data-load-complete="true" src="./[原]CentOS7部署osm2pgsql - think8848 - 博客园_files/saved_resource.html"></iframe></div></div>
+    </div>
+    <div id="under_post_news"><div class="recomm-block"><b>相关博文：</b><br>·  <a title="linux环境下搭建osm_web服务器一（Postgresql配置及osm2pgsql原始数据导入）：" href="https://www.cnblogs.com/BigFishFly/p/6337332.html" target="_blank" onclick="clickRecomItmem(6337332)">linux环境下搭建osm_web服务器一（Postgresql配置及osm2pgsql原始数据导入）：</a><br>·  <a title="在Centos7上安装Nominatim" href="https://www.cnblogs.com/joejiafeng/p/7117330.html" target="_blank" onclick="clickRecomItmem(7117330)">在Centos7上安装Nominatim</a><br>·  <a title="osm2pgsql导入少字段" href="https://www.cnblogs.com/BigFishFly/p/6337275.html" target="_blank" onclick="clickRecomItmem(6337275)">osm2pgsql导入少字段</a><br>·  <a title="[原]在GeoServer中为OpenStreetMap数据设置OSM样式" href="https://www.cnblogs.com/think8848/p/6013939.html" target="_blank" onclick="clickRecomItmem(6013939)">[原]在GeoServer中为OpenStreetMap数据设置OSM样式</a><br>·  <a title="[原]使用node-mapnik生成openstreetmap-carto风格的瓦片" href="https://www.cnblogs.com/think8848/p/6241836.html" target="_blank" onclick="clickRecomItmem(6241836)">[原]使用node-mapnik生成openstreetmap-carto风格的瓦片</a><br>»  <a target="_blank" href="https://recomm.cnblogs.com/blogpost/6011073">更多推荐...</a><div id="cnblogs_t5"><a href="https://developer.aliyun.com/ask/258350?utm_content=g_1000088952" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T5-阿里云开发者社区&#39;)">精品问答：前端开发必懂之 HTML 技术五十问</a></div></div></div>
+    <div id="cnblogs_c2" class="c_ad_block">
+        <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;" data-google-query-id="CODssIfBhOYCFccdKgodZxEGyA">
+            
+        <div id="google_ads_iframe_/1090369/C2_0__container__" style="border: 0pt none;"><iframe id="google_ads_iframe_/1090369/C2_0" title="3rd party ad content" name="google_ads_iframe_/1090369/C2_0" width="468" height="60" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" style="border: 0px; vertical-align: bottom;" data-google-container-id="2" data-load-complete="true" src="./[原]CentOS7部署osm2pgsql - think8848 - 博客园_files/saved_resource(1).html"></iframe></div></div>
+    </div>
+    <div id="under_post_kb">
+<div class="itnews c_ad_block">
+    <b>最新 IT 新闻</b>:
+    <br>
+ ·              <a href="https://news.cnblogs.com/n/649995/" target="_blank">谷歌、Facebook、微软……一大堆互联网巨头正在各大洋的海底较劲</a>
+            <br>
+ ·              <a href="https://news.cnblogs.com/n/649994/" target="_blank">新的 5G 通信协议恐干扰天气预报</a>
+            <br>
+ ·              <a href="https://news.cnblogs.com/n/649993/" target="_blank">OPPO自研芯片曝光 M1处理器已注册商标</a>
+            <br>
+ ·              <a href="https://news.cnblogs.com/n/649992/" target="_blank">大数据流程挖掘公司Celonis融资2.9亿美元 估值达25亿美元</a>
+            <br>
+ ·              <a href="https://news.cnblogs.com/n/649991/" target="_blank">中国核电：安全系数很“硬核”</a>
+            <br>
+    » <a href="https://news.cnblogs.com/" title="IT 新闻" target="_blank">更多新闻...</a>
+</div></div>
+    <div id="HistoryToday" class="c_ad_block"></div>
+    <script type="text/javascript">
+        fixPostBody();
+        setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+        deliverAdT2();
+        deliverAdC1();
+        deliverAdC2();
+        loadNewsAndKb();
+        loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);        LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+        GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+        loadOptUnderPost();
+        GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div></div>
+
+
+    </div>
+</div>
+<!--done-->
+<div class="footer">
+	Powered by: 
+	<br>
+	
+	
+<a href="https://www.cnblogs.com/" id="Footer1_Hyperlink3" style="font-size: 12px; font-family: Verdana">博客园</a>
+	<br>
+	Copyright © 2019 think8848
+<br><span id="poweredby">Powered by .NET Core 3.0.0 on Linux</span>
+
+</div>
+
+
+
+
+
+    
+
+
+</body></html>
