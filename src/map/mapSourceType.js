@@ -2,7 +2,7 @@ import { TileGrid } from 'ol/tilegrid';
 import { Image, Tile } from 'ol/layer';
 import * as extent from 'ol/extent';
 import {
-  TileImage, TileArcGISRest, ImageArcGISRest, XYZ,
+  TileImage, TileArcGISRest, ImageArcGISRest, XYZ, ImageStatic,
 } from 'ol/source';
 import * as proj from 'ol/proj';
 // toLonLat
@@ -19,6 +19,30 @@ function getSourceType(config) {
         return [
           new Tile({
             source,
+          }),
+        ];
+        // , new ol.layer.Vector({ source: source })
+      },
+      setPosition: gis => gis,
+      setRevertPosition: gis => gis,
+    },
+    image: {
+      source: () => {
+        const configExtent = this.config.extent;
+        const projection = new proj.Projection({
+          code: 'xkcd-image',
+          units: 'pixels',
+          extent: configExtent,
+        });
+        const imagesource = new ImageStatic({
+          url: this.config.map_Url,
+          projection,
+          imageExtent: configExtent,
+        });
+        return [
+          new Image({
+            imageExtent: configExtent,
+            source: imagesource,
           }),
         ];
         // , new ol.layer.Vector({ source: source })

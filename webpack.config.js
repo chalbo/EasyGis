@@ -59,6 +59,41 @@ const config = {
     rules: [
       { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader' },
       { test: /\.css/, use: ExtractTextWebpackPlugin.extract({ use: ['css-loader'] }) }, // 带css的css编译
+      {
+        test: /\.less$/,
+        exclude: [/icomoon\/style.css$/, /icomoon\\style.css$/, /global.css$/],
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              // Note that we’ve set importLoaders: 1 on css-loader.
+              // We’re setting this because we want PostCSS to git @import statements first
+              modules: true,
+              importLoaders: 1,
+              localIdentName: '[path][name]__[local]--[hash:base64:5]',
+            },
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              plugins: loader => [
+                require('postcss-import')(),
+                require('postcss-cssnext')({
+                  browsers: [
+                    'last 2 Chrome versions',
+                    'last 2 Edge versions',
+                    'last 2 Safari versions',
+                    'last 2 Firefox versions',
+                  ],
+                }),
+              ],
+            },
+          },
+        ],
+      },
+      // eslint-disable-next-line max-len
+      // { test: /\.css/, use: ExtractTextWebpackPlugin.extract({ use: ['css-loader'] }) }, // 带css的css编译
       { test: /\.scss/, use: ExtractTextWebpackPlugin.extract({ fallback: 'style-loader', use: ['css-loader', 'sass-loader'] }) }, // 带scss的css编译
       { test: /\.(svg|jpg|jpeg|gif|woff|woff2|eot|ttf|otf)$/, use: [{ loader: 'file-loader', options: { outputPath: 'assets/' } }] }, // 图片和字体加载
       { test: /\.png$/, use: { loader: 'url-loader', options: { mimetype: 'image/png', limit: '4096' } } }, // 如果有png格式的图片，超过4M直接转化为base64格式
