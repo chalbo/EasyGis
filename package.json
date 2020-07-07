@@ -2,7 +2,7 @@
   "name": "ls",
   "version": "1.0.0",
   "description": "",
-  "main": "static/sugonGiscommonjs.js",
+  "main": "static/sugonGis.mini.js",
   "scripts": {
     "start": "parcel ./src/map/example/mapInfo.html",
     "videostart": "parcel ./src/video/videotest.html",
