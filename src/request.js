@@ -1,7 +1,7 @@
-// import { notification } from 'antd'; 
-import hash from 'hash.js'; 
+// import { notification } from 'antd';
+import hash from 'hash.js';
 
-const fetch= window.fetch;
+const { fetch } = window;
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -21,7 +21,7 @@ const codeMessage = {
   504: '网关超时。',
 };
 
-const checkStatus = response => {
+const checkStatus = (response) => {
   if (response.status >= 200 && response.status < 300) {
     return response;
   }
@@ -30,7 +30,7 @@ const checkStatus = response => {
   //   message: `请求错误 ${response.status}: ${response.url}`,
   //   description: errortext,
   // });
-  console.log( `请求错误 ${response.status}: ${response.url}`)
+  console.log(`请求错误 ${response.status}: ${response.url}`);
   const error = new Error(errortext);
   error.name = response.status;
   error.response = response;
@@ -84,9 +84,9 @@ export default function request(url, option) {
   };
   const newOptions = { ...defaultOptions, ...options };
   if (
-    newOptions.method === 'POST' ||
-    newOptions.method === 'PUT' ||
-    newOptions.method === 'DELETE'
+    newOptions.method === 'POST'
+    || newOptions.method === 'PUT'
+    || newOptions.method === 'DELETE'
   ) {
     if (!(newOptions.body instanceof FormData)) {
       newOptions.headers = {
@@ -124,7 +124,7 @@ export default function request(url, option) {
     fetch(url, newOptions)
       .then(checkStatus)
       // .then(response => cachedSave(response, hashcode))
-      .then(response => {
+      .then((response) => {
         // DELETE and 204 do not return data by default
         // using .json will report an error.
         if (response.status === 204) {
@@ -132,7 +132,7 @@ export default function request(url, option) {
         }
         return response.json();
       })
-      .catch(e => {
+      .catch((e) => {
         const status = e.name;
         if (status === 401) {
           console.log('fetch url 401');
@@ -146,18 +146,17 @@ export default function request(url, option) {
         }
         if (status <= 504 && status >= 500) {
           console.log('fetch url 504,500');
-         // router.push('/exception/500');
+          // router.push('/exception/500');
           return;
         }
         if (status >= 404 && status < 422) {
           console.log('fetch url 404,422');
-          //router.push('/exception/404');
+          // router.push('/exception/404');
         }
       })
       // eslint-disable-next-line consistent-return
-      .then(response => { 
-          return Promise.resolve(response);  
+      .then(response => Promise.resolve(response),
         // return Promise.resolve({});
-      })
+      )
   );
 }

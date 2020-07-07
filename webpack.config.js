@@ -6,20 +6,18 @@ const ExtractTextWebpackPlugin = require('extract-text-webpack-plugin');// å¼•å…
 
 
 const config = {
-  mode: 'development',
-  // mode: 'production',
+  // mode: 'development',
+  mode: 'production',
   // devtool: 'source-map',lastDate
   entry: {
-    // videotest: './src/video/videotest.js',
-    sugonVideo: './src/video/sugonVideo.js',
-    mapInfo: './src/map/example/mapInfo.js',
+    // mapInfo: './src/map/example/mapInfo.js',
     sugonGis: './src/map/sugonGis.js',
 
   },
   output: {
     libraryTarget: 'commonjs2',
     library: 'tools',
-    filename: './[name]Commonjs.js',
+    filename: './[name].mini.js',
     path: path.resolve(__dirname, './static'),
   },
 
