@@ -141,12 +141,12 @@ class MapInteractive extends Base {
       >
         <i className={info.faClass ? info.faClass : 'fa fa-map-marker mark'}
           style={{
-            position: 'absolute', bottom: 0, left: '-4px', zindex: 99999,
+            position: 'absolute', bottom: 0, zindex: 99999,
           }}
         />
         <div className="ol-mapLabel"
           style={{
-            position: 'absolute', bottom: 0, left: 10, zindex: 99999,
+            bottom: 0, left: 15, zindex: 99999,
           }}
         >
           {info.comparisonAddress}
