@@ -14,8 +14,10 @@ const configData = {
   // map_center: [11224194.75460964, 2789606.398616877],
   // map_projection: 'EPSG:3857',
   map_type: 'amap',
+  map_name: '卫星图',
+  map_img: '../../assets/images/satellite.jpg',
   map_Url:
-    'http://wprd0{1-4}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&style=7&x={x}&y={y}&z={z}',
+    'http://wprd02.is.autonavi.com/appmaptile?lang=zh_cn&size=1&style=7&x={x}&y={y}&z={z}',
 
   map_center: [101.243746, 25.109256],
   map_projection: 'EPSG:4326',
@@ -23,10 +25,35 @@ const configData = {
   map_maxZoom: 20,
   map_zoom: 5,
 };
+const configData2 = {
+  map_type: 'XYZ',
+  map_name: '高德地图',
+  map_img: '../../assets/images/street.jpg',
+  map_Url:
+    'http://webst0{1-4}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+  map_center: [101.243746, 25.109256],
+  map_projection: 'EPSG:4326',
+  // map_type: 'amap',
+  // map_Url:
+  //   'http://wprd0{1-4}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&style=7&x={x}&y={y}&z={z}',
+
+  // map_center: [101.243746, 25.109256],
+  // map_projection: 'EPSG:4326',
+  map_minZoom: 1,
+  map_maxZoom: 20,
+  map_zoom: 5,
+};
+
 const mapBase = new MapBase(configData);
+const mapBase2 = new MapBase(configData2);
 const wfsHandle = new WfsHandle(mapBase);
 const mapInteractive = new MapInteractive(mapBase);
+const layer = mapBase2.getMapSource();
 mapBase.makeMap(document.getElementById('map'));
+mapBase.map.getlayers().clear();
+mapBase.map.addLayer(layer[0]);
+
+//mapBase.map.removeLayer(layer[0]);  
 
 const typeColors = {
   Point: { fill: { color: 'yellow' }, stroke: { color: 'green' } },

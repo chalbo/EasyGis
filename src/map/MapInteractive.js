@@ -349,6 +349,39 @@ class MapInteractive extends Base {
       // }));
     }
   };
+
+  // 添加多地图切换 未完成
+  addMapLayerChange = (mapName, config) => {
+    const Label = () => {
+      const [isShow, changeState] = useState(true); 
+
+      return (
+        <div className="ol-select-menu-container">
+          <a href="#"
+            className="ol-popup-closer"
+            onClick={(e) => {
+              changeState(false);
+              const aLink = e.target;
+              aLink.blur();
+              return false;
+            }}
+          />
+          <div className="ol-popup-content" dangerouslySetInnerHTML={{ __html: content }} />
+        </div>
+      );
+    };
+    const contain = document.createElement('div');
+    contain.className = 'ol-select-menu';
+    contain.style.height = 0;
+    ReactDOM.render(<Label />, contain);
+    if (typeof mapName === 'string') {
+      document.getElementById('mapName').parentElement.appendChild(contain);
+    } else {
+      mapName.parentElement.appendChild(contain);
+    }
+
+
+  };
 }
 
 export default MapInteractive;

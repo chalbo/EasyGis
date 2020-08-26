@@ -67,6 +67,12 @@ class MapBase extends Base {
 
   getView = () => (this.map.getView())
 
+  // //添加图层
+  // addLayer = (mapBase) => { this.map.addLayer(mapBase.getMapSource()[0]) }
+
+  // //删除图层
+  // removeLayer = (mapBase) => { this.map.removeLayer(mapBase.getMapSource()[0]) }
+
   // 绘制地图
   makeMap = (mapName) => {
     const map = new Map({
@@ -82,6 +88,7 @@ class MapBase extends Base {
       target: mapName,
     });
     this.map = map;
+    this.mapName = mapName;
     return map;
   };
 }
