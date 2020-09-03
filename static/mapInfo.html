@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Tiled ArcGIS MapServer</title>
+</head>
+
+<body>
+  <div id="map" class="map" style='width: 800px;height: 500px;border:1px solid #ccc'></div>
+  <script type="text/javascript" src='./sugonGis.window.mini.js'></script>
+</body>
+<script type="text/javascript">
+  const { MapBase, MapInteractive } = window.sugonGis;
+  const config = {
+    "map_type": "arcgis",
+    "map_Url": "http://222.92.58.133:9999/ArcGIS/rest/services/KSDOM_WGS84/MapServer",
+    "map_center": [
+      120.959855,
+      31.381492
+    ],
+    "map_projection": "EPSG:4326",
+    "map_minZoom": 5,
+    "map_maxZoom": 18,
+    "map_zoom": 11
+  };
+  const mapBase = new MapBase({ ...config });
+  const mapInteractive = new MapInteractive(mapBase);
+  mapBase.makeMap("map")
+  // 工具栏
+  mapBase.addZoom();
+  mapBase.addZoomslider();
+
+</script>
+
+</html>

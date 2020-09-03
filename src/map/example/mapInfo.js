@@ -50,9 +50,9 @@ const wfsHandle = new WfsHandle(mapBase);
 const mapInteractive = new MapInteractive(mapBase);
 const layer = mapBase2.getMapSource();
 mapBase.makeMap(document.getElementById('map'));
-mapBase.map.getlayers().clear();
-mapBase.map.addLayer(layer[0]);
 
+mapBase.map.addLayer(layer[0]);
+mapBase.map.getLayers().clear();
 //mapBase.map.removeLayer(layer[0]);  
 
 const typeColors = {

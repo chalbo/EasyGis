@@ -25,7 +25,7 @@ if (typeof window === 'object') {
   //   // window.location.href = 'null';
   //   window.sugonGis = { MapSource: null, getArgc };
   // } else {
-  window.sugonGis = { MapSource, getArgc };
+  window.sugonGis = { Base, MapBase, MapSource, getArgc, WfsHandle, MapInteractive, request };
   //  }
 }
 
