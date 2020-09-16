@@ -59,7 +59,7 @@ mapBase.map.addLayer(layer[0]);
 ```
 const wfsHandle = new WfsHandle(mapBase);
 const typeColors = {
-  Point: { fill: { color: 'yellow' }, stroke: { color: 'green' } },
+  Point: { fill: { color: 'yellow' }, stroke: { color: 'green' },font: 'Bold 20px / 2 Arial' },
   LineString: { fill: { color: 'yellow' }, stroke: { color: 'green' } },
   MultiLineString: { fill: { color: 'yellow' }, stroke: { color: 'green' } },
   MultiPoint: { fill: { color: 'yellow' }, stroke: { color: 'green' } },
@@ -84,10 +84,10 @@ const hotmapdata = {
     { type: 'Point', coordinates: [101.01378, 22.818552], count: 100 },
   ],
 };
-wfsHandle.addHeatmapGeoJson(hotmapdata, typeColors, { name: 'NSRMC', color: 'COLOR' });
+wfsHandle.addHeatmapGeoJson(hotmapdata, typeColors, { name: 'NSRMC', color: 'COLOR' ,pointType: 'normal'});
 
 ```
-wfsHandle实现了对地理要素服务WFS的添加，删除。暂时只支持geojson格式的要素。
+wfsHandle实现了对地理要素服务WFS的添加，删除。暂时只支持geojson格式的要素。pointType: 'normal'|pointRegularShape|null
 ```
 const handel = wfsHandle.getFeaturesHandle('rgb(123,123,123,0.5)', true);
 handel.on('select', (e) => {
@@ -181,8 +181,8 @@ getFeaturesHandle=  (color:string, multi:boolean)=>Select //添加创建动作 �
 getNoneStyleFeaturesHandle=()=>Select //添加创建动作无颜色
 getPointerMoveFeaturesHandlee=()=>Select //添加鼠标动作
 getStyle= (feature:Feature, typeColors:TypeColors, field = {自定义字段}) =>Style //要素绘制使用的样式类
-addFeatures= (feature:Feature, typeColors) => void //添加要素
-addJsonFeatures= (features, typeColors) => void //添加json要素
+addFeatures= (feature:Feature, typeColors:TypeColors) => void //添加要素
+addJsonFeatures= (features:JSON, typeColors:TypeColors) => void //添加json要素
 setMourseMoveFeatures= (color:string) => void //添加鼠标移动要素
 addGeoJson=(featureCollection:FeatureCollection, typeColors:TypeColors, field = {})  => void //添加json要素
 addHeatmapGeoJson=(featureCollection:FeatureCollection, typeColors:TypeColors, field = {})  => void //添加json要素

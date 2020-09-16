@@ -58,36 +58,47 @@ class WfsHandle extends Base {
     const styles = {};
     Object.keys(typeColors).forEach((key) => {
       if (key === 'Point') {
-        if (field.pointRegularShape) {
-          const image = new RegularShape({
-            ...field.pointRegularShape,
-            fill: field.hollow ? null : new Fill({ color: feature.get(field.color) }),
-            stroke: new Stroke({ color: feature.get(field.color), width: field.width }),
-            // text: new Text({
-            //   text: feature.get(field.name),
-            // }),
-          });
-          styles[key] = new Style({
-            image,
-            // text: new Text({
-            //   text: feature.get(field.name),
-            // }),
-          });
-        } else {
-          const image = new CircleStyle({
-            radius: field.radius,
-            fill: field.hollow ? null : new Fill({ color: feature.get(field.color) }),
-            stroke: new Stroke({ color: feature.get(field.color), width: field.width }),
-            // text: new Text({
-            //   text: feature.get(field.name),
-            // }),
-          });
-          styles[key] = new Style({
-            image,
-            // text: new Text({
-            //   text: feature.get(field.name),
-            // }),
-          });
+        switch (field.pointType) {
+          case 'normal':
+            styles[key] = new Style({
+              fill: new Fill({ ...typeColors[key].fill }),
+              stroke: new Stroke({ ...typeColors[key].stroke }),
+              text: new Text({
+                // textBaseline: 'Bottom',
+                // textAlign: field.align == '' ? undefined : field.align,
+                text: feature.get(field.name).toString(),
+                fill: new Fill({ ...typeColors[key].fill }),
+                stroke: new Stroke({ ...typeColors[key].stroke }),
+                font: typeColors[key].font,
+              }),
+            });
+            break;
+          case 'pointRegularShape':
+            const image = new RegularShape({
+              ...field.pointRegularShape,
+              fill: field.hollow ? null : new Fill({ color: feature.get(field.color) }),
+              stroke: new Stroke({ color: feature.get(field.color), width: field.width }),
+              // text: new Text({
+              //   text: feature.get(field.name),
+              // }),
+            });
+            styles[key] = new Style({
+              image,
+              // text: new Text({
+              //   text: feature.get(field.name),
+              // }),
+            });
+            break;
+          default:
+            const imageCS = new CircleStyle({
+              radius: field.radius,
+              fill: field.hollow ? null : new Fill({ color: feature.get(field.color) }),
+              stroke: new Stroke({ color: feature.get(field.color), width: field.width })
+
+            });
+            styles[key] = new Style({
+              image: imageCS
+            });
         }
       } else {
         styles[key] = new Style({
