@@ -1,8 +1,8 @@
 .ol-popup {
   position: absolute;
   background-color: white;
-  -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
-  filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+  -webkit-filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
+  filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
   padding: 15px;
   border-radius: 10px;
   border: 1px solid #cccccc;
@@ -10,7 +10,9 @@
   z-index: 1;
   left: -50px;
 }
-.ol-popup:after, .ol-popup:before {
+
+.ol-popup:after,
+.ol-popup:before {
   top: 100%;
   border: solid transparent;
   content: " ";
@@ -19,65 +21,92 @@
   position: absolute;
   pointer-events: none;
 }
+
 .ol-popup:after {
   border-top-color: white;
   border-width: 10px;
   left: 48px;
   margin-left: -10px;
 }
+
 .ol-popup:before {
   border-top-color: #cccccc;
   border-width: 11px;
   left: 48px;
   margin-left: -11px;
 }
+
 .ol-popup-closer {
   text-decoration: none;
   position: absolute;
   top: 2px;
   right: 8px;
 }
+
 .ol-popup-closer:after {
   color: #000;
   content: "✖";
 }
-.popup-content{
-  width:100%;
-  height:100%;
+
+.popup-content {
+  width: 100%;
+  height: 100%;
 }
 
 
 .ol-mapLabelContain {
-  color: rgb(10, 99, 167);
+  /* top: -25px;
+  left: -11px; */
+  position: relative;
+  padding: 2px;
+  color: #0a63a7;
+  font-size: 14px;
   width: auto;
-  height: 25px;
-  overflow: hidden;
+  height: 35px;
+  text-align: center;
+  top: -30px;
+  left: -10px;
 }
 
-.ol-mapLabelContain .ol-mark {
+.ol-mapLabelContain i {
+  font-style: normal;
+}
+
+.ol-mapLabelContain .ol-mapLabel {
+  position: relative !important;
+  left: 15px !important;
+  cursor: pointer;
+  width: auto;
+  padding: 0 5px;
+  color: #fff;
+  height: 35px;
+  vertical-align: top;
+  line-height: 35px;
+  display: inline-block;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAAjCAYAAAB7PdRKAAABS0lEQVR4nO3dsU3DQABG4RfECqFxzSCkdssQsIGrnCtPAEtA6RqmcQMlA0BhIoXkRJdE8v++0kmka+757Eh3ICnW6vbj6/vSg5B0MmXqxh4owPbww+vKD1anHpGks7gB3pqhZerG8nvtTwSOAjB1oysCaRlKM7Qb/onA1UWGJekcytSND8AGuG+Gdsv8KNDvvmAApGXbReCOSgQMgLR8ZerGRyoRMABShmoEjv4GnLrxIqOTdBalGdpn4B14cQUgZdlfCRQDIOUpwCf4ElCKZgCkYAZACmYApGAGQApmAKRgBkAKZgCkYAZACmYApGAGQApmAKRgBkAKZgCkYAZACmYApGAGQMrTA2swAFKavhnaJ+Y9Ad0VWAqyP/lfcU9AKcbR5AcfAaQE1ckP9ePBPR1YWpY1lckP9ePBPR1YWp6eg8kPcwC840uhfgBevFGASMvB4gAAAABJRU5ErkJggg==);
+  background-size: 100% 100%;
+}
+
+.map-canvas-star {
+  width: 100px;
+  height: 100px;
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.ol-mapLabelContain .mark {
   color: rgb(14, 49, 85);
   display: inline-block;
   vertical-align: bottom;
   width: 20px;
   height: 25px;
   font-weight: bold;
-  font-size: 25px;
+  font-size: 15px;
+  z-index: 100;
 }
 
-.ol-mapLabelContain .ol-mapLabel {
-  cursor: pointer;
-  color: #FF0000;;
-  width: auto;
-  height: 25px;
-  font-size: 13px;
-  vertical-align: bottom;
-  line-height: 25px;
-  display: inline-block;
-  background:transparent;
-}
-
-.ol-mapLabelContain .ol-mapLabel i {
-  font-style: normal;
-  font-size: 13px;
-  color:rgb(10, 99, 167);
+.ol-mapLabelContain .mark {
+  left: 0 !important;
 }

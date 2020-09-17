@@ -353,7 +353,7 @@ class MapInteractive extends Base {
   // 添加多地图切换 未完成
   addMapLayerChange = (mapName, config) => {
     const Label = () => {
-      const [isShow, changeState] = useState(true); 
+      const [isShow, changeState] = useState(true);
 
       return (
         <div className="ol-select-menu-container">
