@@ -40,6 +40,26 @@ class WfsHandle extends Base {
     return operate;
   };
 
+  getStyleFeaturesHandle = (typeColors, text, multi = false) => {
+    const operate = new Select({
+      multi,
+      style: new Style({
+        fill: new Fill({ ...typeColors.fill }),
+        stroke: new Stroke({ ...typeColors.stroke }),
+        text: new Text({
+          // textBaseline: 'Bottom',
+          // textAlign: field.align == '' ? undefined : field.align,
+          text: text,
+          fill: new Fill({ ...typeColors.text.fill }),
+          stroke: new Stroke({ ...typeColors.text.stroke }),
+          font: typeColors.text.font,
+        }),
+      }),
+    });
+    this.mapBase.map.addInteraction(operate);
+    return operate;
+  };
+
   getNoneStyleFeaturesHandle = () => {
     const operate = new Select();
     this.mapBase.map.addInteraction(operate);
@@ -67,9 +87,9 @@ class WfsHandle extends Base {
                 // textBaseline: 'Bottom',
                 // textAlign: field.align == '' ? undefined : field.align,
                 text: feature.get(field.name).toString(),
-                fill: new Fill({ ...typeColors[key].fill }),
-                stroke: new Stroke({ ...typeColors[key].stroke }),
-                font: typeColors[key].font,
+                fill: new Fill({ ...typeColors[key].text.fill }),
+                stroke: new Stroke({ ...typeColors[key].text.stroke }),
+                font: typeColors[key].text.font,
               }),
             });
             break;
@@ -105,7 +125,10 @@ class WfsHandle extends Base {
           fill: new Fill({ ...typeColors[key].fill }),
           stroke: new Stroke({ ...typeColors[key].stroke }),
           text: new Text({
-            text: feature.get(field.name),
+            text: feature.get(field.name).toString(),
+            fill: new Fill({ ...typeColors[key].text.fill }),
+            stroke: new Stroke({ ...typeColors[key].text.stroke }),
+            font: typeColors[key].text.font,
           }),
         });
       }

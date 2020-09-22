@@ -59,14 +59,14 @@ mapBase.map.addLayer(layer[0]);
 ```
 const wfsHandle = new WfsHandle(mapBase);
 const typeColors = {
-  Point: { fill: { color: 'yellow' }, stroke: { color: 'green' },font: 'Bold 20px / 2 Arial' },
-  LineString: { fill: { color: 'yellow' }, stroke: { color: 'green' } },
-  MultiLineString: { fill: { color: 'yellow' }, stroke: { color: 'green' } },
-  MultiPoint: { fill: { color: 'yellow' }, stroke: { color: 'green' } },
-  MultiPolygon: { fill: { color: 'rgb(123,123,123,0.1)' }, stroke: { color: 'green' } },
-  Polygon: { fill: { color: 'rgb(123,123,123,0.1)' }, stroke: { color: 'green' } },
-  GeometryCollection: { fill: { color: 'yellow' }, stroke: { color: 'green' } },
-  Circle: { fill: { color: 'yellow' }, stroke: { color: 'green' } },
+  Point: { fill: { color: 'yellow' }, stroke: { color: 'green' },font: 'Bold 20px / 2 Arial', text: { font: 'Bold 20px / 2 Arial', fill: { color: 'red' }, stroke: { color: 'green' } } },
+  LineString: { fill: { color: 'yellow' }, stroke: { color: 'green' } , text: { font: 'Bold 20px / 2 Arial', fill: { color: 'red' }, stroke: { color: 'green' } }},
+  MultiLineString: { fill: { color: 'yellow' }, stroke: { color: 'green' }, text: { font: 'Bold 20px / 2 Arial', fill: { color: 'red' }, stroke: { color: 'green' } } },
+  MultiPoint: { fill: { color: 'yellow' }, stroke: { color: 'green' } , text: { font: 'Bold 20px / 2 Arial', fill: { color: 'red' }, stroke: { color: 'green' } }},
+  MultiPolygon: { fill: { color: 'rgb(123,123,123,0.1)' }, stroke: { color: 'green' } , text: { font: 'Bold 20px / 2 Arial', fill: { color: 'red' }, stroke: { color: 'green' } }},
+  Polygon: { fill: { color: 'rgb(123,123,123,0.1)' }, stroke: { color: 'green' }, text: { font: 'Bold 20px / 2 Arial', fill: { color: 'red' }, stroke: { color: 'green' } } },
+  GeometryCollection: { fill: { color: 'yellow' }, stroke: { color: 'green' }, text: { font: 'Bold 20px / 2 Arial', fill: { color: 'red' }, stroke: { color: 'green' } } },
+  Circle: { fill: { color: 'yellow' }, stroke: { color: 'green' }, text: { font: 'Bold 20px / 2 Arial', fill: { color: 'red' }, stroke: { color: 'green' } } },
 };
 const hotmapdata = {
   type: 'FeatureCollection',
