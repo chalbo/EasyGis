@@ -48,8 +48,9 @@ class MapInteractive extends Base {
       showStatusHandel(changeState);
       return (
         <div className="ol-popup" style={{ display: isShow ? 'block' : 'none' }}>
-          <a href="#"
+          <i
             className="ol-popup-closer"
+            style={{ fontStyle: 'normal', cursor: 'pointer' }}
             onClick={(e) => {
               changeState(false);
               const aLink = e.target;

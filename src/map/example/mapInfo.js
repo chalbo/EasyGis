@@ -126,8 +126,8 @@ wfsHandle.addHeatmapGeoJson(hotmapdata, typeColors, { name: 'COUNT', color: 'COL
 const a = {};
 mapInteractive.on('changeName', () => { alert(2); });
 // eslint-disable-next-line max-len
-//mapInteractive.addMapJSXPopup(<div onClick={() => { alert(1111); mapInteractive.emit('changeName'); MapInteractive.event.emit('check'); }}>aaaccccaaa</div>, [101.243746, 25.109256], (changeStatus) => { a.changeStatus = changeStatus; });
-// a.changeStatus(true);
+mapInteractive.addMapJSXPopup(<div onClick={() => { alert(1111); mapInteractive.emit('changeName'); MapInteractive.event.emit('check'); }}>aaaccccaaa</div>, [101.243746, 25.109256], (changeStatus) => { a.changeStatus = changeStatus; });
+a.changeStatus(true);
 
 // 工具栏
 mapBase.addZoom();
