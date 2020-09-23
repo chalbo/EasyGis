@@ -42,7 +42,7 @@ class MapInteractive extends Base {
   }
 
   // 添加地图弹层框气泡
-  addMapJSXPopup = (jsxContent, lonLat, showStatusHandel) => {
+  addMapJSXPopup = (jsxContent, lonLat, showStatusHandel, closeHandler) => {
     const Label = () => {
       const [isShow, changeState] = useState(true);
       showStatusHandel(changeState);
@@ -55,6 +55,7 @@ class MapInteractive extends Base {
               changeState(false);
               const aLink = e.target;
               aLink.blur();
+              if (closeHandler) { closeHandler(e); }
               return false;
             }}
           />
