@@ -122,6 +122,21 @@ function getSourceType(config) {
       setPosition: gis => proj.transform(gis, 'EPSG:4326', 'EPSG:3857'),
       setRevertPosition: gis => proj.transform(gis, 'EPSG:3857', 'EPSG:4326'),
     },
+    XYZ4326: {
+      source: () => {
+        // 创建XYZ图
+        const XYZSource = new XYZ({
+          url: `${config.map_Url}`,
+          wrapX: true,
+        });
+        const mapLayer = new Tile({
+          source: XYZSource,
+        });
+        return [mapLayer];
+      },
+      setPosition: gis => gis,
+      setRevertPosition: gis => gis,
+    },
     XYZ: {
       source: () => {
         // 创建XYZ图
