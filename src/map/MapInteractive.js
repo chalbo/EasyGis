@@ -78,6 +78,7 @@ class MapInteractive extends Base {
       positioning: 'bottom-left',
     });
     this.mapBase.map.addOverlay(overlay);
+    return overlay;
   };
 
   // 添加地图弹层框气泡

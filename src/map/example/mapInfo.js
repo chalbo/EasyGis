@@ -3,6 +3,7 @@ import {
   MapBase, Base, MapSource, getArgc, WfsHandle, MapInteractive,
 } from '../sugonGis';
 import communityJson from '../mapData/json/community';
+import dq from './dq';
 // import enterprise from '../mapData/Enterprise';
 import '../map.css';
 import 'font-awesome/css/font-awesome.min.css';
@@ -118,6 +119,8 @@ mapInteractive.setMapLabel({ title: '这种重中之重', lonLat: [120.419354, 3
 });
 mapInteractive.drawStar([{ count: 25, lonLat: [120.419354, 36.122387] }, { count: 25, lonLat: [101.243746, 25.109256] }], '123,123,123');
 
+
+wfsHandle.addGeoJson(dq, typeColors, { name: 'name', style: 'style' });
 wfsHandle.addGeoJson(communityJson, typeColors, { name: 'NAME' });
 
 

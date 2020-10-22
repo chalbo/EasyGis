@@ -121,14 +121,31 @@ class WfsHandle extends Base {
             });
         }
       } else {
+        let typeColorsTmp = typeColors[key];
+        if (field.style) {
+          const fieldFeature = feature.get(field.style);
+          if (fieldFeature.fill && fieldFeature.stroke && fieldFeature.text) {
+            typeColorsTmp = {
+              fill: { ...typeColors[key].fill, ...fieldFeature.fill },
+              stroke: { ...typeColors[key].stroke, ...fieldFeature.stroke },
+              text: {
+                fill: { ...typeColors[key].text.fill, ...fieldFeature.text.fill },
+                stroke: { ...typeColors[key].text.stroke, ...fieldFeature.text.stroke },
+                font: { ...typeColors[key].text.font, ...fieldFeature.text.font }
+              }
+            };
+          } else {
+            console.log('prototype not enough');
+          }
+        }
         styles[key] = new Style({
-          fill: new Fill({ ...typeColors[key].fill }),
-          stroke: new Stroke({ ...typeColors[key].stroke }),
+          fill: new Fill({ ...typeColorsTmp.fill }),
+          stroke: new Stroke({ ...typeColorsTmp.stroke }),
           text: new Text({
             text: feature.get(field.name).toString(),
-            fill: new Fill({ ...typeColors[key].text.fill }),
-            stroke: new Stroke({ ...typeColors[key].text.stroke }),
-            font: typeColors[key].text.font,
+            fill: new Fill({ ...typeColorsTmp.text.fill }),
+            stroke: new Stroke({ ...typeColorsTmp.text.stroke }),
+            font: typeColorsTmp.text.font,
           }),
         });
       }
