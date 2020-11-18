@@ -16,6 +16,7 @@ const config = {
   },
   output: {
     libraryTarget: 'commonjs2',
+    // libraryTarget: "window",
     library: 'tools',
     filename: './[name].mini.js',
     path: path.resolve(__dirname, './static'),

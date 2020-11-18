@@ -170,6 +170,7 @@ class MapInteractive extends Base {
       positioning: 'bottom-left',
     });
     this.mapBase.map.addOverlay(overlay);
+    return overlay;
   };
 
   // 绘制轨迹要求参数 cameras:[{lonLat:XX,count:25|default}]

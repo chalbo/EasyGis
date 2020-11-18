@@ -485,15 +485,6 @@ class mapSource extends EventEmitter {
         featureProjection: this.getProjection(),
       })).readFeatures(featureCollection),
     });
-    // const a=(new GeoJSON({
-    //  featureProjection: this.getProjection()
-    // })).writeFeature(vectorSource.getFeatures()[1]); 生成json
-    // eslint-disable-next-line max-len
-    // 获取属性，vectorSource.getFeatures()[1].getProperties() vectorSource.getFeatures()[1].getProperties(
-    // ---{geometry: Polygon, SSXZQH: "崂山区", SSJB: "王哥庄街道办", NAME: "王哥庄中心管区", BM: "370212003009"
-    // eslint-disable-next-line max-len
-    // 获取图形 vectorSource.getFeatures()[1].getGeometry()Polygon{disposed_: false
-    // pendingRemovals_: {…}, dispatching_: {…}, listeners_: {…}, revision_: 1
 
     const VectorTmp = new VectorLayer({
       source: vectorSource,
