@@ -114,6 +114,7 @@ class MapInteractive extends Base {
       positioning: 'bottom-left',
     });
     this.mapBase.map.addOverlay(overlay);
+    return overlay;
   };
 
   // domInfo={dom:,extra:,lonLat:[]}
@@ -126,6 +127,44 @@ class MapInteractive extends Base {
       positioning: 'bottom-left',
     });
     this.mapBase.map.addOverlay(overlay);
+    return overlay;
+  };
+
+  addMapDomPopup = (dom, lonLat, showStatusHandel) => {
+    const Label = () => {
+      const [isShow, changeState] = useState(true);
+      showStatusHandel(changeState);
+      return (
+        <div className="ol-popup" style={{ display: isShow ? 'block' : 'none' }}>
+          <a href="#"
+            className="ol-popup-closer"
+            onClick={(e) => {
+              changeState(false);
+              const aLink = e.target;
+              aLink.blur();
+              return false;
+            }}
+          />
+          <div className="ol-popup-content" />
+        </div>
+      );
+    };
+    const contain = document.createElement('div');
+    contain.className = 'ol-contain';
+    contain.style.position = 'relative';
+    contain.style.height = 0;
+    ReactDOM.render(<Label />, contain);
+    // document.body.appendChild(contain);
+    const content = contain.querySelector('.ol-popup-content');
+    content.insertAdjacentElement('afterend', dom);
+    const overlay = new Overlay({
+      position: this.mapBase.setMapPosition(lonLat),
+      element: contain,
+      stopEvent: false,
+      positioning: 'bottom-left',
+    });
+    this.mapBase.map.addOverlay(overlay);
+    return overlay;
   };
 
   // info={title:,extra:,lonLat:[]}
