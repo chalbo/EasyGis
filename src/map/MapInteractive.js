@@ -5,7 +5,7 @@ import Feature from 'ol/Feature';
 import { LineString } from 'ol/geom';
 import { Vector } from 'ol/source';
 import { Vector as VectorLayer } from 'ol/layer';
-import { Select } from 'ol/interaction';
+import { Select, Draw, Modify, Snap } from 'ol/interaction';
 import { pointerMove } from 'ol/events/condition';
 import Overlay from 'ol/Overlay';
 import {
@@ -40,6 +40,53 @@ class MapInteractive extends Base {
       }),
     }));
   }
+  // 添加地图圈选
+  addInteractions(type) {
+    const source = new VectorSource();
+    const draw = new Draw({
+      source: source,
+      type,
+    });
+    map.addInteraction(draw);
+    const snap = new Snap({ source: source });
+    map.addInteraction(snap);
+    return { draw, snap };
+  }
+  // 添加地图圈选
+  addInteractionsTool({ type, drawEndFunc }) {
+    const Label = () => {
+      const [isShow, changeState] = useState(true);
+      showStatusHandel(changeState);
+      return (
+        <div className="ol-popup" style={{ display: isShow ? 'block' : 'none' }}>
+        
+        </div>
+      );
+    };
+    const contain = document.createElement('div');
+    contain.className = 'ol-contain';
+    contain.style.position = 'relative';
+    contain.style.height = 0;
+    ReactDOM.render(<Label />, contain);
+    const overlay = new Overlay({
+      position: this.mapBase.setMapPosition(lonLat),
+      element: contain,
+      stopEvent: false,
+      positioning: 'bottom-left',
+    });
+    this.mapBase.map.addOverlay(overlay);
+    ///========
+    const source = new VectorSource();
+    const draw = new Draw({
+      source: source,
+      type,
+    });
+    map.addInteraction(draw);
+    const snap = new Snap({ source: source });
+    map.addInteraction(snap);
+    return { draw, snap };
+  }
+
 
   // 添加地图弹层框气泡
   addMapJSXPopup = (jsxContent, lonLat, showStatusHandel, closeHandler) => {

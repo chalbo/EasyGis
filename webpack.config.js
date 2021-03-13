@@ -11,7 +11,7 @@ const config = {
   // devtool: 'source-map',lastDate
   entry: {
     // mapInfo: './src/map/example/mapInfo.js',
-    sugonGis: './src/map/sugonGis.js',
+    EasyGis: './src/map/EasyGis.js',
 
   },
   output: {

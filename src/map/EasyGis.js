@@ -23,9 +23,9 @@ if (typeof window === 'object') {
   // const rq = moment('20191029', 'YYYYMMDD');
   // if (rq < nowtime) {
   //   // window.location.href = 'null';
-  //   window.sugonGis = { MapSource: null, getArgc };
+  //   window.EasyGis = { MapSource: null, getArgc };
   // } else {
-  window.sugonGis = { Base, MapBase, MapSource, getArgc, WfsHandle, MapInteractive, request };
+  window.EasyGis = { Base, MapBase, MapSource, getArgc, WfsHandle, MapInteractive, request };
   //  }
 }
 

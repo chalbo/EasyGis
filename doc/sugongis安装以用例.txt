@@ -1,6 +1,6 @@
 
 一、postgres安装
-sugongis使用 postpres  v10
+Easygis使用 postpres  v10
 
 postpres sql 安装
 
@@ -31,19 +31,19 @@ postpres sql 安装
 
 
 首先修改/var/lib/pgsql/10/data/pg_hba.conf，验证方式：md5
-创建sugongis数据库： 
+创建Easygis数据库： 
 
 
-CREATE DATABASE sugonGis_db OWNER postgres;
+CREATE DATABASE EasyGis_db OWNER postgres;
 
 安装地址
 vim /usr/lib/systemd/system/postgresql-10.service
-#\c sugonGis_db
+#\c EasyGis_db
 
 安装PostGis扩展
-sugonGis_db=# CREATE EXTENSION postgis;
-sugonGis_db =# CREATE EXTENSION postgis_topology;
-sugonGis_db =# CREATE EXTENSION ogr_fdw;
+EasyGis_db=# CREATE EXTENSION postgis;
+EasyGis_db =# CREATE EXTENSION postgis_topology;
+EasyGis_db =# CREATE EXTENSION ogr_fdw;
 
 查看安装 
 SELECT postgis_full_version();

@@ -1,8 +1,8 @@
 {
-  "name": "sugonGis",
+  "name": "EasyGis",
   "version": "1.0.0",
   "description": "",
-  "main": "static/sugonGis.mini.js",
+  "main": "static/EasyGis.mini.js",
   "scripts": {
     "start": "parcel ./src/map/example/mapInfo.html",
     "videostart": "parcel ./src/video/videotest.html",

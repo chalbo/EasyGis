@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   MapBase, Base, MapSource, getArgc, WfsHandle, MapInteractive,
-} from '../sugonGis';
+} from '../EasyGis';
 import communityJson from '../mapData/json/community';
 import dq from './dq';
 // import enterprise from '../mapData/Enterprise';

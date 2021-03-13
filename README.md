@@ -2,15 +2,15 @@
 ### 安装
 
 ```bash
- $git clone https://10.6.8.8/zhangbo/sugongis
- $cd sugongis
+ $git clone https://10.6.8.8/zhangbo/Easygis
+ $cd Easygis
  $webpack -p 
 or
  $npm start        
 ```
 ### 使用
-#### sugonGis    
-# sugonGis使用
+#### EasyGis    
+# EasyGis使用
 
 标签（空格分隔）： 未分类
 
@@ -20,11 +20,11 @@ or
 ```
 import {
   MapBase, Base, MapSource, getArgc, WfsHandle, MapInteractive,
-} from '../sugonGis';
+} from '../EasyGis';
 或者
 const {
   MapBase, Base, MapSource, getArgc, WfsHandle, MapInteractive,
-} =window.sugonGIs;
+} =window.EasyGIs;
 ```
 添加Gis配置文件
 ```
